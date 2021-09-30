@@ -32,7 +32,7 @@ numpy = ">=1.16.6"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.9,<3.11"
-content-hash = "fb21e0355dec42d78c0673e2c248fa4ee59f0623593b33922c0d5275221f2220"
+content-hash = "e0696d7237c00843c25bc69b462e294fb5eac76e4464216ae98ed4e1f24c7811"
 
 [metadata.files]
 numpy = [
