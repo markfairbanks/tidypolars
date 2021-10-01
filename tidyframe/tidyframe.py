@@ -61,22 +61,75 @@ class tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = pl.DataFrame({'x': ['a', 'a', 'b'], 'y': range(3)})
-        >>> # Arrange in ascending order
-        >>> df.arrange('x', 'y')
-        >>>
-        >>> # Arrange some columns descending
-        >>> df.arrange('x', 'y', desc = [True, False])
+        df = pl.DataFrame({'x': ['a', 'a', 'b'], 'y': range(3)})
+        
+        # Arrange in ascending order
+        df.arrange('x', 'y')
+        
+        # Arrange some columns descending
+        df.arrange('x', 'y', desc = [True, False])
         """
         exprs = list(args)
         return self.sort(exprs, reverse = desc).pipe(as_tibble)
     
     def filter(self, *args) -> "tf.tibble":
+        """
+        Filter rows on one or more conditions
+
+        Filters a dataset to choose rows where conditions are true.
+
+        Parameters
+        ----------
+        *args : Expr
+            Conditions to filter by
+
+        Returns
+        -------
+            tf.tibble
+
+        Examples
+        --------
+        df = tf.tibble(
+            {'a': range(3),
+             'b': range(3),
+             'c': ['a', 'a', 'b']}
+        )
+        
+        df.filter(col('a') < 2, col('c') == 'a')
+        """
         args = list(args)
         exprs = ft.reduce(lambda a, b: a & b, args)
         return super().filter(exprs).pipe(as_tibble)
     
     def mutate(self, **kwargs) -> "tf.tibble":
+        """
+        Add or modify columns
+
+        Add new columns or modify existing ones.
+
+        Parameters
+        ----------
+        **kwargs : Expr
+            Column expressions to add or modify
+
+        Returns
+        -------
+            tf.tibble
+
+        Examples
+        --------
+        df = tf.tibble(
+            {'a': range(3),
+             'b': range(3),
+             'c': ['a', 'a', 'b']}
+        )
+        
+        (
+            df
+            .mutate(double_a = col('a') * 2,
+                    a_plus_b = col('a') + col('b'))
+        )
+        """
         exprs = [expr.alias(key) for key, expr in kwargs.items()]
         return self.with_columns(exprs).pipe(as_tibble)
     
@@ -84,6 +137,32 @@ class tibble(pl.DataFrame):
         return fn(self, *args, **kwargs)
     
     def relocate(self, *args, before: str = None, after: str = None) -> "tf.tibble":
+        """
+        Move a column or columns to a new position
+
+        Move a column or columns to a new position.
+
+        Parameters
+        ----------
+        **args : str
+            Columns to move
+
+        Returns
+        -------
+            tf.tibble
+
+        Examples
+        --------
+        df = tf.tibble(
+            {'a': range(3),
+             'b': range(3),
+             'c': ['a', 'a', 'b']}
+        )
+        
+        df.relocate('a', before = 'c')
+
+        df.relocate('b', after = 'c')
+        """
         move_cols = np.array(list(args))
 
         if len(move_cols) == 0:
@@ -123,6 +202,32 @@ class tibble(pl.DataFrame):
             return self.select(ordered_cols)
     
     def select(self, *args) -> "tf.tibble":
+        """
+        Select or drop columns
+
+        Select or drop columns.
+
+        Parameters
+        ----------
+        **args : str
+            Columns to move
+
+        Returns
+        -------
+            tf.tibble
+
+        Examples
+        --------
+        df = tf.tibble(
+            {'a': range(3),
+             'b': range(3),
+             'c': ['a', 'a', 'b']}
+        )
+        
+        df.relocate('a', before = 'c')
+
+        df.relocate('b', after = 'c')
+        """
         arg = list(args)
         args = [[arg] if not is_list_like(arg) else arg for arg in args]
         args = np.concatenate(args)
