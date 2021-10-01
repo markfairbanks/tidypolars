@@ -103,7 +103,7 @@ class tidyframe(pl.DataFrame):
         
         df.filter(col('a') < 2, col('c') == 'a')
 
-        df.filter(col('a') < 2 & col('c') == 'a')
+        df.filter((col('a') < 2) & (col('c') == 'a'))
         """
         args = list(args)
         exprs = ft.reduce(lambda a, b: a & b, args)
