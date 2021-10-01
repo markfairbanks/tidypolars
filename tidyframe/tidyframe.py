@@ -19,7 +19,7 @@ def col_expr(x):
     else:
        raise ValueError("Invalid input for column selection") 
 
-#  Wrap all str inputs in col()   
+#  Wrap all str inputs in col()  
 def col_exprs(x):
     if is_list_like(x):
         return [col_expr(val) for val in x]
@@ -27,7 +27,7 @@ def col_exprs(x):
         return [col_expr(x)]
   
 def is_list_like(x):
-    if (isinstance(x, list)) | (isinstance(x, np.ndarray)):
+    if isinstance(x, list) | isinstance(x, np.ndarray):
         return True
     else:
         return False
