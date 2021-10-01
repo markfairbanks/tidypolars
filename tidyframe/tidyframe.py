@@ -45,8 +45,6 @@ class tibble(pl.DataFrame):
         """
         Arrange/sort rows
 
-        Order rows in ascending or descending order.
-
         Parameters
         ----------
         *args : Union[str, Expr]
@@ -76,8 +74,6 @@ class tibble(pl.DataFrame):
         """
         Filter rows on one or more conditions
 
-        Filters a dataset to choose rows where conditions are true.
-
         Parameters
         ----------
         *args : Expr
@@ -104,8 +100,6 @@ class tibble(pl.DataFrame):
     def mutate(self, **kwargs) -> "tf.tibble":
         """
         Add or modify columns
-
-        Add new columns or modify existing ones.
 
         Parameters
         ----------
@@ -139,8 +133,6 @@ class tibble(pl.DataFrame):
     def relocate(self, *args, before: str = None, after: str = None) -> "tf.tibble":
         """
         Move a column or columns to a new position
-
-        Move a column or columns to a new position.
 
         Parameters
         ----------
@@ -205,12 +197,10 @@ class tibble(pl.DataFrame):
         """
         Select or drop columns
 
-        Select or drop columns.
-
         Parameters
         ----------
         **args : str
-            Columns to move
+            Columns to select
 
         Returns
         -------
