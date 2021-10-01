@@ -41,7 +41,7 @@ def arg_as_list(x: Union[str, list]) -> list:
     return x
 
 class tibble(pl.DataFrame):
-    def arrange(self, *args, desc: Union[bool, tp.List[bool]] = False) -> tf.tibble:
+    def arrange(self, *args, desc: Union[bool, tp.List[bool]] = False) -> "tf.tibble":
         """
         Arrange/sort rows
 
@@ -71,19 +71,19 @@ class tibble(pl.DataFrame):
         exprs = list(args)
         return self.sort(exprs, reverse = desc).pipe(as_tibble)
     
-    def filter(self, *args) -> tf.tibble:
+    def filter(self, *args) -> "tf.tibble":
         args = list(args)
         exprs = ft.reduce(lambda a, b: a & b, args)
         return super().filter(exprs).pipe(as_tibble)
     
-    def mutate(self, **kwargs) -> tf.tibble:
+    def mutate(self, **kwargs) -> "tf.tibble":
         exprs = [expr.alias(key) for key, expr in kwargs.items()]
         return self.with_columns(exprs).pipe(as_tibble)
     
     def pipe(self, fn, *args, **kwargs):
         return fn(self, *args, **kwargs)
     
-    def relocate(self, *args, before: str = None, after: str = None) -> tf.tibble:
+    def relocate(self, *args, before: str = None, after: str = None) -> "tf.tibble":
         move_cols = np.array(list(args))
 
         if len(move_cols) == 0:
@@ -122,7 +122,7 @@ class tibble(pl.DataFrame):
 
             return self.select(ordered_cols)
     
-    def select(self, *args) -> tf.tibble:
+    def select(self, *args) -> "tf.tibble":
         arg = list(args)
         args = [[arg] if not is_list_like(arg) else arg for arg in args]
         args = np.concatenate(args)
