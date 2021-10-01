@@ -7,8 +7,8 @@ from typing import Union
 
 col = pl.col
 
-def as_tibble(df):
-    df.__class__ = tibble
+def as_tidyframe(df):
+    df.__class__ = tidyframe
     return df
 
 def col_expr(x):
@@ -40,8 +40,8 @@ def arg_as_list(x: Union[str, list]) -> list:
 
     return x
 
-class tibble(pl.DataFrame):
-    def arrange(self, *args, desc: Union[bool, tp.List[bool]] = False) -> "tf.tibble":
+class tidyframe(pl.DataFrame):
+    def arrange(self, *args, desc: Union[bool, tp.List[bool]] = False) -> "tf.tidyframe":
         """
         Arrange/sort rows
 
@@ -55,7 +55,7 @@ class tibble(pl.DataFrame):
 
         Returns
         -------
-            tf.tibble
+            tf.tidyframe
 
         Examples
         --------
@@ -68,9 +68,9 @@ class tibble(pl.DataFrame):
         df.arrange('x', 'y', desc = [True, False])
         """
         exprs = list(args)
-        return self.sort(exprs, reverse = desc).pipe(as_tibble)
+        return self.sort(exprs, reverse = desc).pipe(as_tidyframe)
     
-    def filter(self, *args) -> "tf.tibble":
+    def filter(self, *args) -> "tf.tidyframe":
         """
         Filter rows on one or more conditions
 
@@ -81,11 +81,11 @@ class tibble(pl.DataFrame):
 
         Returns
         -------
-            tf.tibble
+            tf.tidyframe
 
         Examples
         --------
-        df = tf.tibble(
+        df = tf.tidyframe(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
@@ -95,9 +95,9 @@ class tibble(pl.DataFrame):
         """
         args = list(args)
         exprs = ft.reduce(lambda a, b: a & b, args)
-        return super().filter(exprs).pipe(as_tibble)
+        return super().filter(exprs).pipe(as_tidyframe)
     
-    def mutate(self, **kwargs) -> "tf.tibble":
+    def mutate(self, **kwargs) -> "tf.tidyframe":
         """
         Add or modify columns
 
@@ -108,11 +108,11 @@ class tibble(pl.DataFrame):
 
         Returns
         -------
-            tf.tibble
+            tf.tidyframe
 
         Examples
         --------
-        df = tf.tibble(
+        df = tf.tidyframe(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
@@ -125,12 +125,12 @@ class tibble(pl.DataFrame):
         )
         """
         exprs = [expr.alias(key) for key, expr in kwargs.items()]
-        return self.with_columns(exprs).pipe(as_tibble)
+        return self.with_columns(exprs).pipe(as_tidyframe)
     
     def pipe(self, fn, *args, **kwargs):
         return fn(self, *args, **kwargs)
     
-    def relocate(self, *args, before: str = None, after: str = None) -> "tf.tibble":
+    def relocate(self, *args, before: str = None, after: str = None) -> "tf.tidyframe":
         """
         Move a column or columns to a new position
 
@@ -141,11 +141,11 @@ class tibble(pl.DataFrame):
 
         Returns
         -------
-            tf.tibble
+            tf.tidyframe
 
         Examples
         --------
-        df = tf.tibble(
+        df = tf.tidyframe(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
@@ -193,7 +193,7 @@ class tibble(pl.DataFrame):
 
             return self.select(ordered_cols)
     
-    def select(self, *args) -> "tf.tibble":
+    def select(self, *args) -> "tf.tidyframe":
         """
         Select or drop columns
 
@@ -204,11 +204,11 @@ class tibble(pl.DataFrame):
 
         Returns
         -------
-            tf.tibble
+            tf.tidyframe
 
         Examples
         --------
-        df = tf.tibble(
+        df = tf.tidyframe(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
@@ -221,4 +221,4 @@ class tibble(pl.DataFrame):
         arg = list(args)
         args = [[arg] if not is_list_like(arg) else arg for arg in args]
         args = np.concatenate(args)
-        return super().select(args).pipe(as_tibble)
+        return super().select(args).pipe(as_tidyframe)
