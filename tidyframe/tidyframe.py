@@ -140,6 +140,27 @@ class tidyframe(pl.DataFrame):
         return self.with_columns(exprs).pipe(as_tidyframe)
     
     def pipe(self, fn, *args, **kwargs):
+        """
+        Apply a function to the data frame
+
+        Parameters
+        ----------
+        *args :
+            args to pass to the function
+        
+        **kwargs :
+            keyword arguments to pass to the function
+
+        Examples
+        --------
+        df = tf.tidyframe(
+            {'a': range(3),
+             'b': range(3),
+             'c': ['a', 'a', 'b']}
+        )
+        
+        df.pipe(print)
+        """
         return fn(self, *args, **kwargs)
     
     def relocate(self, *args, before: str = None, after: str = None) -> "tf.tidyframe":
