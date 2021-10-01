@@ -3,9 +3,9 @@
 Tidy interface to polars
 
 ## Installation
-
+*This package is not yet available on PyPI*
 ```bash
-$ pip install tidyframe
+$ pip3 install tidyframe
 ```
 
 ## Usage
