@@ -18,27 +18,37 @@ def col_expr(x):
         return col(x)
     else:
        raise ValueError("Invalid input for column selection") 
-    
+
+#  Wrap all str inputs in col()   
 def col_exprs(x):
-    if (is_list_like(x)):
+    if is_list_like(x):
         return [col_expr(val) for val in x]
     else:
         return [col_expr(x)]
-    
+  
 def is_list_like(x):
     if (isinstance(x, list)) | (isinstance(x, np.ndarray)):
         return True
     else:
         return False
-    
-# Helpful for pivot_longer/_wider
-def arg_as_list(x: Union[str, list]) -> list:
-    if not is_list_like(x):
-        x = [x]
-    else:
-        x = x.copy()
 
-    return x
+def as_list(x):
+    if isinstance(x, list):
+        return x
+    elif isinstance(x, str):
+        return [x]
+    else:
+        return list(x)
+
+# Allow selecting with str, list, or list of lists
+def args_as_list(args):
+    args = as_list(args)
+    args = [[arg] if not is_list_like(arg) else arg for arg in args]
+    return np.concatenate(args)
+
+# Convert kwargs to col() expressions with alias
+def kwargs_as_exprs(kwargs):
+    return [expr.alias(key) for key, expr in kwargs.items()]
 
 class tidyframe(pl.DataFrame):
     def arrange(self, *args, desc: Union[bool, tp.List[bool]] = False) -> "tf.tidyframe":
@@ -55,7 +65,7 @@ class tidyframe(pl.DataFrame):
 
         Returns
         -------
-            tf.tidyframe
+        tf.tidyframe
 
         Examples
         --------
@@ -67,7 +77,7 @@ class tidyframe(pl.DataFrame):
         # Arrange some columns descending
         df.arrange('x', 'y', desc = [True, False])
         """
-        exprs = list(args)
+        exprs = as_list(args)
         return self.sort(exprs, reverse = desc).pipe(as_tidyframe)
     
     def filter(self, *args) -> "tf.tidyframe":
@@ -81,7 +91,7 @@ class tidyframe(pl.DataFrame):
 
         Returns
         -------
-            tf.tidyframe
+        tf.tidyframe
 
         Examples
         --------
@@ -92,6 +102,8 @@ class tidyframe(pl.DataFrame):
         )
         
         df.filter(col('a') < 2, col('c') == 'a')
+
+        df.filter(col('a') < 2 & col('c') == 'a')
         """
         args = list(args)
         exprs = ft.reduce(lambda a, b: a & b, args)
@@ -108,7 +120,7 @@ class tidyframe(pl.DataFrame):
 
         Returns
         -------
-            tf.tidyframe
+        tf.tidyframe
 
         Examples
         --------
@@ -124,7 +136,7 @@ class tidyframe(pl.DataFrame):
                     a_plus_b = col('a') + col('b'))
         )
         """
-        exprs = [expr.alias(key) for key, expr in kwargs.items()]
+        exprs = kwargs_as_exprs(kwargs)
         return self.with_columns(exprs).pipe(as_tidyframe)
     
     def pipe(self, fn, *args, **kwargs):
@@ -136,12 +148,12 @@ class tidyframe(pl.DataFrame):
 
         Parameters
         ----------
-        **args : str
+        *args : Union[str, Expr]
             Columns to move
 
         Returns
         -------
-            tf.tidyframe
+        tf.tidyframe
 
         Examples
         --------
@@ -199,12 +211,12 @@ class tidyframe(pl.DataFrame):
 
         Parameters
         ----------
-        **args : str
+        *args : Union[str, Expr]
             Columns to select
 
         Returns
         -------
-            tf.tidyframe
+        tf.tidyframe
 
         Examples
         --------
@@ -214,11 +226,9 @@ class tidyframe(pl.DataFrame):
              'c': ['a', 'a', 'b']}
         )
         
-        df.relocate('a', before = 'c')
+        df.select('a', 'b')
 
-        df.relocate('b', after = 'c')
+        df.select(col('a'), col('b'))
         """
-        arg = list(args)
-        args = [[arg] if not is_list_like(arg) else arg for arg in args]
-        args = np.concatenate(args)
+        args = args_as_list(args)
         return super().select(args).pipe(as_tidyframe)
