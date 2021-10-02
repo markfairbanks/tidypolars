@@ -1,6 +1,6 @@
 # tidypolars
 
-tidypolars is a data frame library built on top of the blazingly fast [polars](https://github.com/pola-rs/polars) library that gives access to methods and function familiar to R tidyverse users.
+tidypolars is a data frame library built on top of the blazingly fast [polars](https://github.com/pola-rs/polars) library that gives access to methods and functions familiar to R tidyverse users.
 
 ## Installation
 ```bash
