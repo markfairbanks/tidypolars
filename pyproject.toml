@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "tidyframe"
+name = "tidypolars"
 version = "0.1.0"
 description = "Tidy interface to polars"
 authors = ["Mark Fairbanks"]

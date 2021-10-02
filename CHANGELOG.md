@@ -2,6 +2,6 @@
 
 <!--next-version-placeholder-->
 
-## v0.1.0 (30/09/2021)
+## v0.1.0 (2021/10/02)
 
-- First release of `tidyframe`!
+- First release of `tidypolars`!

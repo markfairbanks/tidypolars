@@ -40,10 +40,10 @@ If you are proposing a feature:
 
 ## Get Started!
 
-Ready to contribute? Here's how to set up `tidyframe` for local development.
+Ready to contribute? Here's how to set up `tidypolars` for local development.
 
-1. Download a copy of `tidyframe` locally.
-2. Install `tidyframe` using `poetry`:
+1. Download a copy of `tidypolars` locally.
+2. Install `tidypolars` using `poetry`:
 
     ```console
     $ poetry install
@@ -69,5 +69,5 @@ Before you submit a pull request, check that it meets these guidelines:
 
 ## Code of Conduct
 
-Please note that the `tidyframe` project is released with a 
+Please note that the `tidypolars` project is released with a 
 Code of Conduct. By contributing to this project you agree to abide by its terms.

@@ -9,7 +9,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=.
 set BUILDDIR=_build
-set SPHINXPROJ=tidyframe
+set SPHINXPROJ=tidypolars
 
 if "%1" == "" goto help
 

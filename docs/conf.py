@@ -6,7 +6,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = u"tidyframe"
+project = u"tidypolars"
 copyright = u"2021, Mark Fairbanks"
 author = u"Mark Fairbanks"
 

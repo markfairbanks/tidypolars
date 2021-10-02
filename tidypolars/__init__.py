@@ -1,5 +1,5 @@
 # read version from installed package
 from importlib.metadata import version
-__version__ = version("tidyframe")
+__version__ = version("tidypolars")
 
-from .tidyframe import *
+from .tidypolars import *
