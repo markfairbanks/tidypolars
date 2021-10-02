@@ -41,6 +41,18 @@ def test_mutate():
     )
     assert actual.frame_equal(expected), "mutate failed"
 
+def test_mutate_across():
+    """Can mutate multiple columns simultaneously"""
+    df = tp.tidyframe({'x': np.repeat(1, 3), 'y': np.repeat(2, 3)})
+    actual = df.mutate(col(['x', 'y']) * 2,
+                       x_plus_y = col('x') + col('y'))
+    expected = tp.tidyframe(
+        {'x': np.repeat(2, 3),
+         'y': np.repeat(4, 3),
+         'x_plus_y': np.repeat(3, 3)}
+    )
+    assert actual.frame_equal(expected), "mutate across failed"
+
 def test_relocate():
     """Can relocate columns"""
     df = tp.tidyframe({'x': range(3), 'y': range(3), 'z': range(3)})
@@ -61,3 +73,13 @@ def test_summarize():
     actual = df.summarize(avg_x = col('x').mean())
     expected = tp.tidyframe({'avg_x': [1]})
     assert actual.frame_equal(expected), "ungrouped summarize failed"
+
+def test_summarize_across():
+    """Can use summarize_across"""
+    df = tp.tidyframe({'x': range(3), 'y': range(3), 'z': range(3)})
+    actual = df.summarize(col(['x', 'y']).max().prefix('max_'),
+                          avg_x = col('x').mean())
+    expected = tp.tidyframe({'max_x': [2],
+                             'max_y': [2],
+                             'avg_x': [1]})
+    assert actual.frame_equal(expected), "ungrouped summarize across failed"
