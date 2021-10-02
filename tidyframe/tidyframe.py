@@ -69,7 +69,7 @@ class tidyframe(pl.DataFrame):
 
         Examples
         --------
-        df = pl.DataFrame({'x': ['a', 'a', 'b'], 'y': range(3)})
+        df = tf.tidyframe({'x': ['a', 'a', 'b'], 'y': range(3)})
         
         # Arrange in ascending order
         df.arrange('x', 'y')
@@ -253,3 +253,36 @@ class tidyframe(pl.DataFrame):
         """
         args = args_as_list(args)
         return super().select(args).pipe(as_tidyframe)
+    
+    def summarize(self, **kwargs) -> "tf.tidyframe":
+        """
+        Aggregate data with summary statistics
+
+        Parameters
+        ----------
+        **kwargs : Expr
+            Column expressions to add or modify
+
+        Returns
+        -------
+        tf.tidyframe
+
+        Examples
+        --------
+        df = tf.tidyframe(
+            {'a': range(3),
+             'b': range(3),
+             'c': ['a', 'a', 'b']}
+        )
+        
+        df.summarize(avg_a = col('a').mean())
+
+        (
+            df
+            .summarize(avg_a = col('a').mean(),
+                       max_b = col('b').max())
+        )
+        """
+        exprs = kwargs_as_exprs(kwargs)
+        return super().select(exprs).pipe(as_tidyframe)
+

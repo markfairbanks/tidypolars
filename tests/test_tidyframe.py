@@ -48,3 +48,10 @@ def test_select():
     actual = df.select('x', 'z')
     expected = df[['x', 'z']]
     assert actual.frame_equal(expected), "select failed"
+
+def test_summarize():
+    """Can use summarize"""
+    df = tf.tidyframe({'x': range(3), 'y': range(3), 'z': range(3)})
+    actual = df.summarize(avg_x = col('x').mean())
+    expected = tf.tidyframe({'avg_x': [1]})
+    assert actual.frame_equal(expected), "ungrouped summarize failed"
