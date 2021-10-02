@@ -2,8 +2,7 @@ import polars as pl
 import numpy as np
 import functools as ft
 
-import typing as tp
-from typing import Union
+from typing import Union, List
 
 col = pl.col
 
@@ -51,7 +50,7 @@ def kwargs_as_exprs(kwargs):
     return [expr.alias(key) for key, expr in kwargs.items()]
 
 class tidyframe(pl.DataFrame):
-    def arrange(self, *args, desc: Union[bool, tp.List[bool]] = False) -> "tf.tidyframe":
+    def arrange(self, *args, desc: Union[bool, List[bool]] = False) -> "tp.tidyframe":
         """
         Arrange/sort rows
 
@@ -65,11 +64,11 @@ class tidyframe(pl.DataFrame):
 
         Returns
         -------
-        tf.tidyframe
+        tp.tidyframe
 
         Examples
         --------
-        df = tf.tidyframe({'x': ['a', 'a', 'b'], 'y': range(3)})
+        df = tp.tidyframe({'x': ['a', 'a', 'b'], 'y': range(3)})
         
         # Arrange in ascending order
         df.arrange('x', 'y')
@@ -80,7 +79,7 @@ class tidyframe(pl.DataFrame):
         exprs = as_list(args)
         return self.sort(exprs, reverse = desc).pipe(as_tidyframe)
     
-    def filter(self, *args) -> "tf.tidyframe":
+    def filter(self, *args) -> "tp.tidyframe":
         """
         Filter rows on one or more conditions
 
@@ -91,11 +90,11 @@ class tidyframe(pl.DataFrame):
 
         Returns
         -------
-        tf.tidyframe
+        tp.tidyframe
 
         Examples
         --------
-        df = tf.tidyframe(
+        df = tp.tidyframe(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
@@ -111,7 +110,7 @@ class tidyframe(pl.DataFrame):
     
     def group_by(df, *args):
         """
-        Filter rows on one or more conditions
+        Group by one or more variables
 
         Parameters
         ----------
@@ -124,7 +123,7 @@ class tidyframe(pl.DataFrame):
 
         Examples
         --------
-        df = tf.tidyframe(
+        df = tp.tidyframe(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
@@ -141,7 +140,7 @@ class tidyframe(pl.DataFrame):
         df.__class__ = grouped_tidyframe
         return df
     
-    def mutate(self, **kwargs) -> "tf.tidyframe":
+    def mutate(self, **kwargs) -> "tp.tidyframe":
         """
         Add or modify columns
 
@@ -152,11 +151,11 @@ class tidyframe(pl.DataFrame):
 
         Returns
         -------
-        tf.tidyframe
+        tp.tidyframe
 
         Examples
         --------
-        df = tf.tidyframe(
+        df = tp.tidyframe(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
@@ -185,7 +184,7 @@ class tidyframe(pl.DataFrame):
 
         Examples
         --------
-        df = tf.tidyframe(
+        df = tp.tidyframe(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
@@ -195,7 +194,7 @@ class tidyframe(pl.DataFrame):
         """
         return fn(self, *args, **kwargs)
     
-    def relocate(self, *args, before: str = None, after: str = None) -> "tf.tidyframe":
+    def relocate(self, *args, before: str = None, after: str = None) -> "tp.tidyframe":
         """
         Move a column or columns to a new position
 
@@ -206,11 +205,11 @@ class tidyframe(pl.DataFrame):
 
         Returns
         -------
-        tf.tidyframe
+        tp.tidyframe
 
         Examples
         --------
-        df = tf.tidyframe(
+        df = tp.tidyframe(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
@@ -258,7 +257,7 @@ class tidyframe(pl.DataFrame):
 
             return self.select(ordered_cols)
     
-    def select(self, *args) -> "tf.tidyframe":
+    def select(self, *args) -> "tp.tidyframe":
         """
         Select or drop columns
 
@@ -269,11 +268,11 @@ class tidyframe(pl.DataFrame):
 
         Returns
         -------
-        tf.tidyframe
+        tp.tidyframe
 
         Examples
         --------
-        df = tf.tidyframe(
+        df = tp.tidyframe(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
@@ -286,7 +285,7 @@ class tidyframe(pl.DataFrame):
         args = args_as_list(args)
         return super().select(args).pipe(as_tidyframe)
     
-    def summarize(self, **kwargs) -> "tf.tidyframe":
+    def summarize(self, **kwargs) -> "tp.tidyframe":
         """
         Aggregate data with summary statistics
 
@@ -297,11 +296,11 @@ class tidyframe(pl.DataFrame):
 
         Returns
         -------
-        tf.tidyframe
+        tp.tidyframe
 
         Examples
         --------
-        df = tf.tidyframe(
+        df = tp.tidyframe(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
@@ -319,7 +318,7 @@ class tidyframe(pl.DataFrame):
         return super().select(exprs).pipe(as_tidyframe)
 
 class grouped_tidyframe(pl.eager.frame.GroupBy):
-    def filter(self, *args) -> "tf.tidyframe":
+    def filter(self, *args) -> "tp.tidyframe":
         """
         Filter rows on one or more conditions by group
 
@@ -330,11 +329,11 @@ class grouped_tidyframe(pl.eager.frame.GroupBy):
 
         Returns
         -------
-        tf.tidyframe
+        tp.tidyframe
 
         Examples
         --------
-        df = tf.tidyframe(
+        df = tp.tidyframe(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
@@ -346,7 +345,7 @@ class grouped_tidyframe(pl.eager.frame.GroupBy):
         exprs = ft.reduce(lambda a, b: a & b, args)
         return self.apply(lambda df: df.filter(exprs)).pipe(as_tidyframe)
     
-    def mutate(self, **kwargs) -> "tf.tidyframe":
+    def mutate(self, **kwargs) -> "tp.tidyframe":
         """
         Add or modify columns by group
 
@@ -357,11 +356,11 @@ class grouped_tidyframe(pl.eager.frame.GroupBy):
 
         Returns
         -------
-        tf.tidyframe
+        tp.tidyframe
 
         Examples
         --------
-        df = tf.tidyframe(
+        df = tp.tidyframe(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
@@ -372,7 +371,7 @@ class grouped_tidyframe(pl.eager.frame.GroupBy):
         exprs = kwargs_as_exprs(kwargs)
         return self.apply(lambda df: df.with_columns(exprs)).pipe(as_tidyframe)
 
-    def summarize(self, **kwargs) -> "tf.tidyframe":
+    def summarize(self, **kwargs) -> "tp.tidyframe":
         """
         Aggregate data with summary statistics
 
@@ -383,11 +382,11 @@ class grouped_tidyframe(pl.eager.frame.GroupBy):
 
         Returns
         -------
-        tf.tidyframe
+        tp.tidyframe
 
         Examples
         --------
-        df = tf.tidyframe(
+        df = tp.tidyframe(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
