@@ -1,11 +1,11 @@
-# tidyframe
+# tidypolars
 
 Tidy interface to polars
 
 ## Installation
 *This package is not yet available on PyPI*
 ```bash
-$ pip3 install tidyframe
+$ pip3 install tidypolars
 ```
 
 ## Usage
@@ -18,8 +18,8 @@ Interested in contributing? Check out the contributing guidelines. Please note t
 
 ## License
 
-`tidyframe` was created by Mark Fairbanks. It is licensed under the terms of the MIT license.
+`tidypolars` was created by Mark Fairbanks. It is licensed under the terms of the MIT license.
 
 ## Credits
 
-`tidyframe` was created with [`cookiecutter`](https://cookiecutter.readthedocs.io/en/latest/) and the `py-pkgs-cookiecutter` [template](https://github.com/py-pkgs/py-pkgs-cookiecutter).
+`tidypolars` was created with [`cookiecutter`](https://cookiecutter.readthedocs.io/en/latest/) and the `py-pkgs-cookiecutter` [template](https://github.com/py-pkgs/py-pkgs-cookiecutter).
