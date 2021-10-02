@@ -69,7 +69,7 @@ class tidyframe(pl.DataFrame):
 
         Examples
         --------
-        df = pl.DataFrame({'x': ['a', 'a', 'b'], 'y': range(3)})
+        df = tf.tidyframe({'x': ['a', 'a', 'b'], 'y': range(3)})
         
         # Arrange in ascending order
         df.arrange('x', 'y')
@@ -108,6 +108,38 @@ class tidyframe(pl.DataFrame):
         args = list(args)
         exprs = ft.reduce(lambda a, b: a & b, args)
         return super().filter(exprs).pipe(as_tidyframe)
+    
+    def group_by(df, *args):
+        """
+        Filter rows on one or more conditions
+
+        Parameters
+        ----------
+        *args : Expr
+            Conditions to filter by
+
+        Returns
+        -------
+        tf.grouped_tidyframe
+
+        Examples
+        --------
+        df = tf.tidyframe(
+            {'a': range(3),
+             'b': range(3),
+             'c': ['a', 'a', 'b']}
+        )
+        
+        df.group_by('c')
+
+        df.group_by('a', 'c')
+        """
+        # TODO: Why doesn't using args_as_list work?
+        # args = args_as_list(args)
+        args = list(args)
+        df = df.groupby(args)
+        df.__class__ = grouped_tidyframe
+        return df
     
     def mutate(self, **kwargs) -> "tf.tidyframe":
         """
@@ -253,3 +285,123 @@ class tidyframe(pl.DataFrame):
         """
         args = args_as_list(args)
         return super().select(args).pipe(as_tidyframe)
+    
+    def summarize(self, **kwargs) -> "tf.tidyframe":
+        """
+        Aggregate data with summary statistics
+
+        Parameters
+        ----------
+        **kwargs : Expr
+            Column expressions to add or modify
+
+        Returns
+        -------
+        tf.tidyframe
+
+        Examples
+        --------
+        df = tf.tidyframe(
+            {'a': range(3),
+             'b': range(3),
+             'c': ['a', 'a', 'b']}
+        )
+        
+        df.summarize(avg_a = col('a').mean())
+
+        (
+            df
+            .summarize(avg_a = col('a').mean(),
+                       max_b = col('b').max())
+        )
+        """
+        exprs = kwargs_as_exprs(kwargs)
+        return super().select(exprs).pipe(as_tidyframe)
+
+class grouped_tidyframe(pl.eager.frame.GroupBy):
+    def filter(self, *args) -> "tf.tidyframe":
+        """
+        Filter rows on one or more conditions by group
+
+        Parameters
+        ----------
+        *args : Expr
+            Conditions to filter by
+
+        Returns
+        -------
+        tf.tidyframe
+
+        Examples
+        --------
+        df = tf.tidyframe(
+            {'a': range(3),
+             'b': range(3),
+             'c': ['a', 'a', 'b']}
+        )
+        
+        df.group_by('c').filter(col('a') < col('a').mean())
+        """
+        args = list(args)
+        exprs = ft.reduce(lambda a, b: a & b, args)
+        return self.apply(lambda df: df.filter(exprs)).pipe(as_tidyframe)
+    
+    def mutate(self, **kwargs) -> "tf.tidyframe":
+        """
+        Add or modify columns by group
+
+        Parameters
+        ----------
+        **kwargs : Expr
+            Column expressions to add or modify
+
+        Returns
+        -------
+        tf.tidyframe
+
+        Examples
+        --------
+        df = tf.tidyframe(
+            {'a': range(3),
+             'b': range(3),
+             'c': ['a', 'a', 'b']}
+        )
+        
+        df.mutate(avg_a = col('a').mean())
+        """
+        exprs = kwargs_as_exprs(kwargs)
+        return self.apply(lambda df: df.with_columns(exprs)).pipe(as_tidyframe)
+
+    def summarize(self, **kwargs) -> "tf.tidyframe":
+        """
+        Aggregate data with summary statistics
+
+        Parameters
+        ----------
+        **kwargs : Expr
+            Column expressions to add or modify
+
+        Returns
+        -------
+        tf.tidyframe
+
+        Examples
+        --------
+        df = tf.tidyframe(
+            {'a': range(3),
+             'b': range(3),
+             'c': ['a', 'a', 'b']}
+        )
+        
+        df.summarize(avg_a = col('a').mean())
+
+        (
+            df
+            .group_by('c')
+            .summarize(avg_a = col('a').mean(),
+                       max_b = col('b').max())
+        )
+        """
+        exprs = kwargs_as_exprs(kwargs)
+        return self.agg(exprs).pipe(as_tidyframe)
+

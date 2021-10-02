@@ -23,6 +23,12 @@ def test_filter():
     expected = tf.tidyframe({'x': range(2), 'y': range(2)})
     assert actual.frame_equal(expected), "filter failed"
 
+def test_group_by1():
+    """Can create grouped_tidyframe"""
+    df = tf.tidyframe({'x': range(3), 'y': ['a', 'a', 'b']})
+    out = df.group_by('y')
+    assert isinstance(out, tf.grouped_tidyframe), "group_by failed"
+
 def test_mutate():
     """Can edit existing columns and can add columns"""
     df = tf.tidyframe({'x': np.repeat(1, 3), 'y': np.repeat(2, 3)})
@@ -48,3 +54,10 @@ def test_select():
     actual = df.select('x', 'z')
     expected = df[['x', 'z']]
     assert actual.frame_equal(expected), "select failed"
+
+def test_summarize():
+    """Can use summarize"""
+    df = tf.tidyframe({'x': range(3), 'y': range(3), 'z': range(3)})
+    actual = df.summarize(avg_x = col('x').mean())
+    expected = tf.tidyframe({'avg_x': [1]})
+    assert actual.frame_equal(expected), "ungrouped summarize failed"
