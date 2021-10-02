@@ -140,7 +140,7 @@ class tidyframe(pl.DataFrame):
         df.__class__ = grouped_tidyframe
         return df
     
-    def mutate(self, **kwargs) -> "tp.tidyframe":
+    def mutate(self, *args, **kwargs) -> "tp.tidyframe":
         """
         Add or modify columns
 
@@ -167,7 +167,7 @@ class tidyframe(pl.DataFrame):
                     a_plus_b = col('a') + col('b'))
         )
         """
-        exprs = kwargs_as_exprs(kwargs)
+        exprs = list(args) + kwargs_as_exprs(kwargs)
         return self.with_columns(exprs).pipe(as_tidyframe)
     
     def pipe(self, fn, *args, **kwargs):
@@ -285,7 +285,7 @@ class tidyframe(pl.DataFrame):
         args = args_as_list(args)
         return super().select(args).pipe(as_tidyframe)
     
-    def summarize(self, **kwargs) -> "tp.tidyframe":
+    def summarize(self, *args, **kwargs) -> "tp.tidyframe":
         """
         Aggregate data with summary statistics
 
@@ -314,7 +314,7 @@ class tidyframe(pl.DataFrame):
                        max_b = col('b').max())
         )
         """
-        exprs = kwargs_as_exprs(kwargs)
+        exprs = list(args) + kwargs_as_exprs(kwargs)
         return super().select(exprs).pipe(as_tidyframe)
 
 class grouped_tidyframe(pl.eager.frame.GroupBy):
@@ -345,7 +345,7 @@ class grouped_tidyframe(pl.eager.frame.GroupBy):
         exprs = ft.reduce(lambda a, b: a & b, args)
         return self.apply(lambda df: df.filter(exprs)).pipe(as_tidyframe)
     
-    def mutate(self, **kwargs) -> "tp.tidyframe":
+    def mutate(self, *args, **kwargs) -> "tp.tidyframe":
         """
         Add or modify columns by group
 
@@ -368,10 +368,10 @@ class grouped_tidyframe(pl.eager.frame.GroupBy):
         
         df.mutate(avg_a = col('a').mean())
         """
-        exprs = kwargs_as_exprs(kwargs)
+        exprs = list(args) + kwargs_as_exprs(kwargs)
         return self.apply(lambda df: df.with_columns(exprs)).pipe(as_tidyframe)
 
-    def summarize(self, **kwargs) -> "tp.tidyframe":
+    def summarize(self, *args, **kwargs) -> "tp.tidyframe":
         """
         Aggregate data with summary statistics
 
@@ -401,6 +401,6 @@ class grouped_tidyframe(pl.eager.frame.GroupBy):
                        max_b = col('b').max())
         )
         """
-        exprs = kwargs_as_exprs(kwargs)
+        exprs = list(args) + kwargs_as_exprs(kwargs)
         return self.agg(exprs).pipe(as_tidyframe)
 
