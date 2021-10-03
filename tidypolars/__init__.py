@@ -1,5 +1,11 @@
 # read version from installed package
 from importlib.metadata import version
-__version__ = version("tidypolars")
+from importlib import find_loader
 
-from .tidypolars import *
+try:
+    find_loader('tidypolars')
+    __version__ = version("tidypolars")
+    from .tidypolars import *
+except:
+    import tidypolars
+    from .tidypolars import *
