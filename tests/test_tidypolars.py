@@ -69,6 +69,13 @@ def test_mutate_across():
     )
     assert actual.frame_equal(expected), "mutate across failed"
 
+def test_mutate_across():
+    """Can use pull"""
+    df = tp.tibble({'x': pl.repeat(1, 3), 'y': pl.repeat(2, 3)})
+    actual = df.pull('x')
+    expected = df.get_column('x')
+    assert actual == expected, "pull failed"
+
 def test_relocate():
     """Can relocate columns"""
     df = tp.tibble({'x': range(3), 'y': range(3), 'z': range(3)})

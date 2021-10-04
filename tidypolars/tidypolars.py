@@ -77,35 +77,39 @@ class tibble(pl.DataFrame):
         exprs = args_as_list(args)
         return self.sort(exprs, reverse = desc).pipe(as_tibble)
 
-    def bind_cols(self, df) -> "tp.tibble" :
+    def bind_cols(self, df: "tp.tibble") -> "tp.tibble" :
         """
-        Returns tibble with new column added to the end
+        Bind data frames by columns
 
         Parameters
         ----------
-        df : Dataframe
+        df : tibble
+            Data frame to bind
 
         Examples
         --------
         df1 = tp.tibble({'x': ['a', 'a', 'b'], 'y': range(3)})
-        df2 = tp.tibble({'a': ['c', 'c', 'c'], 'b': range(4,7)})
+        df2 = tp.tibble({'a': ['c', 'c', 'c'], 'b': range(4, 7)})
+
         df1.bind_cols(df2)
         """
         # TODO: Allow to work on multiple inputs
-        return self.hstack(df).pipe(as_tibble) 
+        return self.hstack(df).pipe(as_tibble)
     
-    def bind_rows(self, df) -> "tp.tibble" :
+    def bind_rows(self, df: "tp.tibble") -> "tp.tibble":
         """
-        Arrange/sort rows
+        Bind data frames by row
 
         Parameters
         ----------
-        df : Dataframe to append
+        df : tibble
+            Data frame to bind
 
         Examples
         --------
         df1 = tp.tibble({'x': ['a', 'a', 'b'], 'y': range(3)})
-        df2 = tp.tibble({'x': ['c', 'c', 'c'], 'y': range(4,7)})
+        df2 = tp.tibble({'x': ['c', 'c', 'c'], 'y': range(4, 7)})
+
         df1.bind_rows(df2)
         """
         # TODO: Allow to work on multiple inputs
@@ -122,11 +126,7 @@ class tibble(pl.DataFrame):
 
         Examples
         --------
-        df = tp.tibble(
-            {'a': range(3),
-             'b': range(3),
-             'c': ['a', 'a', 'b']}
-        )
+        df = tp.tibble({'a': range(3), 'b': ['a', 'a', 'b'])
         
         df.filter(col('a') < 2, col('c') == 'a')
 
@@ -136,7 +136,7 @@ class tibble(pl.DataFrame):
         exprs = ft.reduce(lambda a, b: a & b, args)
         return super().filter(exprs).pipe(as_tibble)
     
-    def group_by(df, *args):
+    def group_by(self, *args):
         """
         Group by one or more variables
 
@@ -145,24 +145,16 @@ class tibble(pl.DataFrame):
         *args : Expr
             Conditions to filter by
 
-        Returns
-        -------
-        tp.grouped_tibble
-
         Examples
         --------
-        df = tp.tibble(
-            {'a': range(3),
-             'b': range(3),
-             'c': ['a', 'a', 'b']}
-        )
+        df = tp.tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
         
         df.group_by('c')
 
         df.group_by('a', 'c')
         """
         args = args_as_list(args)
-        df = df.groupby(args)
+        df = self.groupby(args)
         df.__class__ = grouped_tibble
         return df
     
@@ -177,44 +169,36 @@ class tibble(pl.DataFrame):
 
         Examples
         --------
-        df = tp.tibble(
-            {'a': range(3),
-             'b': range(3),
-             'c': ['a', 'a', 'b']}
-        )
+        df = tp.tibble({'a': range(3), 'b': range(3)})
+
+        df.mutate(double_a = col('a') * 2,
+                  a_plus_b = col('a') + col('b'))
         
-        (
-            df
-            .mutate(double_a = col('a') * 2,
-                    a_plus_b = col('a') + col('b'))
-        )
+        df.mutate((col(['a', 'b]) * 2).prefix('double_'),
+                  a_plus_b = col('a') + col('b'))
         """
         exprs = args_as_list(args) + kwargs_as_exprs(kwargs)
         return self.with_columns(exprs).pipe(as_tibble)
-    
-    def pipe(self, fn, *args, **kwargs):
+
+    def pull(self, var = None):
         """
-        Apply a function to the data frame
+        Extract a column as a series
 
         Parameters
         ----------
-        *args :
-            args to pass to the function
-        
-        **kwargs :
-            keyword arguments to pass to the function
+        var : str
+            Name of the column to extract. Defaults to the last column.
 
         Examples
         --------
-        df = tp.tibble(
-            {'a': range(3),
-             'b': range(3),
-             'c': ['a', 'a', 'b']}
-        )
+        df = tp.tibble({'a': range(3), 'b': range(3))
         
-        df.pipe(print)
+        df.pull('a')
         """
-        return fn(self, *args, **kwargs)
+        if var == None:
+            var = self.columns[-1]
+        
+        return self.get_column(var)
     
     def relocate(self, *args, before: str = None, after: str = None) -> "tp.tibble":
         """
@@ -227,11 +211,7 @@ class tibble(pl.DataFrame):
 
         Examples
         --------
-        df = tp.tibble(
-            {'a': range(3),
-             'b': range(3),
-             'c': ['a', 'a', 'b']}
-        )
+        df = tp.tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
         
         df.relocate('a', before = 'c')
 
@@ -285,11 +265,7 @@ class tibble(pl.DataFrame):
 
         Examples
         --------
-        df = tp.tibble(
-            {'a': range(3),
-             'b': range(3),
-             'c': ['a', 'a', 'b']}
-        )
+        df = tp.tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
         
         df.select('a', 'b')
 
@@ -309,19 +285,12 @@ class tibble(pl.DataFrame):
 
         Examples
         --------
-        df = tp.tibble(
-            {'a': range(3),
-             'b': range(3),
-             'c': ['a', 'a', 'b']}
-        )
+        df = tp.tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
         
         df.summarize(avg_a = col('a').mean())
 
-        (
-            df
-            .summarize(avg_a = col('a').mean(),
-                       max_b = col('b').max())
-        )
+        df.summarize(avg_a = col('a').mean(),
+                     max_b = col('b').max()))
         """
         exprs = args_as_list(args) + kwargs_as_exprs(kwargs)
         return super().select(exprs).pipe(as_tibble)
@@ -338,15 +307,11 @@ class grouped_tibble(pl.eager.frame.GroupBy):
 
         Examples
         --------
-        df = tp.tibble(
-            {'a': range(3),
-             'b': range(3),
-             'c': ['a', 'a', 'b']}
-        )
+        df = tp.tibble({'a': range(3), 'b': ['a', 'a', 'b']})
         
-        df.group_by('c').filter(col('a') < col('a').mean())
+        df.group_by('b').filter(col('a') < col('a').mean())
         """
-        args = list(args)
+        args = args_as_list(args)
         exprs = ft.reduce(lambda a, b: a & b, args)
         return self.apply(lambda df: df.filter(exprs)).pipe(as_tibble)
     
@@ -361,13 +326,9 @@ class grouped_tibble(pl.eager.frame.GroupBy):
 
         Examples
         --------
-        df = tp.tibble(
-            {'a': range(3),
-             'b': range(3),
-             'c': ['a', 'a', 'b']}
-        )
+        df = tp.tibble({'a': range(3), 'b': ['a', 'a', 'b']})
         
-        df.mutate(avg_a = col('a').mean())
+        df.group_by('b').mutate(avg_a = col('a').mean())
         """
         exprs = args_as_list(args) + kwargs_as_exprs(kwargs)
         return self.apply(lambda df: df.with_columns(exprs)).pipe(as_tibble)
@@ -383,20 +344,12 @@ class grouped_tibble(pl.eager.frame.GroupBy):
 
         Examples
         --------
-        df = tp.tibble(
-            {'a': range(3),
-             'b': range(3),
-             'c': ['a', 'a', 'b']}
-        )
+        df = tp.tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
         
         df.summarize(avg_a = col('a').mean())
 
-        (
-            df
-            .group_by('c')
-            .summarize(avg_a = col('a').mean(),
-                       max_b = col('b').max())
-        )
+        df.group_by('c').summarize(avg_a = col('a').mean(),
+                                   max_b = col('b').max())
         """
         exprs = args_as_list(args) + kwargs_as_exprs(kwargs)
         return self.agg(exprs).pipe(as_tibble)
