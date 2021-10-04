@@ -1,10 +1,8 @@
 import polars as pl
-from polars import Series
+from polars import col, Series
 import functools as ft
 
 from typing import Union, List
-
-col = pl.col
 
 def as_tibble(df):
     df.__class__ = tibble
