@@ -1,5 +1,6 @@
 import tidypolars as tp
 from tidypolars import col
+import polars as pl
 
 def test_arrange1():
     """Can arrange ascending"""

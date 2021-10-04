@@ -39,18 +39,14 @@ def as_list(x):
         return list(x)
 
 def args_as_list(x):
-    if isinstance(x, list):
+    if len(x) == 0:
+        return []
+    elif isinstance(x[0], list):
         return x[0]
     elif is_list_like(x[0]):
         return list(x[0])
     else:
         return [*x]
-
-def as_series(x):
-    if isinstance(pl.Series):
-        return x
-    else:
-        return pl.Series(as_list(x))
 
 # Convert kwargs to col() expressions with alias
 def kwargs_as_exprs(kwargs):
@@ -83,7 +79,7 @@ class tidyframe(pl.DataFrame):
         # Arrange some columns descending
         df.arrange('x', 'y', desc = [True, False])
         """
-        exprs = as_list(args)
+        exprs = args_as_list(args)
         return self.sort(exprs, reverse = desc).pipe(as_tidyframe)
     
     def filter(self, *args) -> "tp.tidyframe":
@@ -111,7 +107,7 @@ class tidyframe(pl.DataFrame):
 
         df.filter((col('a') < 2) & (col('c') == 'a'))
         """
-        args = list(args)
+        args = args_as_list(args)
         exprs = ft.reduce(lambda a, b: a & b, args)
         return super().filter(exprs).pipe(as_tidyframe)
     
@@ -140,7 +136,7 @@ class tidyframe(pl.DataFrame):
 
         df.group_by('a', 'c')
         """
-        args = as_list(args)
+        args = args_as_list(args)
         df = df.groupby(args)
         df.__class__ = grouped_tidyframe
         return df
@@ -172,7 +168,7 @@ class tidyframe(pl.DataFrame):
                     a_plus_b = col('a') + col('b'))
         )
         """
-        exprs = list(args) + kwargs_as_exprs(kwargs)
+        exprs = args_as_list(args) + kwargs_as_exprs(kwargs)
         return self.with_columns(exprs).pipe(as_tidyframe)
     
     def pipe(self, fn, *args, **kwargs):
