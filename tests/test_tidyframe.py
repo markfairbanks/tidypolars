@@ -1,6 +1,5 @@
 import tidypolars as tp
 from tidypolars import col
-import numpy as np
 
 def test_arrange1():
     """Can arrange ascending"""
@@ -31,25 +30,25 @@ def test_group_by1():
 
 def test_mutate():
     """Can edit existing columns and can add columns"""
-    df = tp.tidyframe({'x': np.repeat(1, 3), 'y': np.repeat(2, 3)})
+    df = tp.tidyframe({'x': pl.repeat(1, 3), 'y': pl.repeat(2, 3)})
     actual = df.mutate(double_x = col('x') * 2,
                        y = col('y') + 10)
     expected = tp.tidyframe(
-        {'x': np.repeat(1, 3),
-         'y': np.repeat(12, 3),
-          'double_x': np.repeat(2, 3)}
+        {'x': pl.repeat(1, 3),
+         'y': pl.repeat(12, 3),
+          'double_x': pl.repeat(2, 3)}
     )
     assert actual.frame_equal(expected), "mutate failed"
 
 def test_mutate_across():
     """Can mutate multiple columns simultaneously"""
-    df = tp.tidyframe({'x': np.repeat(1, 3), 'y': np.repeat(2, 3)})
+    df = tp.tidyframe({'x': pl.repeat(1, 3), 'y': pl.repeat(2, 3)})
     actual = df.mutate(col(['x', 'y']) * 2,
                        x_plus_y = col('x') + col('y'))
     expected = tp.tidyframe(
-        {'x': np.repeat(2, 3),
-         'y': np.repeat(4, 3),
-         'x_plus_y': np.repeat(3, 3)}
+        {'x': pl.repeat(2, 3),
+         'y': pl.repeat(4, 3),
+         'x_plus_y': pl.repeat(3, 3)}
     )
     assert actual.frame_equal(expected), "mutate across failed"
 

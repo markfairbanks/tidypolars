@@ -1,5 +1,4 @@
 import polars as pl
-import numpy as np
 import functools as ft
 
 from typing import Union, List
@@ -26,24 +25,32 @@ def col_exprs(x):
         return [col_expr(x)]
   
 def is_list_like(x):
-    if isinstance(x, list) | isinstance(x, np.ndarray):
+    if isinstance(x, list) | isinstance(x, pl.Series):
         return True
     else:
         return False
 
 def as_list(x):
     if isinstance(x, list):
-        return x
+        return x.copy()
     elif isinstance(x, str):
         return [x]
     else:
         return list(x)
 
-# Allow selecting with str, list, or list of lists
-def args_as_list(args):
-    args = as_list(args)
-    args = [[arg] if not is_list_like(arg) else arg for arg in args]
-    return np.concatenate(args)
+def args_as_list(x):
+    if isinstance(x, list):
+        return x[0]
+    elif is_list_like(x[0]):
+        return list(x[0])
+    else:
+        return [*x]
+
+def as_series(x):
+    if isinstance(pl.Series):
+        return x
+    else:
+        return pl.Series(as_list(x))
 
 # Convert kwargs to col() expressions with alias
 def kwargs_as_exprs(kwargs):
@@ -133,9 +140,7 @@ class tidyframe(pl.DataFrame):
 
         df.group_by('a', 'c')
         """
-        # TODO: Why doesn't using args_as_list work?
-        # args = args_as_list(args)
-        args = list(args)
+        args = as_list(args)
         df = df.groupby(args)
         df.__class__ = grouped_tidyframe
         return df
@@ -219,7 +224,7 @@ class tidyframe(pl.DataFrame):
 
         df.relocate('b', after = 'c')
         """
-        move_cols = np.array(list(args))
+        move_cols = pl.Series(list(args))
 
         if len(move_cols) == 0:
             return self
@@ -227,33 +232,32 @@ class tidyframe(pl.DataFrame):
             if (before != None) & (after != None):
                 raise ValueError("Cannot provide both before and after")
 
-            all_cols = np.array(self.columns)
-            all_locs = np.arange(0, len(all_cols))
+            all_cols = pl.Series(self.columns)
+            all_locs = pl.Series(range(len(all_cols)))
             
-            move_cols = col_exprs(move_cols)
-            move_cols = self.select(move_cols).columns
-            move_locs = all_locs[np.isin(all_cols, move_cols)]
+            move_cols = pl.Series(self.select(move_cols).columns)
+            move_locs = all_locs[all_cols.is_in(move_cols)]
 
             if (before == None) & (after == None):
                 before_loc = 0
             elif before != None:
-                before = col_exprs(before)
                 before = self.select(before).columns[0]
-                before_loc = all_locs[all_cols == before]
+                before_loc = all_locs[all_cols == before][0]
             else:
-                after = col_exprs(after)
                 after = self.select(after).columns[0]
-                before_loc = all_locs[all_cols == after] + 1
+                before_loc = all_locs[all_cols == after][0] + 1
 
-            before_locs = np.arange(0, before_loc)
-            after_locs = np.arange(before_loc, len(all_cols))
+            before_locs = pl.Series(range(before_loc))
+            after_locs = pl.Series(range(before_loc, len(all_cols)))
 
-            before_locs = np.setdiff1d(before_locs, move_locs)
-            after_locs = np.setdiff1d(after_locs, move_locs)
+            before_locs = before_locs[~before_locs.is_in(move_locs)]
+            after_locs = after_locs[~after_locs.is_in(move_locs)]
 
-            final_order = np.concatenate((before_locs, move_locs, after_locs))
+            final_order = before_locs.cast(int)
+            final_order.append(move_locs.cast(int))
+            final_order.append(after_locs.cast(int))
 
-            ordered_cols = all_cols[final_order]
+            ordered_cols = all_cols.take(final_order)
 
             return self.select(ordered_cols)
     
