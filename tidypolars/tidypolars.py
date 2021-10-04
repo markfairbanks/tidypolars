@@ -77,7 +77,7 @@ class tibble(pl.DataFrame):
         exprs = args_as_list(args)
         return self.sort(exprs, reverse = desc).pipe(as_tibble)
 
-    def bind_cols(self, *args) -> "tp.tibble" :
+    def bind_cols(self, columns) -> "tp.tibble" :
         """
         Returns tibble with new column added to the end
 
@@ -87,12 +87,11 @@ class tibble(pl.DataFrame):
 
         Examples
         --------
-        df = tp.tibble({'x': ['a', 'a', 'b'], 'y': range(3)})
-        zz = tp.Series('z', [9, 12, 15])
-        df.bind_cols([zz])
+        df1 = tp.tibble({'x': ['a', 'a', 'b'], 'y': range(3)})
+        df2 = tp.tibble({'a': ['c', 'c', 'c'], 'b': range(4,7)})
+        df1.bind_cols(df2)
         """
-        args = args_as_list(args)
-        return self.hstack(args).pipe(as_tibble) 
+        return self.hstack(columns).pipe(as_tibble) 
     
     def bind_rows(self, df) -> "tp.tibble" :
         """
@@ -108,6 +107,7 @@ class tibble(pl.DataFrame):
         df2 = tp.tibble({'x': ['c', 'c', 'c'], 'y': range(4,7)})
         df1.bind_rows(df2)
         """
+        # TODO: Allow bind rows to work on multiple inputs
         return self.vstack(df).pipe(as_tibble)
 
 
