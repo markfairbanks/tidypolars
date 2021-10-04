@@ -1,4 +1,5 @@
 import polars as pl
+from polars import Series
 import functools as ft
 
 from typing import Union, List
@@ -65,10 +66,6 @@ class tibble(pl.DataFrame):
         desc : Union[bool, List[bool]] = False
             Should columns be ordered in descending order
 
-        Returns
-        -------
-        tp.tibble
-
         Examples
         --------
         df = tp.tibble({'x': ['a', 'a', 'b'], 'y': range(3)})
@@ -81,7 +78,41 @@ class tibble(pl.DataFrame):
         """
         exprs = args_as_list(args)
         return self.sort(exprs, reverse = desc).pipe(as_tibble)
+
+    def bind_cols(self, *args) -> "tp.tibble" :
+        """
+        Returns tibble with new column added to the end
+
+        Parameters
+        ----------
+        *args : Series to add to dataframe
+
+        Examples
+        --------
+        df = tp.tibble({'x': ['a', 'a', 'b'], 'y': range(3)})
+        zz = tp.Series('z', [9, 12, 15])
+        df.bind_cols([zz])
+        """
+        args = args_as_list(args)
+        return self.hstack(args).pipe(as_tibble) 
     
+    def bind_rows(self, df) -> "tp.tibble" :
+        """
+        Arrange/sort rows
+
+        Parameters
+        ----------
+        df : Dataframe to append
+
+        Examples
+        --------
+        df1 = tp.tibble({'x': ['a', 'a', 'b'], 'y': range(3)})
+        df2 = tp.tibble({'x': ['c', 'c', 'c'], 'y': range(4,7)})
+        df1.bind_rows(df2)
+        """
+        return self.vstack(df).pipe(as_tibble)
+
+
     def filter(self, *args) -> "tp.tibble":
         """
         Filter rows on one or more conditions
@@ -90,10 +121,6 @@ class tibble(pl.DataFrame):
         ----------
         *args : Expr
             Conditions to filter by
-
-        Returns
-        -------
-        tp.tibble
 
         Examples
         --------
@@ -150,10 +177,6 @@ class tibble(pl.DataFrame):
         **kwargs : Expr
             Column expressions to add or modify
 
-        Returns
-        -------
-        tp.tibble
-
         Examples
         --------
         df = tp.tibble(
@@ -203,10 +226,6 @@ class tibble(pl.DataFrame):
         ----------
         *args : Union[str, Expr]
             Columns to move
-
-        Returns
-        -------
-        tp.tibble
 
         Examples
         --------
@@ -266,10 +285,6 @@ class tibble(pl.DataFrame):
         *args : Union[str, Expr]
             Columns to select
 
-        Returns
-        -------
-        tp.tibble
-
         Examples
         --------
         df = tp.tibble(
@@ -293,10 +308,6 @@ class tibble(pl.DataFrame):
         ----------
         **kwargs : Expr
             Column expressions to add or modify
-
-        Returns
-        -------
-        tp.tibble
 
         Examples
         --------
@@ -327,10 +338,6 @@ class grouped_tibble(pl.eager.frame.GroupBy):
         *args : Expr
             Conditions to filter by
 
-        Returns
-        -------
-        tp.tibble
-
         Examples
         --------
         df = tp.tibble(
@@ -354,10 +361,6 @@ class grouped_tibble(pl.eager.frame.GroupBy):
         **kwargs : Expr
             Column expressions to add or modify
 
-        Returns
-        -------
-        tp.tibble
-
         Examples
         --------
         df = tp.tibble(
@@ -379,10 +382,6 @@ class grouped_tibble(pl.eager.frame.GroupBy):
         ----------
         **kwargs : Expr
             Column expressions to add or modify
-
-        Returns
-        -------
-        tp.tibble
 
         Examples
         --------

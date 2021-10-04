@@ -16,6 +16,22 @@ def test_arrange2():
     expected = tp.tibble({'x': ['b', 'a', 'a'], 'y': [3, 1, 2]})
     assert actual.frame_equal(expected), "arrange descending failed"
 
+def test_bind_cols():
+    """Can bind_cols"""
+    df = tp.tibble({'x': ['a', 'a', 'b'], 'y': [2, 1, 3]})
+    zz = tp.Series('z', [4, 4, 4])
+    actual = df.bind_cols([zz])
+    expected = tp.tibble({'x': ['a', 'a', 'b'], 'y': [2, 1, 3], 'z':[4, 4, 4]})
+    assert actual.frame_equal(expected), "bind cols failed"
+
+def test_bind_rows():
+    """Can bind rows"""
+    df1 = tp.tibble({'x': ['a', 'a'], 'y': [2, 1]})
+    df2 = tp.tibble({'x': ['b'], 'y': [3]})
+    actual = df1.bind_rows(df2)
+    expected = tp.tibble({'x': ['a', 'a', 'b'], 'y': [2, 1, 3]})
+    assert actual.frame_equal(expected), "bind rows failed"
+
 def test_filter():
     """Can filter multiple conditions"""
     df = tp.tibble({'x': range(10), 'y': range(10)})
