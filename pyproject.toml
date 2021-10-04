@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tidypolars"
-version = "0.1.0"
+version = "0.1.3"
 description = "Tidy interface to polars"
 authors = ["Mark Fairbanks"]
 license = "MIT"
