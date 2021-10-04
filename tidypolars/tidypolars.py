@@ -170,6 +170,26 @@ class tibble(pl.DataFrame):
         """
         exprs = args_as_list(args) + kwargs_as_exprs(kwargs)
         return self.with_columns(exprs).pipe(as_tibble)
+
+    def pull(self, var = None):
+        """
+        Extract a column as a series
+
+        Parameters
+        ----------
+        var : str
+            Name of the column to extract. Defaults to the last column.
+
+        Examples
+        --------
+        df = tp.tibble({'a': range(3), 'b': range(3))
+        
+        df.pull('a')
+        """
+        if var == None:
+            var = self.columns[-1]
+        
+        return self.get_column(var)
     
     def pipe(self, fn, *args, **kwargs):
         """
