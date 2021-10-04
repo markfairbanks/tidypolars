@@ -19,8 +19,8 @@ def test_arrange2():
 def test_bind_cols():
     """Can bind_cols"""
     df = tp.tibble({'x': ['a', 'a', 'b'], 'y': [2, 1, 3]})
-    zz = tp.Series('z', [4, 4, 4])
-    actual = df.bind_cols([zz])
+    srs = tp.Series('z', [4, 4, 4])
+    actual = df.bind_cols([srs])
     expected = tp.tibble({'x': ['a', 'a', 'b'], 'y': [2, 1, 3], 'z':[4, 4, 4]})
     assert actual.frame_equal(expected), "bind cols failed"
 
