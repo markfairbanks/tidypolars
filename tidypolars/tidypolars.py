@@ -314,7 +314,7 @@ class tidyframe(pl.DataFrame):
                        max_b = col('b').max())
         )
         """
-        exprs = list(args) + kwargs_as_exprs(kwargs)
+        exprs = args_as_list(args) + kwargs_as_exprs(kwargs)
         return super().select(exprs).pipe(as_tidyframe)
 
 class grouped_tidyframe(pl.eager.frame.GroupBy):
@@ -368,7 +368,7 @@ class grouped_tidyframe(pl.eager.frame.GroupBy):
         
         df.mutate(avg_a = col('a').mean())
         """
-        exprs = list(args) + kwargs_as_exprs(kwargs)
+        exprs = args_as_list(args) + kwargs_as_exprs(kwargs)
         return self.apply(lambda df: df.with_columns(exprs)).pipe(as_tidyframe)
 
     def summarize(self, *args, **kwargs) -> "tp.tidyframe":
@@ -401,6 +401,6 @@ class grouped_tidyframe(pl.eager.frame.GroupBy):
                        max_b = col('b').max())
         )
         """
-        exprs = list(args) + kwargs_as_exprs(kwargs)
+        exprs = args_as_list(args) + kwargs_as_exprs(kwargs)
         return self.agg(exprs).pipe(as_tidyframe)
 
