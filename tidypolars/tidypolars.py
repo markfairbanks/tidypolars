@@ -5,8 +5,8 @@ from typing import Union, List
 
 col = pl.col
 
-def as_tidyframe(df):
-    df.__class__ = tidyframe
+def as_tibble(df):
+    df.__class__ = tibble
     return df
 
 def col_expr(x):
@@ -52,8 +52,8 @@ def args_as_list(x):
 def kwargs_as_exprs(kwargs):
     return [expr.alias(key) for key, expr in kwargs.items()]
 
-class tidyframe(pl.DataFrame):
-    def arrange(self, *args, desc: Union[bool, List[bool]] = False) -> "tp.tidyframe":
+class tibble(pl.DataFrame):
+    def arrange(self, *args, desc: Union[bool, List[bool]] = False) -> "tp.tibble":
         """
         Arrange/sort rows
 
@@ -67,11 +67,11 @@ class tidyframe(pl.DataFrame):
 
         Returns
         -------
-        tp.tidyframe
+        tp.tibble
 
         Examples
         --------
-        df = tp.tidyframe({'x': ['a', 'a', 'b'], 'y': range(3)})
+        df = tp.tibble({'x': ['a', 'a', 'b'], 'y': range(3)})
         
         # Arrange in ascending order
         df.arrange('x', 'y')
@@ -80,9 +80,9 @@ class tidyframe(pl.DataFrame):
         df.arrange('x', 'y', desc = [True, False])
         """
         exprs = args_as_list(args)
-        return self.sort(exprs, reverse = desc).pipe(as_tidyframe)
+        return self.sort(exprs, reverse = desc).pipe(as_tibble)
     
-    def filter(self, *args) -> "tp.tidyframe":
+    def filter(self, *args) -> "tp.tibble":
         """
         Filter rows on one or more conditions
 
@@ -93,11 +93,11 @@ class tidyframe(pl.DataFrame):
 
         Returns
         -------
-        tp.tidyframe
+        tp.tibble
 
         Examples
         --------
-        df = tp.tidyframe(
+        df = tp.tibble(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
@@ -109,7 +109,7 @@ class tidyframe(pl.DataFrame):
         """
         args = args_as_list(args)
         exprs = ft.reduce(lambda a, b: a & b, args)
-        return super().filter(exprs).pipe(as_tidyframe)
+        return super().filter(exprs).pipe(as_tibble)
     
     def group_by(df, *args):
         """
@@ -122,11 +122,11 @@ class tidyframe(pl.DataFrame):
 
         Returns
         -------
-        tf.grouped_tidyframe
+        tp.grouped_tibble
 
         Examples
         --------
-        df = tp.tidyframe(
+        df = tp.tibble(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
@@ -138,10 +138,10 @@ class tidyframe(pl.DataFrame):
         """
         args = args_as_list(args)
         df = df.groupby(args)
-        df.__class__ = grouped_tidyframe
+        df.__class__ = grouped_tibble
         return df
     
-    def mutate(self, *args, **kwargs) -> "tp.tidyframe":
+    def mutate(self, *args, **kwargs) -> "tp.tibble":
         """
         Add or modify columns
 
@@ -152,11 +152,11 @@ class tidyframe(pl.DataFrame):
 
         Returns
         -------
-        tp.tidyframe
+        tp.tibble
 
         Examples
         --------
-        df = tp.tidyframe(
+        df = tp.tibble(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
@@ -169,7 +169,7 @@ class tidyframe(pl.DataFrame):
         )
         """
         exprs = args_as_list(args) + kwargs_as_exprs(kwargs)
-        return self.with_columns(exprs).pipe(as_tidyframe)
+        return self.with_columns(exprs).pipe(as_tibble)
     
     def pipe(self, fn, *args, **kwargs):
         """
@@ -185,7 +185,7 @@ class tidyframe(pl.DataFrame):
 
         Examples
         --------
-        df = tp.tidyframe(
+        df = tp.tibble(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
@@ -195,7 +195,7 @@ class tidyframe(pl.DataFrame):
         """
         return fn(self, *args, **kwargs)
     
-    def relocate(self, *args, before: str = None, after: str = None) -> "tp.tidyframe":
+    def relocate(self, *args, before: str = None, after: str = None) -> "tp.tibble":
         """
         Move a column or columns to a new position
 
@@ -206,11 +206,11 @@ class tidyframe(pl.DataFrame):
 
         Returns
         -------
-        tp.tidyframe
+        tp.tibble
 
         Examples
         --------
-        df = tp.tidyframe(
+        df = tp.tibble(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
@@ -257,7 +257,7 @@ class tidyframe(pl.DataFrame):
 
             return self.select(ordered_cols)
     
-    def select(self, *args) -> "tp.tidyframe":
+    def select(self, *args) -> "tp.tibble":
         """
         Select or drop columns
 
@@ -268,11 +268,11 @@ class tidyframe(pl.DataFrame):
 
         Returns
         -------
-        tp.tidyframe
+        tp.tibble
 
         Examples
         --------
-        df = tp.tidyframe(
+        df = tp.tibble(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
@@ -283,9 +283,9 @@ class tidyframe(pl.DataFrame):
         df.select(col('a'), col('b'))
         """
         args = args_as_list(args)
-        return super().select(args).pipe(as_tidyframe)
+        return super().select(args).pipe(as_tibble)
     
-    def summarize(self, *args, **kwargs) -> "tp.tidyframe":
+    def summarize(self, *args, **kwargs) -> "tp.tibble":
         """
         Aggregate data with summary statistics
 
@@ -296,11 +296,11 @@ class tidyframe(pl.DataFrame):
 
         Returns
         -------
-        tp.tidyframe
+        tp.tibble
 
         Examples
         --------
-        df = tp.tidyframe(
+        df = tp.tibble(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
@@ -315,10 +315,10 @@ class tidyframe(pl.DataFrame):
         )
         """
         exprs = args_as_list(args) + kwargs_as_exprs(kwargs)
-        return super().select(exprs).pipe(as_tidyframe)
+        return super().select(exprs).pipe(as_tibble)
 
-class grouped_tidyframe(pl.eager.frame.GroupBy):
-    def filter(self, *args) -> "tp.tidyframe":
+class grouped_tibble(pl.eager.frame.GroupBy):
+    def filter(self, *args) -> "tp.tibble":
         """
         Filter rows on one or more conditions by group
 
@@ -329,11 +329,11 @@ class grouped_tidyframe(pl.eager.frame.GroupBy):
 
         Returns
         -------
-        tp.tidyframe
+        tp.tibble
 
         Examples
         --------
-        df = tp.tidyframe(
+        df = tp.tibble(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
@@ -343,9 +343,9 @@ class grouped_tidyframe(pl.eager.frame.GroupBy):
         """
         args = list(args)
         exprs = ft.reduce(lambda a, b: a & b, args)
-        return self.apply(lambda df: df.filter(exprs)).pipe(as_tidyframe)
+        return self.apply(lambda df: df.filter(exprs)).pipe(as_tibble)
     
-    def mutate(self, *args, **kwargs) -> "tp.tidyframe":
+    def mutate(self, *args, **kwargs) -> "tp.tibble":
         """
         Add or modify columns by group
 
@@ -356,11 +356,11 @@ class grouped_tidyframe(pl.eager.frame.GroupBy):
 
         Returns
         -------
-        tp.tidyframe
+        tp.tibble
 
         Examples
         --------
-        df = tp.tidyframe(
+        df = tp.tibble(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
@@ -369,9 +369,9 @@ class grouped_tidyframe(pl.eager.frame.GroupBy):
         df.mutate(avg_a = col('a').mean())
         """
         exprs = args_as_list(args) + kwargs_as_exprs(kwargs)
-        return self.apply(lambda df: df.with_columns(exprs)).pipe(as_tidyframe)
+        return self.apply(lambda df: df.with_columns(exprs)).pipe(as_tibble)
 
-    def summarize(self, *args, **kwargs) -> "tp.tidyframe":
+    def summarize(self, *args, **kwargs) -> "tp.tibble":
         """
         Aggregate data with summary statistics
 
@@ -382,11 +382,11 @@ class grouped_tidyframe(pl.eager.frame.GroupBy):
 
         Returns
         -------
-        tp.tidyframe
+        tp.tibble
 
         Examples
         --------
-        df = tp.tidyframe(
+        df = tp.tibble(
             {'a': range(3),
              'b': range(3),
              'c': ['a', 'a', 'b']}
@@ -402,5 +402,5 @@ class grouped_tidyframe(pl.eager.frame.GroupBy):
         )
         """
         exprs = args_as_list(args) + kwargs_as_exprs(kwargs)
-        return self.agg(exprs).pipe(as_tidyframe)
+        return self.agg(exprs).pipe(as_tibble)
 
