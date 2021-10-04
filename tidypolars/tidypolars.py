@@ -77,13 +77,13 @@ class tibble(pl.DataFrame):
         exprs = args_as_list(args)
         return self.sort(exprs, reverse = desc).pipe(as_tibble)
 
-    def bind_cols(self, columns) -> "tp.tibble" :
+    def bind_cols(self, df) -> "tp.tibble" :
         """
         Returns tibble with new column added to the end
 
         Parameters
         ----------
-        *args : Series to add to dataframe
+        df : Dataframe
 
         Examples
         --------
@@ -91,7 +91,8 @@ class tibble(pl.DataFrame):
         df2 = tp.tibble({'a': ['c', 'c', 'c'], 'b': range(4,7)})
         df1.bind_cols(df2)
         """
-        return self.hstack(columns).pipe(as_tibble) 
+        # TODO: Allow to work on multiple inputs
+        return self.hstack(df).pipe(as_tibble) 
     
     def bind_rows(self, df) -> "tp.tibble" :
         """
@@ -107,9 +108,8 @@ class tibble(pl.DataFrame):
         df2 = tp.tibble({'x': ['c', 'c', 'c'], 'y': range(4,7)})
         df1.bind_rows(df2)
         """
-        # TODO: Allow bind rows to work on multiple inputs
+        # TODO: Allow to work on multiple inputs
         return self.vstack(df).pipe(as_tibble)
-
 
     def filter(self, *args) -> "tp.tibble":
         """
