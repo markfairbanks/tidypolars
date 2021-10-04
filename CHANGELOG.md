@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.1.1 (in development)
+## v0.1.2 (2021/10/04)
 
 - Class name changed from tidyframe to tibble
 
