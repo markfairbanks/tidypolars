@@ -13,7 +13,7 @@ $ pip3 install tidypolars
 import tidypolars as tp
 from tidypolars import col
 
-test_df = tp.tidyframe({'x': range(3), 'y': range(4, 7), 'z': ['a', 'a', 'b']})
+test_df = tp.tibble({'x': range(3), 'y': range(4, 7), 'z': ['a', 'a', 'b']})
 
 (
     test_df
