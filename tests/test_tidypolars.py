@@ -33,7 +33,7 @@ def test_bind_rows():
     assert actual.frame_equal(expected), "bind rows failed"
 
 def test_distinct():
-    """Can bind rows"""
+    """Can distinct columns"""
     df = tp.tibble({'x': ['a', 'a', 'b'], 'y': [2, 1, 3]})
     actual = df.distinct('x')
     expected = tp.tibble({'x': ['a', 'b']})
