@@ -32,6 +32,13 @@ def test_bind_rows():
     expected = tp.tibble({'x': ['a', 'a', 'b'], 'y': [2, 1, 3]})
     assert actual.frame_equal(expected), "bind rows failed"
 
+def test_distinct():
+    """Can bind rows"""
+    df = tp.tibble({'x': ['a', 'a', 'b'], 'y': [2, 1, 3]})
+    actual = df.distinct('x')
+    expected = tp.tibble({'x': ['a', 'b']})
+    assert actual.frame_equal(expected), "distinct failed"
+
 def test_filter():
     """Can filter multiple conditions"""
     df = tp.tibble({'x': range(10), 'y': range(10)})
