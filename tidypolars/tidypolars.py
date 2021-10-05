@@ -119,6 +119,33 @@ class Tibble(pl.DataFrame):
         # TODO: Allow to work on multiple inputs
         return self.vstack(df).pipe(as_Tibble)
 
+    def distinct(self, *args) -> "tp.tibble":
+        """
+        Select distinct/unique rows
+
+        Parameters
+        ----------
+        *args : Expr
+            Column expressions find distinct/unique rows
+
+        Examples
+        --------
+        df = tp.tibble({'a': range(3), 'b': ['a', 'a', 'b']})
+        
+        df.distinct()
+        df.distinct('b')
+
+        """
+        # TODO: Create for series
+        args = args_as_list(args)
+
+        if len(args) == 0:
+            df = self.drop_duplicates()
+        else:
+            df = self.select(args).drop_duplicates()
+        
+        return df.pipe(as_Tibble)
+
     def filter(
         self, *args,
         groupby: Union[str, pl.Expr, List[str], List[pl.Expr]] = None
@@ -136,7 +163,7 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        df = tp.Tibble({'a': range(3), 'b': ['a', 'a', 'b'])
+        df = tp.Tibble({'a': range(3), 'b': ['a', 'a', 'b']})
         
         df.filter(col('a') < 2, col('c') == 'a')
         df.filter((col('a') < 2) & (col('c') == 'a'))
