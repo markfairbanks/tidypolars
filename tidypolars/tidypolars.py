@@ -2,7 +2,7 @@ import polars as pl
 from polars import col, Expr, Series
 import functools as ft
 
-from typing import Union, List
+from typing import Dict, List, Union
 
 def _as_Tibble(df):
     df.__class__ = Tibble
@@ -302,6 +302,24 @@ class Tibble(pl.DataFrame):
             ordered_cols = all_cols.take(final_order)
 
             return self.select(ordered_cols)
+    
+    def rename(self, mapping: Dict[str, str]):
+        """
+        Rename columns
+
+        Parameters
+        ----------
+        *args : Dict[str, str]
+            Dictionary mapping of new names
+
+        Examples
+        --------
+        df = tp.Tibble({'x': range(3), 't': range(3), 'z': ['a', 'a', 'b']})
+        
+        df.rename({'x': 'new_x'})
+        """
+        df = _as_DataFrame(self)
+        return df.rename(mapping).pipe(_as_Tibble)
     
     def select(self, *args) -> "tp.Tibble":
         """

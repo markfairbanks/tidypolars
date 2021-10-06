@@ -91,6 +91,13 @@ def test_relocate():
     expected = df.select('y', 'z', 'x')
     assert actual.frame_equal(expected), "relocate failed"
 
+def test_rename():
+    """Can rename"""
+    df = tp.Tibble({'x': range(3), 'y': range(3), 'z': range(3)})
+    actual = df.rename({'x': 'new_x'})
+    expected = tp.Tibble({'new_x': range(3), 'y': range(3), 'z': range(3)})
+    assert actual.frame_equal(expected), "rename failed"
+
 def test_select():
     """Can select columns"""
     df = tp.Tibble({'x': range(3), 'y': range(3), 'z': range(3)})
