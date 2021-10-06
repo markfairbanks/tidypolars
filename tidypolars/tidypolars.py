@@ -1,5 +1,5 @@
 import polars as pl
-from polars import col, Series
+from polars import col, Expr, Series
 import functools as ft
 
 from typing import Union, List
@@ -13,7 +13,7 @@ def _as_DataFrame(df):
     return df
 
 def _col_expr(x):
-    if isinstance(x, pl.Expr):
+    if isinstance(x, Expr):
         return x
     elif isinstance(x, str):
         return col(x)
@@ -56,12 +56,16 @@ def _kwargs_as_exprs(kwargs):
     return [expr.alias(key) for key, expr in kwargs.items()]
 
 def _no_groupby(gb):
-    if isinstance(gb, pl.Expr) | isinstance(gb, str) | isinstance(gb, list):
+    if isinstance(gb, Expr) | isinstance(gb, str) | isinstance(gb, list):
         return False
     else:
         return True
 
 class Tibble(pl.DataFrame):
+    def __repr__(self) -> str:
+        df = _as_DataFrame(self)
+        return df.__str__()
+
     def arrange(self, *args, desc: Union[bool, List[bool]] = False) -> "tp.Tibble":
         """
         Arrange/sort rows
@@ -154,7 +158,7 @@ class Tibble(pl.DataFrame):
 
     def filter(
         self, *args,
-        groupby: Union[str, pl.Expr, List[str], List[pl.Expr]] = None
+        groupby: Union[str, Expr, List[str], List[Expr]] = None
     ) -> "tp.Tibble":
         """
         Filter rows on one or more conditions
@@ -164,7 +168,7 @@ class Tibble(pl.DataFrame):
         *args : Expr
             Conditions to filter by
 
-        groupby : Union[str, pl.Expr, List[str], List[pl.Expr]]
+        groupby : Union[str, Expr, List[str], List[Expr]]
             Columns to group by
 
         Examples
@@ -190,7 +194,7 @@ class Tibble(pl.DataFrame):
     def mutate(
         self,
         *args,
-        groupby: Union[str, pl.Expr, List[str], List[pl.Expr]] = None,
+        groupby: Union[str, Expr, List[str], List[Expr]] = None,
         **kwargs
     ) -> "tp.Tibble":
         """
@@ -201,7 +205,7 @@ class Tibble(pl.DataFrame):
         *args : Expr
             Column expressions to add or modify
 
-        groupby : Union[str, pl.Expr, List[str], List[pl.Expr]]
+        groupby : Union[str, Expr, List[str], List[Expr]]
             Columns to group by
         
         **kwargs : Expr
@@ -318,10 +322,37 @@ class Tibble(pl.DataFrame):
         """
         args = _args_as_list(args)
         return super().select(args).pipe(_as_Tibble)
+
+    def slice(self, *args, groupby = None) -> "tp.Tibble":
+        """
+        Grab rows from a data frame
+
+        Parameters
+        ----------
+        *args : Union[int, List[int]]
+            Rows to grab
+        
+        groupby : Union[str, Expr, List[str], List[Expr]]
+            Columns to group by
+
+        Examples
+        --------
+        df = tp.Tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
+        
+        df.slice(0, 1)
+
+        df.slice(0, groupby = 'c')
+        """
+        rows = _args_as_list(args)
+        if _no_groupby(groupby):
+            df = self[rows]
+        else:
+            df = self.groupby(groupby).apply(lambda x: x[rows])
+        return df.pipe(_as_Tibble)
     
     def summarize(
         self, *args,
-        groupby: Union[str, pl.Expr, List[str], List[pl.Expr]] = None,
+        groupby: Union[str, Expr, List[str], List[Expr]] = None,
         **kwargs
     ) -> "tp.Tibble":
         """
@@ -331,7 +362,7 @@ class Tibble(pl.DataFrame):
         ----------
         *args : Expr
 
-        groupby : Union[str, pl.Expr, List[str], List[pl.Expr]]
+        groupby : Union[str, Expr, List[str], List[Expr]]
             Columns to group by
 
         **kwargs : Expr
