@@ -1,6 +1,9 @@
 # Changelog
 
 ## v0.1.5 (in development)
+* New functions
+  + `tp.lag()`
+  + `tp.lead()`
 
 ## v0.1.4 (2021/10/06)
 * New methods

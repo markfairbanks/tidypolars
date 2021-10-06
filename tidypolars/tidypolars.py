@@ -1,8 +1,9 @@
 import polars as pl
 from polars import col, Expr, Series
 import functools as ft
-
 from typing import Dict, List, Union
+
+from .funs import *
 
 def _as_Tibble(df):
     df.__class__ = Tibble
