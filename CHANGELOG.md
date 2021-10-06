@@ -6,6 +6,7 @@
   + `.bind_rows()`
   + `.distinct()`
   + `.pull()`
+  + `.slice()`
 
 * Methods with new `groupby` arg:
   + `.filter()`
