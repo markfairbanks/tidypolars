@@ -77,7 +77,7 @@ def test_mutate_across():
     )
     assert actual.frame_equal(expected), "mutate across failed"
 
-def test_mutate_across():
+def test_pull():
     """Can use pull"""
     df = tp.Tibble({'x': pl.repeat(1, 3), 'y': pl.repeat(2, 3)})
     actual = df.pull('x')
@@ -97,6 +97,13 @@ def test_select():
     actual = df.select('x', 'z')
     expected = df[['x', 'z']]
     assert actual.frame_equal(expected), "select failed"
+
+def test_slice():
+    """Can slice"""
+    df = tp.Tibble({'x': range(3), 'y': ['a', 'a', 'b']})
+    actual = df.slice(0, 2)
+    expected = tp.Tibble({'x': [0, 2], 'y': ['a', 'b']})
+    assert actual.frame_equal(expected), "slice failed"
 
 def test_summarize():
     """Can use summarize"""
