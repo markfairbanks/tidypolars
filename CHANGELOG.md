@@ -1,16 +1,18 @@
 # Changelog
 
-## v0.1.4 (in development)
+## v0.1.4 (2021/10/06)
 * New methods
   + `.bind_cols()`
   + `.bind_rows()`
   + `.distinct()`
   + `.pull()`
+  + `.rename()`
   + `.slice()`
 
 * Methods with new `groupby` arg:
   + `.filter()`
   + `.mutate()`
+  + `.slice()`
   + `.summarize()`
 
 * Class name changed from tibble to Tibble
