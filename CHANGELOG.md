@@ -1,5 +1,7 @@
 # Changelog
 
+## v0.1.5 (in development)
+
 ## v0.1.4 (2021/10/06)
 * New methods
   + `.bind_cols()`
