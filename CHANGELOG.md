@@ -4,8 +4,15 @@
 * New methods
   + `.bind_cols()`
   + `.bind_rows()`
-  + `.pull()`
   + `.distinct()`
+  + `.pull()`
+
+* Methods with new `groupby` arg:
+  + `.filter()`
+  + `.mutate()`
+  + `.summarize()`
+
+* Class name changed from tibble to Tibble
 
 ## v0.1.3 (2021/10/04)
 
