@@ -4,15 +4,15 @@ import functools as ft
 
 from typing import Union, List
 
-def as_Tibble(df):
+def _as_Tibble(df):
     df.__class__ = Tibble
     return df
 
-def as_DataFrame(df):
+def _as_DataFrame(df):
     df.__class__ = pl.DataFrame
     return df
 
-def col_expr(x):
+def _col_expr(x):
     if isinstance(x, pl.Expr):
         return x
     elif isinstance(x, str):
@@ -21,19 +21,19 @@ def col_expr(x):
        raise ValueError("Invalid input for column selection") 
 
 #  Wrap all str inputs in col()  
-def col_exprs(x):
-    if is_list_like(x):
-        return [col_expr(val) for val in x]
+def _col_exprs(x):
+    if _is_list_like(x):
+        return [_col_expr(val) for val in x]
     else:
-        return [col_expr(x)]
+        return [_col_expr(x)]
   
-def is_list_like(x):
+def _is_list_like(x):
     if isinstance(x, list) | isinstance(x, pl.Series):
         return True
     else:
         return False
 
-def as_list(x):
+def _as_list(x):
     if isinstance(x, list):
         return x.copy()
     elif isinstance(x, str):
@@ -41,7 +41,7 @@ def as_list(x):
     else:
         return list(x)
 
-def args_as_list(x):
+def _args_as_list(x):
     if len(x) == 0:
         return []
     elif isinstance(x[0], list):
@@ -52,10 +52,10 @@ def args_as_list(x):
         return [*x]
 
 # Convert kwargs to col() expressions with alias
-def kwargs_as_exprs(kwargs):
+def _kwargs_as_exprs(kwargs):
     return [expr.alias(key) for key, expr in kwargs.items()]
 
-def no_groupby(gb):
+def _no_groupby(gb):
     if isinstance(gb, pl.Expr) | isinstance(gb, str) | isinstance(gb, list):
         return False
     else:
@@ -84,8 +84,8 @@ class Tibble(pl.DataFrame):
         # Arrange some columns descending
         df.arrange('x', 'y', desc = [True, False])
         """
-        exprs = args_as_list(args)
-        return self.sort(exprs, reverse = desc).pipe(as_Tibble)
+        exprs = _args_as_list(args)
+        return self.sort(exprs, reverse = desc).pipe(_as_Tibble)
 
     def bind_cols(self, df: "tp.Tibble") -> "tp.Tibble" :
         """
@@ -104,7 +104,7 @@ class Tibble(pl.DataFrame):
         df1.bind_cols(df2)
         """
         # TODO: Allow to work on multiple inputs
-        return self.hstack(df).pipe(as_Tibble)
+        return self.hstack(df).pipe(_as_Tibble)
     
     def bind_rows(self, df: "tp.Tibble") -> "tp.Tibble":
         """
@@ -123,7 +123,7 @@ class Tibble(pl.DataFrame):
         df1.bind_rows(df2)
         """
         # TODO: Allow to work on multiple inputs
-        return self.vstack(df).pipe(as_Tibble)
+        return self.vstack(df).pipe(_as_Tibble)
 
     def distinct(self, *args) -> "tp.tibble":
         """
@@ -143,14 +143,14 @@ class Tibble(pl.DataFrame):
 
         """
         # TODO: Create for series
-        args = args_as_list(args)
+        args = _args_as_list(args)
 
         if len(args) == 0:
             df = self.drop_duplicates()
         else:
             df = self.select(args).drop_duplicates()
         
-        return df.pipe(as_Tibble)
+        return df.pipe(_as_Tibble)
 
     def filter(
         self, *args,
@@ -176,16 +176,16 @@ class Tibble(pl.DataFrame):
         df.filter(col('a') <= col('a').mean(),
                   groupby = 'b')
         """
-        df = as_DataFrame(self)
-        args = args_as_list(args)
+        df = _as_DataFrame(self)
+        args = _args_as_list(args)
         exprs = ft.reduce(lambda a, b: a & b, args)
 
-        if no_groupby(groupby):
+        if _no_groupby(groupby):
             df = df.filter(exprs)
         else:
             df = df.groupby(groupby).apply(lambda x: x.filter(exprs))
         
-        return df.pipe(as_Tibble)
+        return df.pipe(_as_Tibble)
 
     def mutate(
         self,
@@ -217,13 +217,13 @@ class Tibble(pl.DataFrame):
         df.mutate((col(['a', 'b]) * 2).prefix('double_'),
                   a_plus_b = col('a') + col('b'))
         """
-        exprs = args_as_list(args) + kwargs_as_exprs(kwargs)
-        if no_groupby(groupby):
+        exprs = _args_as_list(args) + _kwargs_as_exprs(kwargs)
+        if _no_groupby(groupby):
             out = self.with_columns(exprs)
         else:
             out = self.groupby(groupby).apply(lambda x: x.with_columns(exprs))
         
-        return out.pipe(as_Tibble)
+        return out.pipe(_as_Tibble)
 
     def pull(self, var = None):
         """
@@ -316,8 +316,8 @@ class Tibble(pl.DataFrame):
 
         df.select(col('a'), col('b'))
         """
-        args = args_as_list(args)
-        return super().select(args).pipe(as_Tibble)
+        args = _args_as_list(args)
+        return super().select(args).pipe(_as_Tibble)
     
     def summarize(
         self, *args,
@@ -349,12 +349,12 @@ class Tibble(pl.DataFrame):
         df.summarize(avg_a = col('a').mean(),
                      max_b = col('b').max()))
         """
-        exprs = args_as_list(args) + kwargs_as_exprs(kwargs)
-        df = as_DataFrame(self)
+        exprs = _args_as_list(args) + _kwargs_as_exprs(kwargs)
+        df = _as_DataFrame(self)
 
-        if no_groupby(groupby):
+        if _no_groupby(groupby):
             out = df.select(exprs)
         else:
             out = df.groupby(groupby).agg(exprs)
         
-        return out.pipe(as_Tibble)
+        return out.pipe(_as_Tibble)
