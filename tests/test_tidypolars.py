@@ -112,6 +112,20 @@ def test_slice():
     expected = tp.Tibble({'x': [0, 2], 'y': ['a', 'b']})
     assert actual.frame_equal(expected), "slice failed"
 
+def test_slice_head():
+    """Can slice_head"""
+    df = tp.Tibble({'x': range(3), 'y': ['a', 'a', 'b']})
+    actual = df.slice_head(2)
+    expected = tp.Tibble({'x': [0, 1], 'y': ['a', 'a']})
+    assert actual.frame_equal(expected), "slice_head failed"
+
+def test_slice_tail():
+    """Can slice_tail by group"""
+    df = tp.Tibble({'x': range(3), 'y': ['a', 'a', 'b']})
+    actual = df.slice_tail(2)
+    expected = tp.Tibble({'x': [1, 2], 'y': ['a', 'b']})
+    assert actual.frame_equal(expected), "slice_tail failed"
+
 def test_summarize():
     """Can use summarize"""
     df = tp.Tibble({'x': range(3), 'y': range(3), 'z': range(3)})

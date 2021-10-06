@@ -156,6 +156,10 @@ class Tibble(pl.DataFrame):
             df = self.select(args).drop_duplicates()
         
         return df.pipe(_as_Tibble)
+    
+    def head(self, n = 5, *args, groupby = None):
+        """Alias for .slice_head()"""
+        return self.slice_tail(n, groupby = groupby)
 
     def filter(
         self, *args,
@@ -368,6 +372,70 @@ class Tibble(pl.DataFrame):
         else:
             df = self.groupby(groupby).apply(lambda x: x[rows])
         return df.pipe(_as_Tibble)
+
+    def slice_head(self, n = 5, *args, groupby = None):
+        """
+        Grab top rows from a data frame
+
+        Parameters
+        ----------
+        n : int
+            Number of rows to grab
+        
+        *args :
+            Currently unused
+        
+        groupby : Union[str, Expr, List[str], List[Expr]]
+            Columns to group by
+
+        Examples
+        --------
+        df = tp.Tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
+        
+        df.slice_head(2)
+
+        df.slice(1, groupby = 'c')
+        """
+        df = _as_DataFrame(self)
+        args = _args_as_list(args)
+        col_order = df.columns
+        if _no_groupby(groupby):
+            df = df.head(n)
+        else:
+            df = df.groupby(groupby).head(n)
+        return df.pipe(_as_Tibble).select(col_order)
+
+    def slice_tail(self, n = 5, *args, groupby = None):
+        """
+        Grab bottom rows from a data frame
+
+        Parameters
+        ----------
+        n : int
+            Number of rows to grab
+        
+        *args :
+            Currently unused
+        
+        groupby : Union[str, Expr, List[str], List[Expr]]
+            Columns to group by
+
+        Examples
+        --------
+        df = tp.Tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
+        
+        df.slice_tail(2)
+
+        df.slice(1, groupby = 'c')
+        """
+        df = _as_DataFrame(self)
+        args = _args_as_list(args)
+        col_order = df.columns
+        if _no_groupby(groupby):
+            df = df.tail(n)
+        else:
+            df = df.groupby(groupby).tail(n)
+        return df.pipe(_as_Tibble).select(col_order)
     
     def summarize(
         self, *args,
@@ -408,3 +476,7 @@ class Tibble(pl.DataFrame):
             out = df.groupby(groupby).agg(exprs)
         
         return out.pipe(_as_Tibble)
+
+    def tail(self, n = 5, *args, groupby = None):
+        """Alias for .slice_tail()"""
+        return self.slice_tail(n, groupby = groupby)

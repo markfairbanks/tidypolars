@@ -5,6 +5,12 @@
   + `tp.lag()`
   + `tp.lead()`
 
+* New Methods
+  + `.head()`
+  + `.tail()`
+  + `.slice_head()`
+  + `.slice_tail()`
+
 ## v0.1.4 (2021/10/06)
 * New methods
   + `.bind_cols()`
