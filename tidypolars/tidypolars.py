@@ -55,6 +55,12 @@ def args_as_list(x):
 def kwargs_as_exprs(kwargs):
     return [expr.alias(key) for key, expr in kwargs.items()]
 
+def no_groupby(gb):
+    if isinstance(gb, pl.Expr) | isinstance(gb, str) | isinstance(gb, list):
+        return False
+    else:
+        return True
+
 class Tibble(pl.DataFrame):
     def arrange(self, *args, desc: Union[bool, List[bool]] = False) -> "tp.Tibble":
         """
@@ -174,7 +180,7 @@ class Tibble(pl.DataFrame):
         args = args_as_list(args)
         exprs = ft.reduce(lambda a, b: a & b, args)
 
-        if groupby == None:
+        if no_groupby(groupby):
             df = df.filter(exprs)
         else:
             df = df.groupby(groupby).apply(lambda x: x.filter(exprs))
@@ -212,7 +218,7 @@ class Tibble(pl.DataFrame):
                   a_plus_b = col('a') + col('b'))
         """
         exprs = args_as_list(args) + kwargs_as_exprs(kwargs)
-        if groupby == None:
+        if no_groupby(groupby):
             out = self.with_columns(exprs)
         else:
             out = self.groupby(groupby).apply(lambda x: x.with_columns(exprs))
@@ -346,7 +352,7 @@ class Tibble(pl.DataFrame):
         exprs = args_as_list(args) + kwargs_as_exprs(kwargs)
         df = as_DataFrame(self)
 
-        if groupby == None:
+        if no_groupby(groupby):
             out = df.select(exprs)
         else:
             out = df.groupby(groupby).agg(exprs)
