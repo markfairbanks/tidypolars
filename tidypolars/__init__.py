@@ -4,4 +4,3 @@ __version__ = version("tidypolars")
 
 from .tidypolars import *
 from .funs import *
-from .docstrings import *
