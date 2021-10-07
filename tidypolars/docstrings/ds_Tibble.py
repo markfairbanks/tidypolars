@@ -1,4 +1,4 @@
-from .tidypolars import Tibble
+from tidypolars import Tibble
 
 Tibble.arrange.__doc__ = """
     Arrange/sort rows
