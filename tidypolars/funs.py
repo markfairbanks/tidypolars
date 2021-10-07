@@ -24,8 +24,8 @@ def lag(expr, n: int = 1, default = None):
 
     Examples
     --------
-    df.mutate(lag_x = tp.lag(col('x')))
-    df.mutate(lag_x = col('x').lag())
+    >>> df.mutate(lag_x = tp.lag(col('x')))
+    >>> df.mutate(lag_x = col('x').lag())
     """
     return _shift(expr, n, default)
 
@@ -48,8 +48,8 @@ def lead(expr, n: int = 1, default = None):
 
     Examples
     --------
-    df.mutate(lead_x = tp.lead(col('x')))
-    df.mutate(lead_x = col('x').lead())
+    >>> df.mutate(lead_x = tp.lead(col('x')))
+    >>> df.mutate(lead_x = col('x').lead())
     """
     return _shift(expr, -n, default)
 
