@@ -910,7 +910,7 @@ testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "polars"
-version = "0.10.0"
+version = "0.10.1"
 description = ""
 category = "main"
 optional = false
@@ -920,10 +920,10 @@ python-versions = "*"
 numpy = "*"
 
 [package.extras]
-fsspec = ["fsspec"]
-pyarrow = ["pyarrow (>=4.0)"]
 pandas = ["pyarrow (>=4.0)", "pandas"]
+fsspec = ["fsspec"]
 connectorx = ["connectorx"]
+pyarrow = ["pyarrow (>=4.0)"]
 
 [[package]]
 name = "prometheus-client"
@@ -1962,11 +1962,8 @@ pluggy = [
     {file = "pluggy-1.0.0.tar.gz", hash = "sha256:4224373bacce55f955a878bf9cfa763c1e360858e330072059e10bad68531159"},
 ]
 polars = [
-    {file = "polars-0.10.0-cp36-abi3-macosx_10_7_x86_64.whl", hash = "sha256:38c9bd190a280a31da2005cd5aaf584bf0b9ad0ca20a7535e8149a5ab7cb434e"},
-    {file = "polars-0.10.0-cp36-abi3-macosx_10_9_x86_64.macosx_11_0_arm64.macosx_10_9_universal2.whl", hash = "sha256:db6e1427753001e1a218c8ad9d39c81e73e9657be2df8f3863cfbb0c3c819fe7"},
-    {file = "polars-0.10.0-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:6a9252a1ab5c286372c4a156de03b80c35c8f21ff328dde12e7aacba407743f5"},
-    {file = "polars-0.10.0-cp36-abi3-win_amd64.whl", hash = "sha256:cb998af4a3b06cd0324b446f9184901c5b933192119715987da1ba10ada38c6b"},
-    {file = "polars-0.10.0.tar.gz", hash = "sha256:5afd8009d511c20577e38340ea6a5531804e0f6d6d66632052b84be757217e8a"},
+    {file = "polars-0.10.1-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:9388dfe063ad2567c5c3a3223c4494796ca619dce599fcb0e682e552b5ea52fd"},
+    {file = "polars-0.10.1.tar.gz", hash = "sha256:3f5650d376ada26b6bb17dfb929a531ba2f52ecd710a54b39d5e21979cb32544"},
 ]
 prometheus-client = [
     {file = "prometheus_client-0.11.0-py2.py3-none-any.whl", hash = "sha256:b014bc76815eb1399da8ce5fc84b7717a3e63652b0c0f8804092c9363acab1b2"},
