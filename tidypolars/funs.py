@@ -1,5 +1,6 @@
 import polars as pl
-from polars import Expr
+
+__all__ = ["lag", "lead"]
 
 def _shift(expr, n, default):
     if default == None:

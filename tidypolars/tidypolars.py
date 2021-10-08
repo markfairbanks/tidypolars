@@ -1,9 +1,17 @@
 import polars as pl
-from polars import col, Expr, Series
 import functools as ft
 from typing import Dict, List, Union
 
-from .funs import *
+__all__ = [
+    "Tibble",
+    "col",
+    "Expr",
+    "Series"
+]
+
+col = pl.col
+Expr = pl.Expr
+Series = pl.Series
 
 def _as_Tibble(df):
     df.__class__ = Tibble
@@ -135,7 +143,7 @@ class Tibble(pl.DataFrame):
         return df.pipe(_as_Tibble)
     
     def head(self, n = 5, *args, groupby = None):
-        """Alias for .slice_head()"""
+        """Alias for `.slice_head()`"""
         return self.slice_tail(n, groupby = groupby)
 
     def filter(self, *args,
@@ -159,16 +167,15 @@ class Tibble(pl.DataFrame):
         >>> df.filter(col('a') <= col('a').mean(),
         ...           groupby = 'b')
         """
-        df = _as_DataFrame(self)
         args = _args_as_list(args)
         exprs = ft.reduce(lambda a, b: a & b, args)
 
         if _no_groupby(groupby):
-            df = df.filter(exprs)
+            out = super().filter(exprs)
         else:
-            df = df.groupby(groupby).apply(lambda x: x.filter(exprs))
+            out = super().groupby(groupby).apply(lambda x: x.filter(exprs))
         
-        return df.pipe(_as_Tibble)
+        return out.pipe(_as_Tibble)
 
     def mutate(self, *args,
                groupby: Union[str, Expr, List[str], List[Expr]] = None,
@@ -288,8 +295,7 @@ class Tibble(pl.DataFrame):
         >>> df = tp.Tibble({'x': range(3), 't': range(3), 'z': ['a', 'a', 'b']})
         >>> df.rename({'x': 'new_x'})
         """
-        df = _as_DataFrame(self)
-        return df.rename(mapping).pipe(_as_Tibble)
+        return super().rename(mapping).pipe(_as_Tibble)
     
     def select(self, *args):
         """
@@ -355,13 +361,12 @@ class Tibble(pl.DataFrame):
         >>> df.slice_head(2)
         >>> df.slice_head(1, groupby = 'c')
         """
-        df = _as_DataFrame(self)
         args = _args_as_list(args)
-        col_order = df.columns
+        col_order = super().columns
         if _no_groupby(groupby):
-            df = df.head(n)
+            df = super().head(n)
         else:
-            df = df.groupby(groupby).head(n)
+            df = super().groupby(groupby).head(n)
         return df.pipe(_as_Tibble).select(col_order)
 
     def slice_tail(self, n: int = 5, *args, groupby = None):
@@ -385,13 +390,12 @@ class Tibble(pl.DataFrame):
         >>> df.slice_tail(2)
         >>> df.slice_tail(1, groupby = 'c')
         """
-        df = _as_DataFrame(self)
         args = _args_as_list(args)
-        col_order = df.columns
+        col_order = super().columns
         if _no_groupby(groupby):
-            df = df.tail(n)
+            df = super().tail(n)
         else:
-            df = df.groupby(groupby).tail(n)
+            df = super().groupby(groupby).tail(n)
         return df.pipe(_as_Tibble).select(col_order)
     
     def summarize(self, *args,
@@ -420,12 +424,11 @@ class Tibble(pl.DataFrame):
         ...              max_b = col('b').max())
         """
         exprs = _args_as_list(args) + _kwargs_as_exprs(kwargs)
-        df = _as_DataFrame(self)
 
         if _no_groupby(groupby):
-            out = df.select(exprs)
+            out = super().select(exprs)
         else:
-            out = df.groupby(groupby).agg(exprs)
+            out = super().groupby(groupby).agg(exprs)
         
         return out.pipe(_as_Tibble)
 
