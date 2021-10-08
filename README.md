@@ -2,6 +2,8 @@
 
 tidypolars is a data frame library built on top of the blazingly fast [polars](https://github.com/pola-rs/polars) library that gives access to methods and functions familiar to R tidyverse users.
 
+*Please be aware that tidypolars is still early in development and may be subject to fast API changes*
+
 ## Installation
 ```bash
 $ pip3 install tidypolars
@@ -13,7 +15,7 @@ $ pip3 install tidypolars
 import tidypolars as tp
 from tidypolars import col
 
-test_df = tp.tibble({'x': range(3), 'y': range(4, 7), 'z': ['a', 'a', 'b']})
+test_df = tp.Tibble({'x': range(3), 'y': range(4, 7), 'z': ['a', 'a', 'b']})
 
 (
     test_df
@@ -23,7 +25,7 @@ test_df = tp.tibble({'x': range(3), 'y': range(4, 7), 'z': ['a', 'a', 'b']})
     .mutate(double_x = col('x') * 2,
             x_plus_y = col('x') + col('y'))
 )
-shape: (3, 5)
+
 ┌─────┬─────┬─────┬──────────┬──────────┐
 │ x   ┆ y   ┆ z   ┆ double_x ┆ x_plus_y │
 │ --- ┆ --- ┆ --- ┆ ---      ┆ ---      │
@@ -35,6 +37,31 @@ shape: (3, 5)
 ├╌╌╌╌╌┼╌╌╌╌╌┼╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌┤
 │ 2   ┆ 6   ┆ "b" ┆ 4        ┆ 8        │
 └─────┴─────┴─────┴──────────┴──────────┘
+```
+
+### Using `groupby`
+
+Methods operate by group by calling the `groupby` arg.
+
+* A single column can be passed with `groupby = 'z'`
+* Multiple columns can be passed with `groupby = ['y', 'z']`
+
+```python
+(
+    test_df
+    .summarize(avg_x = col('x').mean(),
+               groupby = 'z')
+)
+
+┌─────┬───────┐
+│ z   ┆ avg_x │
+│ --- ┆ ---   │
+│ str ┆ f64   │
+╞═════╪═══════╡
+│ "b" ┆ 2     │
+├╌╌╌╌╌┼╌╌╌╌╌╌╌┤
+│ "a" ┆ 0.5   │
+└─────┴───────┘
 ```
 
 ## Contributing

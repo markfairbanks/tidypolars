@@ -1,11 +1,32 @@
 # Changelog
 
-## v0.1.4 (in development)
+## v0.1.5 (in development)
+* New functions
+  + `tp.lag()`
+  + `tp.lead()`
+
+* New Methods
+  + `.head()`
+  + `.tail()`
+  + `.slice_head()`
+  + `.slice_tail()`
+
+## v0.1.4 (2021/10/06)
 * New methods
   + `.bind_cols()`
   + `.bind_rows()`
   + `.distinct()`
   + `.pull()`
+  + `.rename()`
+  + `.slice()`
+
+* Methods with new `groupby` arg:
+  + `.filter()`
+  + `.mutate()`
+  + `.slice()`
+  + `.summarize()`
+
+* Class name changed from tibble to Tibble
 
 ## v0.1.3 (2021/10/04)
 
