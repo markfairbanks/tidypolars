@@ -145,3 +145,8 @@ def test_summarize_across():
                           avg_x = col('x').mean())
     expected = tp.Tibble({'max_x': [2], 'max_y': [2], 'avg_x': [1]})
     assert actual.frame_equal(expected), "ungrouped summarize across failed"
+
+def test_to_polars():
+    """Can convert to a polars DataFrame"""
+    df = tp.Tibble({'x': range(3), 'y': range(3), 'z': range(3)})
+    assert isinstance(df.to_polars(), pl.DataFrame), "to_polars failed"
