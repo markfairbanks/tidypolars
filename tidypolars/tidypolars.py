@@ -1,5 +1,5 @@
 import polars as pl
-from polars import col, Expr, Series
+from polars import col, Expr, Series, when
 import functools as ft
 from typing import Dict, List, Union
 
@@ -108,6 +108,15 @@ class Tibble(pl.DataFrame):
         >>> df1.bind_rows(df2)
         """
         return self.vstack(df).pipe(_as_Tibble)
+
+    def case(*args, default=None):
+        args = _args_as_list(args)
+        if len(args) == 0:
+            raise ValueError("Must provide at least one argument. See examples in documentation.")
+        else:
+            for logic, answer in args:
+                out = when(logic).then(answer).otherwise(default)
+                return out.pipe(_as_Tibble)
 
     def distinct(self, *args):
         """
