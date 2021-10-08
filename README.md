@@ -25,7 +25,8 @@ test_df = tp.Tibble({'x': range(3), 'y': range(4, 7), 'z': ['a', 'a', 'b']})
     .mutate(double_x = col('x') * 2,
             x_plus_y = col('x') + col('y'))
 )
-
+```
+```
 ┌─────┬─────┬─────┬──────────┬──────────┐
 │ x   ┆ y   ┆ z   ┆ double_x ┆ x_plus_y │
 │ --- ┆ --- ┆ --- ┆ ---      ┆ ---      │
@@ -52,7 +53,8 @@ Methods operate by group by calling the `groupby` arg.
     .summarize(avg_x = col('x').mean(),
                groupby = 'z')
 )
-
+```
+```
 ┌─────┬───────┐
 │ z   ┆ avg_x │
 │ --- ┆ ---   │
