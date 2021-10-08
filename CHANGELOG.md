@@ -4,8 +4,8 @@
 * New methods
   + `.bind_cols()`
   + `.bind_rows()`
-  + `.pull()`
   + `.distinct()`
+  + `.pull()`
 
 ## v0.1.3 (2021/10/04)
 

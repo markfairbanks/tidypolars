@@ -1,5 +1,5 @@
 import polars as pl
-from polars import col, Series
+from polars import col, Series, when
 import functools as ft
 
 from typing import Union, List
@@ -121,7 +121,7 @@ class tibble(pl.DataFrame):
 
         Parameters
         ----------
-        *args : Expr
+        *args : Union[str, Expr]
             Column expressions find distinct/unique rows
 
         Examples
@@ -129,8 +129,8 @@ class tibble(pl.DataFrame):
         df = tp.tibble({'a': range(3), 'b': ['a', 'a', 'b']})
         
         df.distinct()
-        df.distinct('b')
 
+        df.distinct('b')
         """
         # TODO: Create for series
         args = args_as_list(args)
