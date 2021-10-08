@@ -10,4 +10,4 @@ from .tidypolars import (
 )
 from .funs import lag, lead
 
-# __all__ = tidypolars.__all__ + funs.__all__
+__all__ = tidypolars.__all__ + funs.__all__
