@@ -1,5 +1,6 @@
 import polars as pl
-from polars import Expr, when
+from polars import when
+__all__ = ["lag", "lead"]
 
 def _shift(expr, n, default):
     if default == None:

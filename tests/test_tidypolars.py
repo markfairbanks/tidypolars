@@ -2,6 +2,11 @@ import tidypolars as tp
 from tidypolars import col
 import polars as pl
 
+def _repeat(x, times):
+    if not isinstance(x, list):
+        x = [x]
+    return x * times
+
 def test_arrange1():
     """Can arrange ascending"""
     df = tp.Tibble({'x': ['a', 'a', 'b'], 'y': [2, 1, 3]})
@@ -55,31 +60,31 @@ def test_filter():
 
 def test_mutate():
     """Can edit existing columns and can add columns"""
-    df = tp.Tibble({'x': pl.repeat(1, 3), 'y': pl.repeat(2, 3)})
+    df = tp.Tibble({'x': _repeat(1, 3), 'y': _repeat(2, 3)})
     actual = df.mutate(double_x = col('x') * 2,
                        y = col('y') + 10)
     expected = tp.Tibble(
-        {'x': pl.repeat(1, 3),
-         'y': pl.repeat(12, 3),
-          'double_x': pl.repeat(2, 3)}
+        {'x': _repeat(1, 3),
+         'y': _repeat(12, 3),
+          'double_x': _repeat(2, 3)}
     )
     assert actual.frame_equal(expected), "mutate failed"
 
 def test_mutate_across():
     """Can mutate multiple columns simultaneously"""
-    df = tp.Tibble({'x': pl.repeat(1, 3), 'y': pl.repeat(2, 3)})
+    df = tp.Tibble({'x': _repeat(1, 3), 'y': _repeat(2, 3)})
     actual = df.mutate(col(['x', 'y']) * 2,
                        x_plus_y = col('x') + col('y'))
     expected = tp.Tibble(
-        {'x': pl.repeat(2, 3),
-         'y': pl.repeat(4, 3),
-         'x_plus_y': pl.repeat(3, 3)}
+        {'x': _repeat(2, 3),
+         'y': _repeat(4, 3),
+         'x_plus_y': _repeat(3, 3)}
     )
     assert actual.frame_equal(expected), "mutate across failed"
 
 def test_pull():
     """Can use pull"""
-    df = tp.Tibble({'x': pl.repeat(1, 3), 'y': pl.repeat(2, 3)})
+    df = tp.Tibble({'x': _repeat(1, 3), 'y': _repeat(2, 3)})
     actual = df.pull('x')
     expected = df.get_column('x')
     assert actual == expected, "pull failed"
@@ -140,3 +145,8 @@ def test_summarize_across():
                           avg_x = col('x').mean())
     expected = tp.Tibble({'max_x': [2], 'max_y': [2], 'avg_x': [1]})
     assert actual.frame_equal(expected), "ungrouped summarize across failed"
+
+def test_to_polars():
+    """Can convert to a polars DataFrame"""
+    df = tp.Tibble({'x': range(3), 'y': range(3), 'z': range(3)})
+    assert isinstance(df.to_polars(), pl.DataFrame), "to_polars failed"
