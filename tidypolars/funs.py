@@ -1,11 +1,37 @@
 import polars as pl
-from polars import Expr
+from polars import Expr, when
 
 def _shift(expr, n, default):
     if default == None:
         return expr.shift(n)
     else:
         return expr.shift_and_fill(n, default)
+
+def _args_as_list(x):
+    if len(x) == 0:
+        return []
+    elif isinstance(x[0], list):
+        return x[0]
+    elif isinstance(x[0], pl.Series):
+        return list(x[0])
+    else:
+        return [*x]
+
+def _case(*args, default=None):
+    args = _args_as_list(args)
+    for logic, answer in args:
+        out = when(logic).then(answer).otherwise(default)
+        return out
+
+def case_when(*args, default = None):
+    if len(args) == 0:
+        raise ValueError("case_when must have at least one argument. See examples in documentation.")
+    for index, obj in enumerate(args, start=0):
+        if index == 0:
+            chained = _case(obj, default = default)
+        else:
+            chained = _case(obj, default = chained)
+    return chained
 
 def lag(expr, n: int = 1, default = None):
     """
