@@ -24,14 +24,37 @@ def _case(*args, default=None):
         return out
 
 def case_when(*args, default = None):
+    """
+    Use multiple if/else statements in one call
+
+    Parameters
+    ----------
+    *args : Expr
+        Column expressions and logic to apply
+
+    default : optional
+        Value to fill in missing values
+
+    Examples
+    --------
+    >>> df = tp.Tibble({'x' : ['a', 'b', 'c'], 'y' : range(3)})
+    >>> df.mutate(
+    >>>     single_case =  tp.case_when((col('y') > 1, "greater than one"), default = "less than one"), 
+    >>>     multi_case = tp.case_when((col('y') == 1, "one"), (col('y') == 2, "two"), default="zero"),
+    >>>     complex_case = tp.case_when(
+    >>>         (col('x').lag() == 'b', "previous is b"), 
+    >>>         (col('x').lead() == 'b', "next is b"), 
+    >>>         default = "others"))
+    """
+    # TODO: Create for series
     if len(args) == 0:
         raise ValueError("case_when must have at least one argument. See examples in documentation.")
-    for index, obj in enumerate(args, start=0):
+    for index, obj in enumerate(args):
         if index == 0:
-            chained = _case(obj, default = default)
+            chained_case = _case(obj, default = default)
         else:
-            chained = _case(obj, default = chained)
-    return chained
+            chained_case = _case(obj, default = chained_case)
+    return chained_case
 
 def lag(expr, n: int = 1, default = None):
     """

@@ -2,6 +2,7 @@
 
 ## v0.1.5 (in development)
 * New functions
+  + `tp.case_when()`
   + `tp.lag()`
   + `tp.lead()`
 

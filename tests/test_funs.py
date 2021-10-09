@@ -1,6 +1,19 @@
 import tidypolars as tp
 from tidypolars import col
 
+
+def test_case_when():
+    """Can use case_when with mutate statement"""
+    df = tp.Tibble({'x': range(3)})
+    actual = df.mutate(single_case = tp.case_when((col('x') > 1, True), default = False), 
+                       mutli_case = tp.case_when((col('x') == 1, "one"), 
+                                                 (col('x') == 2, "two"), 
+                                                 default = "zero"))
+    expected = tp.Tibble({'x': range(3),
+                          'single_case': [False, False, True], 
+                          'multi_case' : ['zero', 'one', 'two']})
+    assert actual.frame_equal(expected, null_equal = True), "case_when failed"
+
 def test_lag():
     """Can get lagging values with function"""
     df = tp.Tibble({'x': range(3)})
