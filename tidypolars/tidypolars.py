@@ -11,22 +11,9 @@ __all__ = [
 
 # reexports
 col = pl.col
+all = pl.all
 Expr = pl.Expr
 Series = pl.Series
-  
-def _is_list_like(x):
-    if isinstance(x, list) | isinstance(x, pl.Series):
-        return True
-    else:
-        return False
-
-def _as_list(x):
-    if isinstance(x, list):
-        return x.copy()
-    elif isinstance(x, str):
-        return [x]
-    else:
-        return list(x)
 
 def _args_as_list(x):
     if len(x) == 0:
@@ -66,9 +53,9 @@ class Tibble(pl.DataFrame):
 
         Parameters
         ----------
-        *args : 
+        *args : str
             Columns to sort by
-        desc : 
+        desc : bool
             Should columns be ordered in descending order
 
         Examples
@@ -155,7 +142,6 @@ class Tibble(pl.DataFrame):
         ----------
         *args : Expr
             Conditions to filter by
-
         groupby : Union[str, Expr, List[str], List[Expr]]
             Columns to group by
 
@@ -187,10 +173,8 @@ class Tibble(pl.DataFrame):
         ----------
         *args : Expr
             Column expressions to add or modify
-
         groupby : Union[str, Expr, List[str], List[Expr]]
             Columns to group by
-        
         **kwargs : Expr
             Column expressions to add or modify
 
@@ -208,6 +192,34 @@ class Tibble(pl.DataFrame):
         else:
             out = self.groupby(groupby).apply(lambda x: x.with_columns(exprs))
         
+        return out.pipe(from_polars)
+
+    def pivot_longer(self,
+                     cols: Expr = pl.all(),
+                     names_to: str = "name",
+                     values_to: str = "value"):
+        """
+        Pivot data from wide to long
+
+        Parameters
+        ----------
+        cols : Expr
+            Name of the column to extract. Defaults to the last column.
+        names_to : str
+            Name of the new "names" column.
+        values_to: str
+            NAme of the new "values" column
+
+        Examples
+        --------
+        >>> test_df = tp.Tibble({'id': ['id1', 'id2'], 'a': [1, 2], 'b': [1, 2]})
+        >>> df.pivot_longer(cols = ['a', 'b'])
+        >>> df.pivot_longer(cols = ['a', 'b'], names_to = 'stuff', values_to = 'things')
+        """
+        df_cols = pl.Series(self.columns)
+        value_vars = pl.Series(self.select(cols).columns)
+        id_vars = df_cols[~df_cols.is_in(value_vars)]
+        out = super().melt(id_vars, value_vars).rename({'variable': names_to, 'value': values_to})
         return out.pipe(from_polars)
 
     def pull(self, var: str = None):
@@ -323,7 +335,6 @@ class Tibble(pl.DataFrame):
         ----------
         *args : Union[int, List[int]]
             Rows to grab
-        
         groupby : Union[str, Expr, List[str], List[Expr]]
             Columns to group by
 
@@ -348,10 +359,8 @@ class Tibble(pl.DataFrame):
         ----------
         n : int
             Number of rows to grab
-        
         *args :
             Currently unused
-        
         groupby : Union[str, Expr, List[str], List[Expr]]
             Columns to group by
 
@@ -377,10 +386,8 @@ class Tibble(pl.DataFrame):
         ----------
         n : int
             Number of rows to grab
-        
         *args :
             Currently unused
-        
         groupby : Union[str, Expr, List[str], List[Expr]]
             Columns to group by
 
@@ -407,10 +414,9 @@ class Tibble(pl.DataFrame):
         Parameters
         ----------
         *args : Expr
-
+            Column expressions to add or modify
         groupby : Union[str, Expr, List[str], List[Expr]]
             Columns to group by
-
         **kwargs : Expr
             Column expressions to add or modify
 
