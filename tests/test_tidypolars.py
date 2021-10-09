@@ -82,6 +82,20 @@ def test_mutate_across():
     )
     assert actual.frame_equal(expected), "mutate across failed"
 
+def test_pivot_longer1():
+    "Can pivot all (unspecified) cols to long"
+    df = tp.Tibble({'x': [1, 2], 'y': [3, 4]})
+    actual = df.pivot_longer()
+    expected = tp.Tibble({'name': ['x', 'x', 'y', 'y'], 'value': range(1, 5)})
+    assert actual.frame_equal(expected), "unspecified pivot_longer failed"
+
+def test_pivot_longer2():
+    "Can pivot all (specified) cols to long"
+    df = tp.Tibble({'x': [1, 2], 'y': [3, 4]})
+    actual = df.pivot_longer(['x', 'y'])
+    expected = tp.Tibble({'name': ['x', 'x', 'y', 'y'], 'value': range(1, 5)})
+    assert actual.frame_equal(expected), "specified pivot_longer failed"
+
 def test_pull():
     """Can use pull"""
     df = tp.Tibble({'x': _repeat(1, 3), 'y': _repeat(2, 3)})

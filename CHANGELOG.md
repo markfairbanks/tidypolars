@@ -7,6 +7,7 @@
 
 * New Methods
   + `.head()`
+  + `.pivot_longer()`
   + `.tail()`
   + `.slice_head()`
   + `.slice_tail()`
