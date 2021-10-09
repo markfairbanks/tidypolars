@@ -4,7 +4,7 @@ from typing import Dict, List, Union
 
 __all__ = [
     "Tibble",
-    "from_pandas", "from_polars"
+    "from_pandas", "from_polars",
     # reexports
     "col", "Expr", "Series",
 ]
