@@ -7,18 +7,7 @@ def _shift(expr, n, default):
     else:
         return expr.shift_and_fill(n, default)
 
-def _args_as_list(x):
-    if len(x) == 0:
-        return []
-    elif isinstance(x[0], list):
-        return x[0]
-    elif isinstance(x[0], pl.Series):
-        return list(x[0])
-    else:
-        return [*x]
-
 def _case(*args, default=None):
-    args = _args_as_list(args)
     for logic, answer in args:
         out = when(logic).then(answer).otherwise(default)
         return out
