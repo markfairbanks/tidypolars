@@ -1,6 +1,6 @@
 import polars as pl
 
-__all__ = ["lag", "lead"]
+__all__ = []
 
 def _shift(expr, n, default):
     if default == None:
@@ -8,7 +8,7 @@ def _shift(expr, n, default):
     else:
         return expr.shift_and_fill(n, default)
 
-def lag(expr, n: int = 1, default = None):
+def _lag(expr, n: int = 1, default = None):
     """
     Get lagging values
 
@@ -30,9 +30,9 @@ def lag(expr, n: int = 1, default = None):
     """
     return _shift(expr, n, default)
 
-pl.Expr.lag = lag
+pl.Expr.lag = _lag
 
-def lead(expr, n: int = 1, default = None):
+def _lead(expr, n: int = 1, default = None):
     """
     Get leading values
 
@@ -54,4 +54,4 @@ def lead(expr, n: int = 1, default = None):
     """
     return _shift(expr, -n, default)
 
-pl.Expr.lead = lead
+pl.Expr.lead = _lead

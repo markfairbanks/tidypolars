@@ -492,7 +492,7 @@ class Tibble(pl.DataFrame):
         """Alias for `.slice_tail()`"""
         return self.slice_tail(n, groupby = groupby)
 
-    def to_polars(self):
+    def to_pandas(self):
         """
         Convert to a polars DataFrame
 
