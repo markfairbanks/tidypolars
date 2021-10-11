@@ -1,11 +1,7 @@
 # Changelog
 
 ## v0.1.5 (in development)
-* New functions
-  + `tp.lag()`
-  + `tp.lead()`
-
-* New Methods
+* New Tibble methods
   + `.head()`
   + `.pivot_longer()`
   + `.pivot_wider()`
@@ -13,8 +9,12 @@
   + `.slice_head()`
   + `.slice_tail()`
 
+* New expression methods
+  + `.lag()`
+  + `.lead()`
+
 ## v0.1.4 (2021/10/06)
-* New methods
+* New Tibble methods
   + `.bind_cols()`
   + `.bind_rows()`
   + `.distinct()`
