@@ -44,6 +44,27 @@ def _no_groupby(gb):
     else:
         return True
 
+def _is_list_like(x):
+    if isinstance(x, list) | isinstance(x, pl.Series):
+        return True
+    else:
+        return False
+
+def _col_expr(x):
+    if isinstance(x, pl.Expr):
+        return x
+    elif isinstance(x, str):
+        return col(x)
+    else:
+       raise ValueError("Invalid input for column selection") 
+
+#  Wrap all str inputs in col()  
+def _col_exprs(x):
+    if _is_list_like(x):
+        return [_col_expr(val) for val in x]
+    else:
+        return [_col_expr(x)]
+
 class Tibble(pl.DataFrame):
     def __repr__(self) -> str:
         df = self.to_polars()
@@ -134,6 +155,44 @@ class Tibble(pl.DataFrame):
     def head(self, n = 5, *args, groupby = None):
         """Alias for `.slice_head()`"""
         return self.slice_tail(n, groupby = groupby)
+
+    def fill(self, *args, direction: str = 'down', groupby = None):
+        """
+        Fill in missing values with previous or next value
+
+        Parameters
+        ----------
+        *args : str
+            Columns to fill
+        direction : str
+            Direction to fill. One of ['down', 'up', 'downup', 'updown']
+        groupby : Union[str, Expr, List[str], List[Expr]]
+            Columns to group by
+
+        Examples
+        --------
+        >>> df = tp.Tibble({'a': [1, None, 3, 4, 5],
+        ...                 'b': [None, 2, None, None, 5],
+        ...                 'groups': ['a', 'a', 'a', 'b', 'b']})
+        >>> df.fill('a', 'b')
+        >>> df.fill('a', 'b', groupby = 'groups')
+        >>> df.fill('a', 'b', direction = 'downup')
+        """
+        args = _args_as_list(args)
+        if len(args) == 0: return self
+        args = _col_exprs(args)
+        options = {'down': 'forward', 'up': 'backward'}
+        if direction in ['down', 'up']:
+            direction = options[direction]
+            exprs = [arg.fill_null(direction) for arg in args]
+        elif direction == 'downup':
+            exprs = [arg.fill_null('forward').fill_null('backward') for arg in args]
+        elif direction == 'updown':
+            exprs = [arg.fill_null('backward').fill_null('forward') for arg in args]
+        else:
+            raise ValueError("direction must be one of down, up, downup, or updown")
+
+        return self.mutate(*exprs, groupby = groupby)
 
     def filter(self, *args,
                groupby: Union[str, Expr, List[str], List[Expr]] = None):

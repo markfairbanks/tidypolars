@@ -2,6 +2,7 @@
 
 ## v0.1.5 (in development)
 * New Tibble methods
+  + `.fill()`
   + `.head()`
   + `.pivot_longer()`
   + `.pivot_wider()`

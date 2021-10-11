@@ -51,6 +51,13 @@ def test_distinct_select():
     expected = tp.Tibble({'x': ['a', 'b']})
     assert actual.frame_equal(expected), "distinct with select failed"
 
+def test_fill():
+    """Can fill"""
+    df = tp.Tibble({'chr': ['a', None], 'int': [1, None]})
+    actual = df.fill('chr', 'int')
+    expected = tp.Tibble({'chr': ['a', 'a'], 'int': [1, 1]})
+    assert actual.frame_equal(expected), "fill failed"
+
 def test_filter():
     """Can filter multiple conditions"""
     df = tp.Tibble({'x': range(10), 'y': range(10)})
