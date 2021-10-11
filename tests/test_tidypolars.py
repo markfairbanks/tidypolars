@@ -90,11 +90,25 @@ def test_pivot_longer1():
     assert actual.frame_equal(expected), "unspecified pivot_longer failed"
 
 def test_pivot_longer2():
-    "Can pivot all (specified) cols to long"
+    """Can pivot all (specified) cols to long"""
     df = tp.Tibble({'x': [1, 2], 'y': [3, 4]})
     actual = df.pivot_longer(['x', 'y'])
     expected = tp.Tibble({'name': ['x', 'x', 'y', 'y'], 'value': range(1, 5)})
     assert actual.frame_equal(expected), "specified pivot_longer failed"
+
+def tets_pivot_wider1():
+    """Can pivot all cols to wide"""
+    df = tp.Tibble({'label': ['x', 'y', 'z'], 'val': range(1, 4)})
+    actual = df.pivot_wider(names_from = 'label', values_from = 'val')
+    expected = tp.Tibble({'x': [1], 'y': [2], 'z': [3]})
+    assert actual.frame_equal(expected), "pivot_wider all cols failed"
+
+def tets_pivot_wider2():
+    """Can pivot cols to wide with id col"""
+    df = tp.Tibble({'id': _repeat(1, 3), 'label': ['x', 'y', 'z'], 'val': range(1, 4)})
+    actual = df.pivot_wider(names_from = 'label', values_from = 'val')
+    expected = tp.Tibble({'id': [1], 'x': [1], 'y': [2], 'z': [3]})
+    assert actual.frame_equal(expected), "pivot_wider with id failed"
 
 def test_pull():
     """Can use pull"""

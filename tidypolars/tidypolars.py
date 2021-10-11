@@ -6,12 +6,14 @@ __all__ = [
     "Tibble",
     "from_pandas", "from_polars",
     # reexports
-    "col", "Expr", "Series",
+    "all", "col", "lit",
+    "Expr", "Series",
 ]
 
 # reexports
 col = pl.col
 all = pl.all
+lit = pl.lit
 Expr = pl.Expr
 Series = pl.Series
 
@@ -204,15 +206,15 @@ class Tibble(pl.DataFrame):
         Parameters
         ----------
         cols : Expr
-            Name of the column to extract. Defaults to the last column.
+            List of the columns to pivot. Defaults to all columns.
         names_to : str
             Name of the new "names" column.
         values_to: str
-            NAme of the new "values" column
+            Name of the new "values" column
 
         Examples
         --------
-        >>> test_df = tp.Tibble({'id': ['id1', 'id2'], 'a': [1, 2], 'b': [1, 2]})
+        >>> df = tp.Tibble({'id': ['id1', 'id2'], 'a': [1, 2], 'b': [1, 2]})
         >>> df.pivot_longer(cols = ['a', 'b'])
         >>> df.pivot_longer(cols = ['a', 'b'], names_to = 'stuff', values_to = 'things')
         """
@@ -220,6 +222,54 @@ class Tibble(pl.DataFrame):
         value_vars = pl.Series(self.select(cols).columns)
         id_vars = df_cols[~df_cols.is_in(value_vars)]
         out = super().melt(id_vars, value_vars).rename({'variable': names_to, 'value': values_to})
+        return out.pipe(from_polars)
+
+    def pivot_wider(self,
+                    names_from: str = 'name',
+                    values_from: str = 'value',
+                    id_cols: Union[str, List[str]] = None,
+                    values_fn: str = 'first'):
+        """
+        Pivot data from long to wide
+
+        Parameters
+        ----------
+        names_from : str
+            Column to get the new column names from.
+        values_from : str
+            Column to get the new column values from
+        id_cols : str
+            A set of columns that uniquely identifies each observation.
+            Defaults to all columns in the data table except for the columns specified in
+            `names_from` and `values_from`.
+        values_fn : str
+            Function for how multiple entries per group should be dealt with.
+
+        Examples
+        --------
+        >>> df = tp.Tibble({'id': [1, 1], 'variable': ['a', 'b'], 'value': [1, 2]})
+        >>> df.pivot_wider(names_from = 'variable', values_from = 'value')
+        """
+        if id_cols == None:
+            df_cols = pl.Series(self.columns)
+            from_cols = pl.Series(self.select(names_from, values_from).columns)
+            id_cols = df_cols[~df_cols.is_in(from_cols)]
+
+        if len(id_cols) == 0:
+            id_cols = '_id'
+            self = self.mutate(_id = pl.lit(1))
+        
+        fn_options = {
+            'first': pl.eager.frame.PivotOps.first,
+            'count': pl.eager.frame.PivotOps.count,
+            'mean': pl.eager.frame.PivotOps.mean,
+            'sum': pl.eager.frame.PivotOps.sum,
+        }
+
+        values_fn = fn_options[values_fn]
+
+        out = values_fn(self.groupby(id_cols).pivot(names_from, values_from))
+
         return out.pipe(from_polars)
 
     def pull(self, var: str = None):

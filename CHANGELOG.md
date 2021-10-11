@@ -8,6 +8,7 @@
 * New Methods
   + `.head()`
   + `.pivot_longer()`
+  + `.pivot_wider()`
   + `.tail()`
   + `.slice_head()`
   + `.slice_tail()`
