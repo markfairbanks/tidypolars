@@ -4,5 +4,6 @@ __version__ = version("tidypolars")
 
 from .tidypolars import *
 from .expr_funs import *
+from .reexports import *
 
-__all__ = tidypolars.__all__ + expr_funs.__all__
+__all__ = tidypolars.__all__ + reexports.__all__

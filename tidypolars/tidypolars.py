@@ -1,69 +1,49 @@
 import polars as pl
 import functools as ft
 from typing import Dict, List, Union
+from .utils import (
+    _args_as_list,
+    _kwargs_as_exprs,
+    _no_groupby,
+    _col_exprs
+)
+from .reexports import *
 
 __all__ = [
     "Tibble",
-    "from_pandas", "from_polars",
-    # reexports
-    "all", "col", "lit",
-    "Expr", "Series",
+    "from_pandas", "from_polars"
 ]
 
-# reexports
-col = pl.col
-all = pl.all
-lit = pl.lit
-Expr = pl.Expr
-Series = pl.Series
-
-def _args_as_list(x):
-    if len(x) == 0:
-        return []
-    elif isinstance(x[0], list):
-        return x[0]
-    elif isinstance(x[0], pl.Series):
-        return list(x[0])
-    else:
-        return [*x]
-
 def from_polars(df):
+    """
+    Convert from polars DataFrame to Tibble
+
+    Parameters
+    ----------
+    df : DataFrame
+        pl.DataFrame to convert to a Tibble
+
+    Examples
+    --------
+    >>> tp.from_polars(df)
+    """
     df.__class__ = Tibble
     return df
 
 def from_pandas(df):
-    return from_pandas(pl.from_pandas(df))
+    """
+    Convert from pandas DataFrame to Tibble
 
-# Convert kwargs to col() expressions with alias
-def _kwargs_as_exprs(kwargs):
-    return [expr.alias(key) for key, expr in kwargs.items()]
+    Parameters
+    ----------
+    df : DataFrame
+        pd.DataFrame to convert to a Tibble
 
-def _no_groupby(gb):
-    if isinstance(gb, Expr) | isinstance(gb, str) | isinstance(gb, list):
-        return False
-    else:
-        return True
-
-def _is_list_like(x):
-    if isinstance(x, list) | isinstance(x, pl.Series):
-        return True
-    else:
-        return False
-
-def _col_expr(x):
-    if isinstance(x, pl.Expr):
-        return x
-    elif isinstance(x, str):
-        return col(x)
-    else:
-       raise ValueError("Invalid input for column selection") 
-
-#  Wrap all str inputs in col()  
-def _col_exprs(x):
-    if _is_list_like(x):
-        return [_col_expr(val) for val in x]
-    else:
-        return [_col_expr(x)]
+    Examples
+    --------
+    >>> tp.from_pandas(df)
+    """
+    return from_polars(pl.from_pandas(df))
 
 class Tibble(pl.DataFrame):
     def __repr__(self) -> str:
