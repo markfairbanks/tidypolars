@@ -121,7 +121,7 @@ def test_pivot_wider3():
     """Can pivot cols to wide with values filled"""
     df = tp.Tibble({'id': _repeat(1, 3), 'label': ['x', 'y', 'z'], 'val': range(1, 4)})
     actual = (
-        df.pivot_wider(names_from = 'label', values_from = 'id', values_fill= 0)
+        df.pivot_wider(names_from = 'label', values_from = 'id', values_fill = 0)
         .select('val', 'x', 'y', 'z').arrange('val')
     )
     expected = tp.Tibble({'val': [1, 2, 3], 'x': [1, 0, 0], 'y': [0, 1, 0], 'z': [0, 0, 1]})

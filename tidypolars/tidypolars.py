@@ -268,7 +268,7 @@ class Tibble(pl.DataFrame):
                     values_from: str = 'value',
                     id_cols: Union[str, List[str]] = None,
                     values_fn: str = 'first', 
-                    values_fill: str = None):
+                    values_fill: Union[str, int, float] = None):
         """
         Pivot data from long to wide
 
@@ -313,7 +313,9 @@ class Tibble(pl.DataFrame):
 
         values_fn = fn_options[values_fn]
 
-        out = values_fn(self.groupby(id_cols).pivot(names_from, values_from)).fill_null(values_fill)
+        out = values_fn(self.groupby(id_cols).pivot(names_from, values_from))
+
+        if values_fill != None: out = out.fill_null(values_fill)
 
         if no_id: out = out.drop('_id')
 
