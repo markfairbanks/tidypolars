@@ -9,9 +9,9 @@ def _repeat(x, times):
 
 def test_arrange1():
     """Can arrange ascending"""
-    df = tp.Tibble({'x': ['a', 'a', 'b'], 'y': [2, 1, 3]})
+    df = tp.Tibble(x = ['a', 'a', 'b'], y = [2, 1, 3])
     actual = df.arrange('y')
-    expected = tp.Tibble({'x': ['a', 'a', 'b'], 'y': [1, 2, 3]})
+    expected = tp.Tibble(x = ['a', 'a', 'b'], y = [1, 2, 3])
     assert actual.frame_equal(expected), "arrange ascending failed"
 
 def test_arrange2():
@@ -185,7 +185,7 @@ def test_summarize():
 
 def test_summarize_across():
     """Can use summarize_across"""
-    df = tp.Tibble({'x': range(3), 'y': range(3), 'z': range(3)})
+    df = tp.Tibble(x = range(3), y = range(3), z = range(3))
     actual = df.summarize(col(['x', 'y']).max().prefix('max_'),
                           avg_x = col('x').mean())
     expected = tp.Tibble({'max_x': [2], 'max_y': [2], 'avg_x': [1]})
@@ -197,7 +197,7 @@ def test_to_polars():
     assert isinstance(df.to_polars(), pl.DataFrame), "to_polars failed"
 
 def test_funs_in_a_row():
-    df = tp.Tibble({'x': range(3), 'y': range(3), 'z': range(3)})
+    df = tp.Tibble(x = range(3), y = range(3), z = range(3))
     df.distinct()
     df.drop('x')
     df.filter(col('x') < 7)
