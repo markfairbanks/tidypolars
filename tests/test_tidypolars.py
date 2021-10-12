@@ -117,6 +117,13 @@ def tets_pivot_wider2():
     expected = tp.Tibble({'id': [1], 'x': [1], 'y': [2], 'z': [3]})
     assert actual.frame_equal(expected), "pivot_wider with id failed"
 
+def tets_pivot_wider3():
+    """Can pivot cols to wide with values filled"""
+    df = tp.Tibble({'id': _repeat(1, 3), 'label': ['x', 'y', 'z'], 'val': range(1, 4)})
+    actual = df.pivot_wider(names_from = 'label', values_from = 'id', values_fill= 0)
+    expected = tp.Tibble({'val': [1,2,3], 'y': [0,0,1], 'x': [1,0,0], 'z': [0,1,0]})
+    assert actual.frame_equal(expected), "pivot_wider with values filled failed"
+
 def test_pull():
     """Can use pull"""
     df = tp.Tibble({'x': _repeat(1, 3), 'y': _repeat(2, 3)})
