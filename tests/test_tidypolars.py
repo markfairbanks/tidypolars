@@ -89,6 +89,21 @@ def test_mutate_across():
     )
     assert actual.frame_equal(expected), "mutate across failed"
 
+def test_names():
+    """Can get column names"""
+    df = tp.Tibble({'x': _repeat(1, 3), 'y': _repeat(2, 3)})
+    assert df.names == ['x', 'y'], "names failed"
+
+def test_ncol():
+    """Can number of columns"""
+    df = tp.Tibble({'x': _repeat(1, 3), 'y': _repeat(2, 3)})
+    assert df.ncol == 2, "ncol failed"
+
+def test_ncol():
+    """Can number of rows"""
+    df = tp.Tibble({'x': _repeat(1, 3), 'y': _repeat(2, 3)})
+    assert df.nrow == 3, "nrow failed"
+
 def test_pivot_longer1():
     "Can pivot all (unspecified) cols to long"
     df = tp.Tibble({'x': [1, 2], 'y': [3, 4]})
