@@ -46,6 +46,14 @@ def from_pandas(df):
     return from_polars(pl.from_pandas(df))
 
 class Tibble(pl.DataFrame):
+    def __init__(self, *args, **kwargs):
+        args = _args_as_list(args)
+        if len(args) == 0:
+            data = {key:value for key, value in kwargs.items()}
+        elif len(args) == 1:
+            data = args[0]
+        super().__init__(data)
+    
     def __repr__(self) -> str:
         df = self.to_polars()
         return df.__str__()
