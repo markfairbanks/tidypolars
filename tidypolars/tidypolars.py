@@ -147,9 +147,9 @@ class Tibble(pl.DataFrame):
         args = _args_as_list(args)
 
         if len(args) == 0:
-            df = self.to_polars().drop_duplicates()
+            df = super().drop_duplicates()
         else:
-            df = self.select(args).to_polars().drop_duplicates()
+            df = super().select(args).drop_duplicates()
         
         return df.pipe(from_polars)
 
@@ -265,11 +265,10 @@ class Tibble(pl.DataFrame):
         ...           a_plus_b = col('a') + col('b'))
         """
         exprs = _args_as_list(args) + _kwargs_as_exprs(kwargs)
-        df = self.to_polars()
         if _no_groupby(groupby):
-            out = df.with_columns(exprs)
+            out = super(Tibble, self).with_columns(exprs)
         else:
-            out = df.groupby(groupby).apply(lambda x: x.with_columns(exprs))
+            out = super(Tibble, self).groupby(groupby).apply(lambda x: x.with_columns(exprs))
         
         return out.pipe(from_polars)
 
@@ -351,7 +350,7 @@ class Tibble(pl.DataFrame):
 
         values_fn = fn_options[values_fn]
 
-        out = values_fn(self.to_polars().groupby(id_cols).pivot(names_from, values_from))
+        out = values_fn(super(Tibble, self).groupby(id_cols).pivot(names_from, values_from))
 
         if values_fill != None: out = out.fill_null(values_fill)
 
@@ -482,11 +481,10 @@ class Tibble(pl.DataFrame):
         >>> df.slice(0, groupby = 'c')
         """
         rows = _args_as_list(args)
-        df = self.to_polars()
         if _no_groupby(groupby):
-            df = self[rows]
+            df = super(Tibble, self).select(all().take(rows))
         else:
-            df = self.groupby(groupby).apply(lambda x: x[rows])
+            df = super(Tibble, self).groupby(groupby).apply(lambda x: x.select(all().take(rows)))
         return df.pipe(from_polars)
 
     def slice_head(self, n: int = 5, *args, groupby = None):
@@ -511,9 +509,9 @@ class Tibble(pl.DataFrame):
         args = _args_as_list(args)
         col_order = super().columns
         if _no_groupby(groupby):
-            df = super().head(n)
+            df = super(Tibble, self).head(n)
         else:
-            df = super().groupby(groupby).head(n)
+            df = super(Tibble, self).groupby(groupby).head(n)
         return df.pipe(from_polars).select(col_order)
 
     def slice_tail(self, n: int = 5, *args, groupby = None):
@@ -538,9 +536,9 @@ class Tibble(pl.DataFrame):
         args = _args_as_list(args)
         col_order = super().columns
         if _no_groupby(groupby):
-            df = super().tail(n)
+            df = super(Tibble, self).tail(n)
         else:
-            df = super().groupby(groupby).tail(n)
+            df = super(Tibble, self).groupby(groupby).tail(n)
         return df.pipe(from_polars).select(col_order)
     
     def summarize(self, *args,
@@ -570,9 +568,9 @@ class Tibble(pl.DataFrame):
         exprs = _args_as_list(args) + _kwargs_as_exprs(kwargs)
 
         if _no_groupby(groupby):
-            out = super().select(exprs)
+            out = super(Tibble, self).select(exprs)
         else:
-            out = super().groupby(groupby).agg(exprs)
+            out = super(Tibble, self).groupby(groupby).agg(exprs)
         
         return out.pipe(from_polars)
 
@@ -611,7 +609,6 @@ _polars_methods = [
     'apply',
     'describe',
     'downsample',
-    'drop',
     'drop_duplicates',
     'explode',
     'fill_nan',

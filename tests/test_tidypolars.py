@@ -195,3 +195,20 @@ def test_to_polars():
     """Can convert to a polars DataFrame"""
     df = tp.Tibble({'x': range(3), 'y': range(3), 'z': range(3)})
     assert isinstance(df.to_polars(), pl.DataFrame), "to_polars failed"
+
+def test_funs_in_a_row():
+    df = tp.Tibble({'x': range(3), 'y': range(3), 'z': range(3)})
+    df.distinct()
+    df.drop('x')
+    df.filter(col('x') < 7)
+    df.head()
+    df.mutate(col('x') * 2)
+    df.relocate('y', before = 'x')
+    df.rename({'x': 'new_x'})
+    df.select('x', 'y')
+    df.slice(1)
+    df.slice_head()
+    df.slice_tail()
+    df.tail()
+    df.arrange('x', 'y')
+    assert True, "Functions in a row failed"
