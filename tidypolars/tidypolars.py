@@ -267,7 +267,8 @@ class Tibble(pl.DataFrame):
                     names_from: str = 'name',
                     values_from: str = 'value',
                     id_cols: Union[str, List[str]] = None,
-                    values_fn: str = 'first'):
+                    values_fn: str = 'first', 
+                    values_fill: Union[str, int, float] = None):
         """
         Pivot data from long to wide
 
@@ -283,6 +284,9 @@ class Tibble(pl.DataFrame):
             `names_from` and `values_from`.
         values_fn : str
             Function for how multiple entries per group should be dealt with.
+        values_fill : str
+            If values are missing/null, what value should be filled in.
+            Can use: "backward", "forward", "mean", "min", "max", "zero", "one" or an expression
 
         Examples
         --------
@@ -294,7 +298,9 @@ class Tibble(pl.DataFrame):
             from_cols = pl.Series(self.select(names_from, values_from).columns)
             id_cols = df_cols[~df_cols.is_in(from_cols)]
 
-        if len(id_cols) == 0:
+        no_id = len(id_cols) == 0
+
+        if no_id:
             id_cols = '_id'
             self = self.mutate(_id = pl.lit(1))
         
@@ -308,6 +314,10 @@ class Tibble(pl.DataFrame):
         values_fn = fn_options[values_fn]
 
         out = values_fn(self.groupby(id_cols).pivot(names_from, values_from))
+
+        if values_fill != None: out = out.fill_null(values_fill)
+
+        if no_id: out = out.drop('_id')
 
         return out.pipe(from_polars)
 
