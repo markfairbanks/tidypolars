@@ -1,6 +1,10 @@
 # Changelog
 
 ## v0.1.6 (in development)
+* New attributes
+  + `.names`
+  + `.ncol`
+  + `.nrow`
 
 ## v0.1.5 (2021/10/12)
 * New Tibble methods
