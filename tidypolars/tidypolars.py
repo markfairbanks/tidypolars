@@ -50,6 +50,24 @@ class Tibble(pl.DataFrame):
         df = self.to_polars()
         return df.__str__()
 
+    def __getattribute__(self, attr):
+        """Prevent access to polars attributes"""
+        if attr in _polars_methods:
+            raise AttributeError
+
+        return pl.DataFrame.__getattribute__(self, attr)
+
+    def __dir__(self):
+        methods = [
+            'arrange', 'bind_cols', 'bind_rows', 'clone',
+            'distinct', 'drop', 'head', 'fill', 'filter',
+            'mutate', 'pivot_longer', 'pivot_wider', 'pull',
+            'relocate', 'rename', 'select', 'slice',
+            'slice_head', 'slice_tail', 'summarize', 'tail',
+            'to_pandas', 'to_polars'
+        ]
+        return methods
+
     def arrange(self, *args, desc: bool = False):
         """
         Arrange/sort rows
@@ -71,7 +89,7 @@ class Tibble(pl.DataFrame):
         >>> df.arrange('x', 'y', desc = [True, False])
         """
         exprs = _args_as_list(args)
-        return self.sort(exprs, reverse = desc).pipe(from_polars)
+        return super().sort(exprs, reverse = desc).pipe(from_polars)
 
     def bind_cols(self, df: "tp.Tibble"):
         """
@@ -88,7 +106,7 @@ class Tibble(pl.DataFrame):
         >>> df2 = tp.Tibble({'a': ['c', 'c', 'c'], 'b': range(4, 7)})
         >>> df1.bind_cols(df2)
         """
-        return self.hstack(df).pipe(from_polars)
+        return super().hstack(df).pipe(from_polars)
     
     def bind_rows(self, df: "tp.Tibble"):
         """
@@ -106,6 +124,10 @@ class Tibble(pl.DataFrame):
         >>> df1.bind_rows(df2)
         """
         return self.vstack(df).pipe(from_polars)
+
+    def clone(self):
+        """Very cheap deeep clone"""
+        return super().clone().pipe(from_polars)
 
     def distinct(self, *args):
         """
@@ -126,11 +148,27 @@ class Tibble(pl.DataFrame):
         args = _args_as_list(args)
 
         if len(args) == 0:
-            df = self.drop_duplicates()
+            df = self.to_polars().drop_duplicates()
         else:
-            df = self.select(args).drop_duplicates()
+            df = self.select(args).to_polars().drop_duplicates()
         
         return df.pipe(from_polars)
+
+    def drop(self, *args):
+        """
+        Drop unwanted columns
+
+        Parameters
+        ----------
+        *args : str
+            Columns to drop
+
+        Examples
+        --------
+        >>> df.drop('x', 'y')
+        """
+        args = _args_as_list(args)
+        return super().drop(args).pipe(from_polars)
     
     def head(self, n = 5, *args, groupby = None):
         """Alias for `.slice_head()`"""
@@ -228,10 +266,11 @@ class Tibble(pl.DataFrame):
         ...           a_plus_b = col('a') + col('b'))
         """
         exprs = _args_as_list(args) + _kwargs_as_exprs(kwargs)
+        df = self.to_polars()
         if _no_groupby(groupby):
-            out = self.with_columns(exprs)
+            out = df.with_columns(exprs)
         else:
-            out = self.groupby(groupby).apply(lambda x: x.with_columns(exprs))
+            out = df.groupby(groupby).apply(lambda x: x.with_columns(exprs))
         
         return out.pipe(from_polars)
 
@@ -313,7 +352,7 @@ class Tibble(pl.DataFrame):
 
         values_fn = fn_options[values_fn]
 
-        out = values_fn(self.groupby(id_cols).pivot(names_from, values_from))
+        out = values_fn(self.to_polars().groupby(id_cols).pivot(names_from, values_from))
 
         if values_fill != None: out = out.fill_null(values_fill)
 
@@ -338,7 +377,7 @@ class Tibble(pl.DataFrame):
         if var == None:
             var = self.columns[-1]
         
-        return self.get_column(var)
+        return super().get_column(var)
     
     def relocate(self, *args, before: str = None, after: str = None):
         """
@@ -444,6 +483,7 @@ class Tibble(pl.DataFrame):
         >>> df.slice(0, groupby = 'c')
         """
         rows = _args_as_list(args)
+        df = self.to_polars()
         if _no_groupby(groupby):
             df = self[rows]
         else:
@@ -561,3 +601,70 @@ class Tibble(pl.DataFrame):
         """
         self.__class__ = pl.DataFrame
         return self
+
+_allowed_methods = [
+    'columns', 'dtypes', 'frame_equal',
+    'get_columns', 'lazy', 'pipe',
+    'shape'
+]
+
+_polars_methods = [
+    'apply',
+    'describe',
+    'downsample',
+    'drop',
+    'drop_duplicates',
+    'explode',
+    'fill_nan',
+    'fill_null',
+    'find_idx_by_name',
+    'fold',
+    'get_column',
+    'groupby',
+    'hash_rows',
+    'height',
+    'hstack',
+    'insert_at_idx',
+    'interpolate',
+    'is_duplicated',
+    'is_unique',
+    'join',
+    'limit',
+    'max',
+    'mean',
+    'median',
+    'melt',
+    'min',
+    'n_chunks',
+    'null_count',
+    'quantile',
+    'rechunk',
+    'replace',
+    'replace_at_idx',
+    'row',
+    'rows'
+    'sample',
+    'select_at_idx',
+    'shift',
+    'shift_and_fill',
+    'shrink_to_fit',
+    'sort',
+    'std',
+    'sum',
+    'to_arrow',
+    'to_dict',
+    'to_dicts',
+    'to_dummies',
+    'to_ipc',
+    'to_json',
+    'to_numpy'
+    'to_pandas'
+    'to_parquet',
+    'transpose',
+    'var',
+    'width',
+    'with_column',
+    'with_columns',
+    'with_column_renamed',
+    'with_columns'
+]

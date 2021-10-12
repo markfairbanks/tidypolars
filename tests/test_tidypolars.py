@@ -131,7 +131,7 @@ def test_pull():
     """Can use pull"""
     df = tp.Tibble({'x': _repeat(1, 3), 'y': _repeat(2, 3)})
     actual = df.pull('x')
-    expected = df.get_column('x')
+    expected = df.to_polars().get_column('x')
     assert actual == expected, "pull failed"
 
 def test_relocate():
