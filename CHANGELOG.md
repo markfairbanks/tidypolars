@@ -1,5 +1,7 @@
 # Changelog
 
+## v0.1.6 (in development)
+
 ## v0.1.5 (2021/10/12)
 * New Tibble methods
   + `.fill()`
