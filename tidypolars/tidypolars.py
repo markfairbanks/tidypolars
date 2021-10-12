@@ -54,7 +54,6 @@ class Tibble(pl.DataFrame):
         """Prevent access to polars attributes"""
         if attr in _polars_methods:
             raise AttributeError
-
         return pl.DataFrame.__getattribute__(self, attr)
 
     def __dir__(self):
