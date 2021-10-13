@@ -400,6 +400,25 @@ class Tibble(pl.DataFrame):
         
         return super().get_column(var)
     
+    def new_relocate(self, *args, before: str = None, after: str = None):
+        moveCols = _args_as_list(args)
+        pushLength = len(moveCols)
+        colDict = dict((column.name, index) for index, column in enumerate(self)) 
+        
+        if (before == None) & (after == None) & (pushLength == 0):
+            return self
+        elif before != None:
+            anchor , pushCols = colDict[before], (-1 - pushLength)
+            [colDict.update({key : pushCols + val})for key, val in colDict.items() if val < anchor]
+            [colDict.update({key : anchor - (index + 1)}) for index, key in enumerate(reversed(moveCols))]
+        elif after != None:
+            anchor, pushCols  = colDict[after], (pushLength + 1)
+            [colDict.update({key : pushCols + val})for key, val in colDict.items() if val > anchor]
+            [colDict.update({key : anchor + (index + 1)}) for index, key in enumerate(moveCols)]
+
+        orderedCols = dict(sorted(colDict.items(), key=lambda x:x[1])).keys()
+        return self.select(list(orderedCols))
+    
     def relocate(self, *args, before: str = None, after: str = None):
         """
         Move a column or columns to a new position
