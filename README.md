@@ -2,8 +2,6 @@
 
 tidypolars is a data frame library built on top of the blazingly fast [polars](https://github.com/pola-rs/polars) library that gives access to methods and functions familiar to R tidyverse users.
 
-*Please be aware that tidypolars is still early in development and may be subject to fast API changes*
-
 ## Installation
 ```bash
 $ pip3 install tidypolars
