@@ -1,6 +1,9 @@
 # Changelog
 
 ## v0.1.6 (in development)
+* Improved functionality
+  + `.rename()`: Can now use both a pandas-like or dplyr-like interface
+  
 * New attributes
   + `.names`
   + `.ncol`
