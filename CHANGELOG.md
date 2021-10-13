@@ -1,5 +1,7 @@
 # Changelog
 
+## v0.1.7 (in development)
+
 ## v0.1.6 (2021/10/13)
 * Improved functionality
   + `.rename()`: Can now use both a dplyr-like and pandas-like interface

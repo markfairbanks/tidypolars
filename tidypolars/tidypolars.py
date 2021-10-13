@@ -176,6 +176,28 @@ class Tibble(pl.DataFrame):
         """
         args = _args_as_list(args)
         return super().drop(args).pipe(from_polars)
+
+    def drop_null(self, *args):
+        """
+        Drop rows containing missing values
+
+        Parameters
+        ----------
+        *args : str
+            Columns to drop nulls from (defaults to all)
+
+        Examples
+        --------
+        >>> df = tp.Tibble(x = [1, None, 3], y = [None, 'b', 'c'], z = range(3)}
+        >>> df.drop_null()
+        >>> df.drop_null('x', 'y')
+        """
+        args = _args_as_list(args)
+        if len(args) == 0:
+            out = super().drop_nulls()
+        else:
+            out = super().drop_nulls(args)
+        return out.pipe(from_polars)
     
     def head(self, n = 5, *args, groupby = None):
         """Alias for `.slice_head()`"""
