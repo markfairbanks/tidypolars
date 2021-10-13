@@ -51,6 +51,20 @@ def test_distinct_select():
     expected = tp.Tibble({'x': ['a', 'b']})
     assert actual.frame_equal(expected), "distinct with select failed"
 
+def test_drop_null_empty():
+    """Can drop nulls from all cols"""
+    df = tp.Tibble(x = [1, None, 3], y = [None, 2, 3], z = range(1, 4))
+    actual = df.drop_null()
+    expected = tp.Tibble(x = [3], y = [3], z = [3])
+    assert actual.frame_equal(expected), "empty drop_null failed"
+
+def test_drop_null_select():
+    """Can drop nulls with selection"""
+    df = tp.Tibble(x = [1, None, 3], y = [None, 2, 3], z = range(1, 4))
+    actual = df.drop_null('x')
+    expected = tp.Tibble(x = [1, 3], y = [None, 3], z = [1, 3])
+    assert actual.frame_equal(expected, null_equal = True), "drop_null with selection failed"
+
 def test_fill():
     """Can fill"""
     df = tp.Tibble({'chr': ['a', None], 'int': [1, None]})
