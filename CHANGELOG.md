@@ -1,8 +1,8 @@
 # Changelog
 
-## v0.1.6 (in development)
+## v0.1.6 (2021/10/13)
 * Improved functionality
-  + `.rename()`: Can now use both a pandas-like or dplyr-like interface
+  + `.rename()`: Can now use both a dplyr-like and pandas-like interface
   
 * New attributes
   + `.names`
