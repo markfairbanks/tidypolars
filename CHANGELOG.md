@@ -1,6 +1,8 @@
 # Changelog
 
 ## v0.1.7 (in development)
+* New Tibble methods
+  + `.drop_null()`
 
 ## v0.1.6 (2021/10/13)
 * Improved functionality
