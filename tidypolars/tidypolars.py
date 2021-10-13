@@ -49,8 +49,8 @@ class Tibble(pl.DataFrame):
     def __init__(self, *args, **kwargs):
         args = _args_as_list(args)
         if len(args) == 0:
-            data = {key:value for key, value in kwargs.items()}
-        elif len(args) == 1:
+            data = kwargs
+        else:
             data = args[0]
         super().__init__(data)
     
@@ -66,7 +66,7 @@ class Tibble(pl.DataFrame):
 
     def __dir__(self):
         methods = [
-            'arrange', 'bind_cols', 'bind_rows', 'clone',
+            'arrange', 'bind_cols', 'bind_rows', 'colnames', 'clone',
             'distinct', 'drop', 'head', 'fill', 'filter',
             'mutate', 'pivot_longer', 'pivot_wider', 'pull',
             'relocate', 'rename', 'select', 'slice',
@@ -133,7 +133,7 @@ class Tibble(pl.DataFrame):
         return self.vstack(df).pipe(from_polars)
 
     def clone(self):
-        """Very cheap deeep clone"""
+        """Very cheap deep clone"""
         return super().clone().pipe(from_polars)
 
     def distinct(self, *args):
@@ -280,6 +280,21 @@ class Tibble(pl.DataFrame):
         
         return out.pipe(from_polars)
 
+    @property
+    def names(self):
+        """Get column names"""
+        return super().columns
+
+    @property
+    def ncol(self):
+        """Get number of columns"""
+        return super().shape[1]
+
+    @property
+    def nrow(self):
+        """Get number of rows"""
+        return super().shape[0]
+
     def pivot_longer(self,
                      cols: Expr = pl.all(),
                      names_to: str = "name",
@@ -302,8 +317,8 @@ class Tibble(pl.DataFrame):
         >>> df.pivot_longer(cols = ['a', 'b'])
         >>> df.pivot_longer(cols = ['a', 'b'], names_to = 'stuff', values_to = 'things')
         """
-        df_cols = pl.Series(self.columns)
-        value_vars = pl.Series(self.select(cols).columns)
+        df_cols = pl.Series(self.names)
+        value_vars = pl.Series(self.select(cols).names)
         id_vars = df_cols[~df_cols.is_in(value_vars)]
         out = super().melt(id_vars, value_vars).rename({'variable': names_to, 'value': values_to})
         return out.pipe(from_polars)
@@ -339,8 +354,8 @@ class Tibble(pl.DataFrame):
         >>> df.pivot_wider(names_from = 'variable', values_from = 'value')
         """
         if id_cols == None:
-            df_cols = pl.Series(self.columns)
-            from_cols = pl.Series(self.select(names_from, values_from).columns)
+            df_cols = pl.Series(self.names)
+            from_cols = pl.Series(self.select(names_from, values_from).names)
             id_cols = df_cols[~df_cols.is_in(from_cols)]
 
         no_id = len(id_cols) == 0
@@ -381,7 +396,7 @@ class Tibble(pl.DataFrame):
         >>> df.pull('a')
         """
         if var == None:
-            var = self.columns[-1]
+            var = self.names[-1]
         
         return super().get_column(var)
     
@@ -400,43 +415,26 @@ class Tibble(pl.DataFrame):
         >>> df.relocate('a', before = 'c')
         >>> df.relocate('b', after = 'c')
         """
-        move_cols = pl.Series(list(args))
-
-        if len(move_cols) == 0:
+        move_cols = _args_as_list(args)
+        push_length = len(move_cols)
+        col_dict = dict((column.name, index) for index, column in enumerate(self)) 
+        
+        if (before == None) & (after == None) & (push_length == 0):
             return self
-        else:
-            if (before != None) & (after != None):
-                raise ValueError("Cannot provide both before and after")
+        elif (before != None) & (after != None):
+            raise ValueError("Cannot provide both before and after")
+        elif before != None:
+            anchor, push_cols = col_dict[before], (-1 - push_length)
+            [col_dict.update({key : push_cols + val}) for key, val in col_dict.items() if val < anchor]
+            [col_dict.update({key : anchor - (index + 1)}) for index, key in enumerate(reversed(move_cols))]
+        elif after != None:
+            anchor, push_cols = col_dict[after], (1 + push_length)
+            [col_dict.update({key : push_cols + val}) for key, val in col_dict.items() if val > anchor]
+            [col_dict.update({key : anchor + (index + 1)}) for index, key in enumerate(move_cols)]
 
-            all_cols = pl.Series(self.columns)
-            all_locs = pl.Series(range(len(all_cols)))
-            
-            move_cols = pl.Series(self.select(move_cols).columns)
-            move_locs = all_locs[all_cols.is_in(move_cols)]
-
-            if (before == None) & (after == None):
-                before_loc = 0
-            elif before != None:
-                before = self.select(before).columns[0]
-                before_loc = all_locs[all_cols == before][0]
-            else:
-                after = self.select(after).columns[0]
-                before_loc = all_locs[all_cols == after][0] + 1
-
-            before_locs = pl.Series(range(before_loc))
-            after_locs = pl.Series(range(before_loc, len(all_cols)))
-
-            before_locs = before_locs[~before_locs.is_in(move_locs)]
-            after_locs = after_locs[~after_locs.is_in(move_locs)]
-
-            final_order = before_locs.cast(int)
-            final_order.append(move_locs.cast(int))
-            final_order.append(after_locs.cast(int))
-
-            ordered_cols = all_cols.take(final_order)
-
-            return self.select(ordered_cols)
-    
+        ordered_cols = dict(sorted(col_dict.items(), key = lambda x:x[1])).keys()
+        return self.select(list(ordered_cols))
+   
     def rename(self, *args, **kwargs):
         """
         Rename columns
@@ -531,7 +529,7 @@ class Tibble(pl.DataFrame):
         >>> df.slice_head(1, groupby = 'c')
         """
         args = _args_as_list(args)
-        col_order = super().columns
+        col_order = self.names
         if _no_groupby(groupby):
             df = super(Tibble, self).head(n)
         else:
@@ -558,7 +556,7 @@ class Tibble(pl.DataFrame):
         >>> df.slice_tail(1, groupby = 'c')
         """
         args = _args_as_list(args)
-        col_order = super().columns
+        col_order = self.names
         if _no_groupby(groupby):
             df = super(Tibble, self).tail(n)
         else:
@@ -624,14 +622,14 @@ class Tibble(pl.DataFrame):
         return self
 
 _allowed_methods = [
-    'columns', 'dtypes', 'frame_equal',
-    'get_columns', 'lazy', 'pipe',
-    'shape'
+    'dtypes', 'frame_equal',
+    'get_columns', 'lazy', 'pipe'
 ]
 
 _polars_methods = [
     'apply',
-    'describe',
+    'columns',
+    # 'describe',
     'downsample',
     'drop_duplicates',
     'explode',
@@ -665,6 +663,7 @@ _polars_methods = [
     'rows'
     'sample',
     'select_at_idx',
+    'shape',
     'shift',
     'shift_and_fill',
     'shrink_to_fit',
