@@ -400,25 +400,6 @@ class Tibble(pl.DataFrame):
         
         return super().get_column(var)
     
-    def new_relocate(self, *args, before: str = None, after: str = None):
-        moveCols = _args_as_list(args)
-        pushLength = len(moveCols)
-        colDict = dict((column.name, index) for index, column in enumerate(self)) 
-        
-        if (before == None) & (after == None) & (pushLength == 0):
-            return self
-        elif before != None:
-            anchor , pushCols = colDict[before], (-1 - pushLength)
-            [colDict.update({key : pushCols + val})for key, val in colDict.items() if val < anchor]
-            [colDict.update({key : anchor - (index + 1)}) for index, key in enumerate(reversed(moveCols))]
-        elif after != None:
-            anchor, pushCols  = colDict[after], (pushLength + 1)
-            [colDict.update({key : pushCols + val})for key, val in colDict.items() if val > anchor]
-            [colDict.update({key : anchor + (index + 1)}) for index, key in enumerate(moveCols)]
-
-        orderedCols = dict(sorted(colDict.items(), key=lambda x:x[1])).keys()
-        return self.select(list(orderedCols))
-    
     def relocate(self, *args, before: str = None, after: str = None):
         """
         Move a column or columns to a new position
@@ -434,43 +415,26 @@ class Tibble(pl.DataFrame):
         >>> df.relocate('a', before = 'c')
         >>> df.relocate('b', after = 'c')
         """
-        move_cols = pl.Series(list(args))
-
-        if len(move_cols) == 0:
+        moveCols = _args_as_list(args)
+        pushLength = len(moveCols)
+        colDict = dict((column.name, index) for index, column in enumerate(self)) 
+        
+        if (before == None) & (after == None) & (pushLength == 0):
             return self
-        else:
-            if (before != None) & (after != None):
-                raise ValueError("Cannot provide both before and after")
+        elif (before != None) & (after != None):
+            raise ValueError("Cannot provide both before and after")
+        elif before != None:
+            anchor , pushCols = colDict[before], (-1 - pushLength)
+            [colDict.update({key : pushCols + val})for key, val in colDict.items() if val < anchor]
+            [colDict.update({key : anchor - (index + 1)}) for index, key in enumerate(reversed(moveCols))]
+        elif after != None:
+            anchor, pushCols  = colDict[after], (pushLength + 1)
+            [colDict.update({key : pushCols + val})for key, val in colDict.items() if val > anchor]
+            [colDict.update({key : anchor + (index + 1)}) for index, key in enumerate(moveCols)]
 
-            all_cols = pl.Series(self.names)
-            all_locs = pl.Series(range(len(all_cols)))
-            
-            move_cols = pl.Series(self.select(move_cols).names)
-            move_locs = all_locs[all_cols.is_in(move_cols)]
-
-            if (before == None) & (after == None):
-                before_loc = 0
-            elif before != None:
-                before = self.select(before).names[0]
-                before_loc = all_locs[all_cols == before][0]
-            else:
-                after = self.select(after).names[0]
-                before_loc = all_locs[all_cols == after][0] + 1
-
-            before_locs = pl.Series(range(before_loc))
-            after_locs = pl.Series(range(before_loc, len(all_cols)))
-
-            before_locs = before_locs[~before_locs.is_in(move_locs)]
-            after_locs = after_locs[~after_locs.is_in(move_locs)]
-
-            final_order = before_locs.cast(int)
-            final_order.append(move_locs.cast(int))
-            final_order.append(after_locs.cast(int))
-
-            ordered_cols = all_cols.take(final_order)
-
-            return self.select(ordered_cols)
-    
+        orderedCols = dict(sorted(colDict.items(), key=lambda x:x[1])).keys()
+        return self.select(list(orderedCols))
+   
     def rename(self, mapping: Dict[str, str]):
         """
         Rename columns

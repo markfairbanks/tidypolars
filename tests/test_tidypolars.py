@@ -149,12 +149,19 @@ def test_pull():
     expected = df.to_polars().get_column('x')
     assert actual == expected, "pull failed"
 
-def test_relocate():
-    """Can relocate columns"""
+def test_relocate1():
+    """Can relocate before columns"""
     df = tp.Tibble({'x': range(3), 'y': range(3), 'z': range(3)})
     actual = df.relocate('y', 'z', before = 'x')
     expected = df.select('y', 'z', 'x')
-    assert actual.frame_equal(expected), "relocate failed"
+    assert actual.frame_equal(expected), "relocate before failed"
+
+def test_relocate2():
+    """Can relocate after columns"""
+    df = tp.Tibble({'x': range(3), 'y': range(3), 'z': range(3)})
+    actual = df.relocate('z', 'y', after = 'x')
+    expected = df.select('x', 'z', 'y')
+    assert actual.frame_equal(expected), "relocate after failed"
 
 def test_rename():
     """Can rename"""
