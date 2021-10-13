@@ -424,12 +424,12 @@ class Tibble(pl.DataFrame):
         elif (before != None) & (after != None):
             raise ValueError("Cannot provide both before and after")
         elif before != None:
-            anchor , pushCols = colDict[before], (-1 - pushLength)
-            [colDict.update({key : pushCols + val})for key, val in colDict.items() if val < anchor]
+            anchor, pushCols = colDict[before], (-1 - pushLength)
+            [colDict.update({key : pushCols + val}) for key, val in colDict.items() if val < anchor]
             [colDict.update({key : anchor - (index + 1)}) for index, key in enumerate(reversed(moveCols))]
         elif after != None:
-            anchor, pushCols  = colDict[after], (pushLength + 1)
-            [colDict.update({key : pushCols + val})for key, val in colDict.items() if val > anchor]
+            anchor, pushCols = colDict[after], (1 + pushLength)
+            [colDict.update({key : pushCols + val}) for key, val in colDict.items() if val > anchor]
             [colDict.update({key : anchor + (index + 1)}) for index, key in enumerate(moveCols)]
 
         orderedCols = dict(sorted(colDict.items(), key=lambda x:x[1])).keys()
