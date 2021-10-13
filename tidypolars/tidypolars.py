@@ -447,8 +447,8 @@ class Tibble(pl.DataFrame):
         Examples
         --------
         >>> df = tp.Tibble({'x': range(3), 't': range(3), 'z': ['a', 'a', 'b']})
-        >>> df.rename(new_x = 'x')
-        >>> df.rename({'x': 'new_x'})
+        >>> df.rename(new_x = 'x') # dplyr interface
+        >>> df.rename({'x': 'new_x'}) # pandas interface
         """
         args = _args_as_list(args)
         if len(args) > 0:
