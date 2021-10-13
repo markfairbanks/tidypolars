@@ -437,7 +437,7 @@ class Tibble(pl.DataFrame):
 
             return self.select(ordered_cols)
     
-    def rename(self, mapping: Dict[str, str]):
+    def rename(self, *args, **kwargs):
         """
         Rename columns
 
@@ -449,8 +449,24 @@ class Tibble(pl.DataFrame):
         Examples
         --------
         >>> df = tp.Tibble({'x': range(3), 't': range(3), 'z': ['a', 'a', 'b']})
+        >>> df.rename(new_x = 'x')
         >>> df.rename({'x': 'new_x'})
         """
+        args = _args_as_list(args)
+        if len(args) > 0:
+            if isinstance(args[0], dict):
+                mapping = args[0]
+            else:
+                args = pl.Series(args)
+                len_args = len(args)
+                if (len_args % 2) == 1:
+                    raise ValueError("Need matching new_name/old_name pairs when using args")
+                even_bool = pl.Series([True, False] * int(len_args/2))
+                new_names = args[even_bool]
+                old_names = args[~even_bool]
+                mapping = {key:value for key, value in zip(old_names, new_names)}
+        else:
+            mapping = {value:key for key, value in kwargs.items()}
         return super().rename(mapping).pipe(from_polars)
     
     def select(self, *args):
