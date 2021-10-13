@@ -8,6 +8,9 @@
   + `tp.case_when()`
   + `tp.if_else()`
 
+* Improved functionality
+  + `.bind_cols()`/`.bind_rows()`: Can append multiple data frames in one call
+
 ## v0.1.6 (2021/10/13)
 * Improved functionality
   + `.rename()`: Can now use both a dplyr-like and pandas-like interface

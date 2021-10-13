@@ -21,21 +21,39 @@ def test_arrange2():
     expected = tp.Tibble({'x': ['b', 'a', 'a'], 'y': [3, 1, 2]})
     assert actual.frame_equal(expected), "arrange descending failed"
 
-def test_bind_cols():
+def test_bind_cols_single():
     """Can bind_cols"""
     df1 = tp.Tibble({'x': ['a', 'a', 'b'], 'y': [1, 2, 3]})
     df2 = tp.Tibble({'z': [4, 4, 4]})
     actual = df1.bind_cols(df2)
     expected = tp.Tibble({'x': ['a', 'a', 'b'], 'y': [1, 2, 3], 'z':[4, 4, 4]})
-    assert actual.frame_equal(expected), "bind cols failed"
+    assert actual.frame_equal(expected), "bind_cols failed"
 
-def test_bind_rows():
+def test_bind_cols_multiple():
+    """Can bind_cols multiple"""
+    df1 = tp.Tibble(x = range(3))
+    df2 = tp.Tibble(y = range(3))
+    df3 = tp.Tibble(z = range(3))
+    actual = df1.bind_cols(df2, df3)
+    expected = tp.Tibble(x = range(3), y = range(3), z = range(3))
+    assert actual.frame_equal(expected), "multiple bind_cols failed"
+
+def test_bind_rows_single():
     """Can bind rows"""
     df1 = tp.Tibble({'x': ['a', 'a'], 'y': [2, 1]})
     df2 = tp.Tibble({'x': ['b'], 'y': [3]})
     actual = df1.bind_rows(df2)
     expected = tp.Tibble({'x': ['a', 'a', 'b'], 'y': [2, 1, 3]})
-    assert actual.frame_equal(expected), "bind rows failed"
+    assert actual.frame_equal(expected), "bind_rows failed"
+
+def test_bind_rows_multiple():
+    """Can bind rows (multiple)"""
+    df1 = tp.Tibble({'x': ['a', 'a'], 'y': [2, 1]})
+    df2 = tp.Tibble({'x': ['b'], 'y': [3]})
+    df3 = tp.Tibble({'x': ['b'], 'y': [3]})
+    actual = df1.bind_rows(df2, df3)
+    expected = tp.Tibble({'x': ['a', 'a', 'b', 'b'], 'y': [2, 1, 3, 3]})
+    assert actual.frame_equal(expected), "bind_rows multiple failed"
 
 def test_distinct_empty():
     """Can distinct columns"""
@@ -226,12 +244,26 @@ def test_slice_tail():
     expected = tp.Tibble({'x': [1, 2], 'y': ['a', 'b']})
     assert actual.frame_equal(expected), "slice_tail failed"
 
+def test_summarise():
+    """Can use summarise alias"""
+    df = tp.Tibble({'x': range(3), 'y': range(3), 'z': range(3)})
+    actual = df.summarise(avg_x = col('x').mean())
+    expected = tp.Tibble({'avg_x': [1]})
+    assert actual.frame_equal(expected), "summarise failed"
+
 def test_summarize():
     """Can use summarize"""
     df = tp.Tibble({'x': range(3), 'y': range(3), 'z': range(3)})
     actual = df.summarize(avg_x = col('x').mean())
     expected = tp.Tibble({'avg_x': [1]})
     assert actual.frame_equal(expected), "ungrouped summarize failed"
+
+def test_summarize_grouped():
+    """Can use summarize by group"""
+    df = tp.Tibble({'x': range(3), 'y': range(3), 'z': ['a', 'a', 'b']})
+    actual = df.summarize(avg_x = col('x').mean(), groupby = 'z').arrange('z')
+    expected = tp.Tibble(z = ['a', 'b'], avg_x = [.5, 2])
+    assert actual.frame_equal(expected), "grouped summarize failed"
 
 def test_summarize_across():
     """Can use summarize_across"""
@@ -250,6 +282,7 @@ def test_funs_in_a_row():
     df = tp.Tibble(x = range(3), y = range(3), z = range(3))
     df.distinct()
     df.drop('x')
+    df.drop_null()
     df.filter(col('x') < 7)
     df.head()
     df.mutate(col('x') * 2)
