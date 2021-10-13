@@ -4,6 +4,10 @@
 * New Tibble methods
   + `.drop_null()`
 
+* New functions
+  + `tp.case_when()`
+  + `tp.if_else()`
+
 ## v0.1.6 (2021/10/13)
 * Improved functionality
   + `.rename()`: Can now use both a dplyr-like and pandas-like interface
