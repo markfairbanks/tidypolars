@@ -49,8 +49,8 @@ class Tibble(pl.DataFrame):
     def __init__(self, *args, **kwargs):
         args = _args_as_list(args)
         if len(args) == 0:
-            data = {key:value for key, value in kwargs.items()}
-        elif len(args) == 1:
+            data = kwargs
+        else:
             data = args[0]
         super().__init__(data)
     
@@ -415,25 +415,25 @@ class Tibble(pl.DataFrame):
         >>> df.relocate('a', before = 'c')
         >>> df.relocate('b', after = 'c')
         """
-        moveCols = _args_as_list(args)
-        pushLength = len(moveCols)
-        colDict = dict((column.name, index) for index, column in enumerate(self)) 
+        move_cols = _args_as_list(args)
+        push_length = len(move_cols)
+        col_dict = dict((column.name, index) for index, column in enumerate(self)) 
         
-        if (before == None) & (after == None) & (pushLength == 0):
+        if (before == None) & (after == None) & (push_length == 0):
             return self
         elif (before != None) & (after != None):
             raise ValueError("Cannot provide both before and after")
         elif before != None:
-            anchor, pushCols = colDict[before], (-1 - pushLength)
-            [colDict.update({key : pushCols + val}) for key, val in colDict.items() if val < anchor]
-            [colDict.update({key : anchor - (index + 1)}) for index, key in enumerate(reversed(moveCols))]
+            anchor, push_cols = col_dict[before], (-1 - push_length)
+            [col_dict.update({key : push_cols + val}) for key, val in col_dict.items() if val < anchor]
+            [col_dict.update({key : anchor - (index + 1)}) for index, key in enumerate(reversed(move_cols))]
         elif after != None:
-            anchor, pushCols = colDict[after], (1 + pushLength)
-            [colDict.update({key : pushCols + val}) for key, val in colDict.items() if val > anchor]
-            [colDict.update({key : anchor + (index + 1)}) for index, key in enumerate(moveCols)]
+            anchor, push_cols = col_dict[after], (1 + push_length)
+            [col_dict.update({key : push_cols + val}) for key, val in col_dict.items() if val > anchor]
+            [col_dict.update({key : anchor + (index + 1)}) for index, key in enumerate(move_cols)]
 
-        orderedCols = dict(sorted(colDict.items(), key=lambda x:x[1])).keys()
-        return self.select(list(orderedCols))
+        ordered_cols = dict(sorted(col_dict.items(), key = lambda x:x[1])).keys()
+        return self.select(list(ordered_cols))
    
     def rename(self, mapping: Dict[str, str]):
         """
