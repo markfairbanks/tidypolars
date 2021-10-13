@@ -99,7 +99,7 @@ def test_ncol():
     df = tp.Tibble({'x': _repeat(1, 3), 'y': _repeat(2, 3)})
     assert df.ncol == 2, "ncol failed"
 
-def test_ncol():
+def test_nrow():
     """Can number of rows"""
     df = tp.Tibble({'x': _repeat(1, 3), 'y': _repeat(2, 3)})
     assert df.nrow == 3, "nrow failed"
@@ -163,12 +163,26 @@ def test_relocate2():
     expected = df.select('x', 'z', 'y')
     assert actual.frame_equal(expected), "relocate after failed"
 
-def test_rename():
-    """Can rename"""
+def test_rename_dplyr_kwargs():
+    """Can rename - dplyr interface (kwargs)"""
     df = tp.Tibble({'x': range(3), 'y': range(3), 'z': range(3)})
-    actual = df.rename({'x': 'new_x'})
+    actual = df.rename(new_x = 'x', new_y = 'y')
+    expected = tp.Tibble({'new_x': range(3), 'new_y': range(3), 'z': range(3)})
+    assert actual.frame_equal(expected), "dplyr rename failed"
+
+def test_rename_dplyr_strings():
+    """Can rename - dplyr interface (strings)"""
+    df = tp.Tibble({'x': range(3), 'y': range(3), 'z': range(3)})
+    actual = df.rename('new_x', 'x', 'new_y', 'y')
+    expected = tp.Tibble({'new_x': range(3), 'new_y': range(3), 'z': range(3)})
+    assert actual.frame_equal(expected), "dplyr rename failed"
+
+def test_rename_pandas():
+    """Can rename - pandas interface"""
+    df = tp.Tibble({'x': range(3), 'y': range(3), 'z': range(3)})
+    actual = df.rename({'x': 'new_x', 'y': 'new_y'})
     expected = tp.Tibble({'new_x': range(3), 'y': range(3), 'z': range(3)})
-    assert actual.frame_equal(expected), "rename failed"
+    assert actual.frame_equal(expected), "pandas rename failed"
 
 def test_select():
     """Can select columns"""
