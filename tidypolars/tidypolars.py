@@ -98,7 +98,7 @@ class Tibble(pl.DataFrame):
         exprs = _args_as_list(args)
         return super().sort(exprs, reverse = desc).pipe(from_polars)
 
-    def bind_cols(self, df: "tp.Tibble"):
+    def bind_cols(self, *args):
         """
         Bind data frames by columns
 
@@ -113,16 +113,20 @@ class Tibble(pl.DataFrame):
         >>> df2 = tp.Tibble({'a': ['c', 'c', 'c'], 'b': range(4, 7)})
         >>> df1.bind_cols(df2)
         """
-        return super().hstack(df).pipe(from_polars)
+        frames = _args_as_list(args)
+        out = self
+        for frame in frames:
+            out = super(Tibble, out).hstack(frame).pipe(from_polars)
+        return out
     
-    def bind_rows(self, df: "tp.Tibble"):
+    def bind_rows(self, *args):
         """
         Bind data frames by row
 
         Parameters
         ----------
-        df : Tibble
-            Data frame to bind
+        *args : Union[Tibble, List[Tibble]]
+            Data frames to bind by row
 
         Examples
         --------
@@ -130,7 +134,9 @@ class Tibble(pl.DataFrame):
         >>> df2 = tp.Tibble({'x': ['c', 'c', 'c'], 'y': range(4, 7)})
         >>> df1.bind_rows(df2)
         """
-        return self.vstack(df).pipe(from_polars)
+        frames = _args_as_list(args)
+        out = pl.concat([self, *frames])
+        return out.pipe(from_polars)
 
     def clone(self):
         """Very cheap deep clone"""
@@ -584,6 +590,12 @@ class Tibble(pl.DataFrame):
         else:
             df = super(Tibble, self).groupby(groupby).tail(n)
         return df.pipe(from_polars).select(col_order)
+    
+    def summarise(self, *args,
+                  groupby: Union[str, Expr, List[str], List[Expr]] = None,
+                  **kwargs):
+        """Alias for .summarize()"""
+        return self.summarize(*args, groupby = groupby, **kwargs)
     
     def summarize(self, *args,
                   groupby: Union[str, Expr, List[str], List[Expr]] = None,
