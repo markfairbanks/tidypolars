@@ -10,7 +10,7 @@
   + `tp.case_when()`
   + `tp.if_else()`
   + `tp.read_csv()`
-  + `tp.read_parquet
+  + `tp.read_parquet()`
 
 * Improved functionality
   + `.bind_cols()`/`.bind_rows()`: Can append multiple data frames in one call
