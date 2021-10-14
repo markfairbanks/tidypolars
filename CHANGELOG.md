@@ -3,6 +3,7 @@
 ## v0.1.7 (in development)
 * New Tibble methods
   + `.drop_null()`
+  + `.inner_join()`/`.left_join()`/`.outer_join()`
   + `.write_csv()`
   + `.write_parquet()`
 

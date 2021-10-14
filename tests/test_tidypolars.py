@@ -97,6 +97,14 @@ def test_filter():
     expected = tp.Tibble({'x': range(2), 'y': range(2)})
     assert actual.frame_equal(expected), "filter failed"
 
+def test_left_join():
+    """Can perform a left join"""
+    df1 = tp.Tibble(x = ['a', 'a', 'b'], y = range(3))
+    df2 = tp.Tibble(x = ['a', 'b'], z = range(2))
+    actual = df1.left_join(df2)
+    expected = tp.Tibble(x = ['a', 'a', 'b'], y = range(3), z = [0, 0 ,1])
+    assert actual.frame_equal(expected), "left_join failed"
+
 def test_mutate():
     """Can edit existing columns and can add columns"""
     df = tp.Tibble({'x': _repeat(1, 3), 'y': _repeat(2, 3)})

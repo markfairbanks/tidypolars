@@ -69,7 +69,8 @@ class Tibble(pl.DataFrame):
         methods = [
             'arrange', 'bind_cols', 'bind_rows', 'colnames', 'clone',
             'distinct', 'drop', 'drop_null', 'head', 'fill', 'filter',
-            'mutate', 'names', 'nrow', 'ncol', 'pivot_longer', 'pivot_wider',
+            'inner_join', 'left_join', 'mutate', 'names', 'nrow', 'ncol',
+            'outer_join', 'pivot_longer', 'pivot_wider',
             'pull', 'relocate', 'rename', 'select', 'slice',
             'slice_head', 'slice_tail', 'summarize', 'tail',
             'to_pandas', 'to_polars', 'write_csv', 'write_parquet'
@@ -278,6 +279,60 @@ class Tibble(pl.DataFrame):
         
         return out.pipe(from_polars)
 
+    def inner_join(self, df, left_on = None, right_on = None, on = None, suffix: str = '_right'):
+        """
+        Perform an inner join
+
+        Parameters
+        ----------
+        df : Tibble
+            Lazy DataFrame to join with.
+        left_on : str, list
+            Join column(s) of the left DataFrame.
+        right_on : str, list
+            Join column(s) of the right DataFrame.
+        on: str, list
+            Join column(s) of both DataFrames. If set, `left_on` and `right_on` should be None.
+        suffix : str
+            Suffix to append to columns with a duplicate name.
+
+        Examples
+        --------
+        df1.inner_join(df2)
+        df1.inner_join(df2, on = 'x')
+        df1.inner_join(df2, left_on = 'left_x', right_on = 'x')
+        """
+        if (left_on == None) & (right_on == None) & (on == None):
+            on = list(set(self.names) & set(df.names))
+        return super().join(df, left_on, right_on, on, 'inner', suffix).pipe(from_polars)
+
+    def left_join(self, df, left_on = None, right_on = None, on = None, suffix: str = '_right'):
+        """
+        Perform a left join
+
+        Parameters
+        ----------
+        df : Tibble
+            Lazy DataFrame to join with.
+        left_on : str, list
+            Join column(s) of the left DataFrame.
+        right_on : str, list
+            Join column(s) of the right DataFrame.
+        on: str, list
+            Join column(s) of both DataFrames. If set, `left_on` and `right_on` should be None.
+        suffix : str
+            Suffix to append to columns with a duplicate name.
+
+        Examples
+        --------
+        df1.left_join(df2)
+        df1.left_join(df2, on = 'x')
+        df1.left_join(df2, left_on = 'left_x', right_on = 'x')
+        """
+        if (left_on == None) & (right_on == None) & (on == None):
+            on = list(set(self.names) & set(df.names))
+        return super().join(df, left_on, right_on, on, 'left', suffix).pipe(from_polars)
+
     def mutate(self, *args,
                groupby: Union[str, Expr, typ.List[str], typ.List[Expr]] = None,
                **kwargs):
@@ -323,6 +378,33 @@ class Tibble(pl.DataFrame):
     def nrow(self):
         """Get number of rows"""
         return super().shape[0]
+
+    def outer_join(self, df, left_on = None, right_on = None, on = None, suffix: str = '_right'):
+        """
+        Perform an outer join
+
+        Parameters
+        ----------
+        df : Tibble
+            Lazy DataFrame to join with.
+        left_on : str, list
+            Join column(s) of the left DataFrame.
+        right_on : str, list
+            Join column(s) of the right DataFrame.
+        on: str, list
+            Join column(s) of both DataFrames. If set, `left_on` and `right_on` should be None.
+        suffix : str
+            Suffix to append to columns with a duplicate name.
+
+        Examples
+        --------
+        df1.outer_join(df2)
+        df1.outer_join(df2, on = 'x')
+        df1.outer_join(df2, left_on = 'left_x', right_on = 'x')
+        """
+        if (left_on == None) & (right_on == None) & (on == None):
+            on = list(set(self.names) & set(df.names))
+        return super().join(df, left_on, right_on, on, 'outer', suffix).pipe(from_polars)
 
     def pivot_longer(self,
                      cols: Expr = pl.all(),
@@ -679,7 +761,7 @@ _allowed_methods = [
 _polars_methods = [
     'apply',
     'columns',
-    # 'describe',
+    'describe',
     'downsample',
     'drop_duplicates',
     'explode',
