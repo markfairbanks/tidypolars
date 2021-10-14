@@ -3,10 +3,14 @@
 ## v0.1.7 (in development)
 * New Tibble methods
   + `.drop_null()`
+  + `.write_csv()`
+  + `.write_parquet()`
 
 * New functions
   + `tp.case_when()`
   + `tp.if_else()`
+  + `tp.read_csv()`
+  + `tp.read_parquet
 
 * Improved functionality
   + `.bind_cols()`/`.bind_rows()`: Can append multiple data frames in one call
