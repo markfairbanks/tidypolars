@@ -1,6 +1,10 @@
 import polars as pl
+from .tidypolars import from_polars
 
-__all__ = ["case_when", "if_else"]
+__all__ = [
+    "case_when", "if_else",
+    "read_csv", "read_parquet"
+]
 
 def case_when(expr):
     """
@@ -41,3 +45,15 @@ def if_else(condition, true, false):
     >>> df.mutate(if_x = tp.if_else(col('x') < 2, 1, 2))
     """
     return pl.when(condition).then(true).otherwise(false)
+
+def read_csv(file: str,
+             *args,
+             **kwargs):
+    """Simple wrapper around polars.read_csv"""
+    return pl.read_csv(file, *args, **kwargs).pipe(from_polars)
+
+def read_parquet(source: str,
+                 *args,
+                 **kwargs):
+    """Simple wrapper around polars.read_parquet"""
+    return pl.read_parquet(source, *args, **kwargs).pipe(from_polars)
