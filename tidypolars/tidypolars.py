@@ -1,6 +1,7 @@
 import polars as pl
 import functools as ft
-from typing import Dict, List, Union
+from typing import Dict, Union
+import typing as typ
 from .utils import (
     _args_as_list,
     _kwargs_as_exprs,
@@ -125,7 +126,7 @@ class Tibble(pl.DataFrame):
 
         Parameters
         ----------
-        *args : Union[Tibble, List[Tibble]]
+        *args : Union[Tibble, typ.List[Tibble]]
             Data frames to bind by row
 
         Examples
@@ -219,7 +220,7 @@ class Tibble(pl.DataFrame):
             Columns to fill
         direction : str
             Direction to fill. One of ['down', 'up', 'downup', 'updown']
-        groupby : Union[str, Expr, List[str], List[Expr]]
+        groupby : Union[str, Expr, typ.List[str], typ.List[Expr]]
             Columns to group by
 
         Examples
@@ -248,7 +249,7 @@ class Tibble(pl.DataFrame):
         return self.mutate(*exprs, groupby = groupby)
 
     def filter(self, *args,
-               groupby: Union[str, Expr, List[str], List[Expr]] = None):
+               groupby: Union[str, Expr, typ.List[str], typ.List[Expr]] = None):
         """
         Filter rows on one or more conditions
 
@@ -256,7 +257,7 @@ class Tibble(pl.DataFrame):
         ----------
         *args : Expr
             Conditions to filter by
-        groupby : Union[str, Expr, List[str], List[Expr]]
+        groupby : Union[str, Expr, typ.List[str], typ.List[Expr]]
             Columns to group by
 
         Examples
@@ -278,7 +279,7 @@ class Tibble(pl.DataFrame):
         return out.pipe(from_polars)
 
     def mutate(self, *args,
-               groupby: Union[str, Expr, List[str], List[Expr]] = None,
+               groupby: Union[str, Expr, typ.List[str], typ.List[Expr]] = None,
                **kwargs):
         """
         Add or modify columns
@@ -287,7 +288,7 @@ class Tibble(pl.DataFrame):
         ----------
         *args : Expr
             Column expressions to add or modify
-        groupby : Union[str, Expr, List[str], List[Expr]]
+        groupby : Union[str, Expr, typ.List[str], typ.List[Expr]]
             Columns to group by
         **kwargs : Expr
             Column expressions to add or modify
@@ -354,7 +355,7 @@ class Tibble(pl.DataFrame):
     def pivot_wider(self,
                     names_from: str = 'name',
                     values_from: str = 'value',
-                    id_cols: Union[str, List[str]] = None,
+                    id_cols: Union[str, typ.List[str]] = None,
                     values_fn: str = 'first', 
                     values_fill: Union[str, int, float] = None):
         """
@@ -519,9 +520,9 @@ class Tibble(pl.DataFrame):
 
         Parameters
         ----------
-        *args : Union[int, List[int]]
+        *args : Union[int, typ.List[int]]
             Rows to grab
-        groupby : Union[str, Expr, List[str], List[Expr]]
+        groupby : Union[str, Expr, typ.List[str], typ.List[Expr]]
             Columns to group by
 
         Examples
@@ -547,7 +548,7 @@ class Tibble(pl.DataFrame):
             Number of rows to grab
         *args :
             Currently unused
-        groupby : Union[str, Expr, List[str], List[Expr]]
+        groupby : Union[str, Expr, typ.List[str], typ.List[Expr]]
             Columns to group by
 
         Examples
@@ -574,7 +575,7 @@ class Tibble(pl.DataFrame):
             Number of rows to grab
         *args :
             Currently unused
-        groupby : Union[str, Expr, List[str], List[Expr]]
+        groupby : Union[str, Expr, typ.List[str], typ.List[Expr]]
             Columns to group by
 
         Examples
@@ -592,13 +593,13 @@ class Tibble(pl.DataFrame):
         return df.pipe(from_polars).select(col_order)
     
     def summarise(self, *args,
-                  groupby: Union[str, Expr, List[str], List[Expr]] = None,
+                  groupby: Union[str, Expr, typ.List[str], typ.List[Expr]] = None,
                   **kwargs):
         """Alias for .summarize()"""
         return self.summarize(*args, groupby = groupby, **kwargs)
     
     def summarize(self, *args,
-                  groupby: Union[str, Expr, List[str], List[Expr]] = None,
+                  groupby: Union[str, Expr, typ.List[str], typ.List[Expr]] = None,
                   **kwargs):
         """
         Aggregate data with summary statistics
@@ -607,7 +608,7 @@ class Tibble(pl.DataFrame):
         ----------
         *args : Expr
             Column expressions to add or modify
-        groupby : Union[str, Expr, List[str], List[Expr]]
+        groupby : Union[str, Expr, typ.List[str], typ.List[Expr]]
             Columns to group by
         **kwargs : Expr
             Column expressions to add or modify
