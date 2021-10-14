@@ -67,11 +67,11 @@ class Tibble(pl.DataFrame):
     def __dir__(self):
         methods = [
             'arrange', 'bind_cols', 'bind_rows', 'colnames', 'clone',
-            'distinct', 'drop', 'head', 'fill', 'filter',
-            'mutate', 'pivot_longer', 'pivot_wider', 'pull',
-            'relocate', 'rename', 'select', 'slice',
+            'distinct', 'drop', 'drop_null', 'head', 'fill', 'filter',
+            'mutate', 'names', 'nrow', 'ncol', 'pivot_longer', 'pivot_wider',
+            'pull', 'relocate', 'rename', 'select', 'slice',
             'slice_head', 'slice_tail', 'summarize', 'tail',
-            'to_pandas', 'to_polars'
+            'to_pandas', 'to_polars', 'write_csv', 'write_parquet'
         ]
         return methods
 
@@ -654,6 +654,21 @@ class Tibble(pl.DataFrame):
         """
         self.__class__ = pl.DataFrame
         return self
+    
+    def write_csv(self,
+                  file: str = None,
+                  has_headers: bool = True,
+                  sep: str = ','):
+        """Write a data frame to a csv"""
+        return super().to_csv(file, has_headers, sep)
+
+    def write_parquet(self,
+                      file: str,
+                      compression: str = 'snappy',
+                      use_pyarrow: bool = False,
+                      **kwargs):
+        """Write a data frame to a parquet"""
+        return super().to_parquet(file, compression, use_pyarrow, **kwargs)
 
 _allowed_methods = [
     'dtypes', 'frame_equal',
