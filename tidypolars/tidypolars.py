@@ -735,8 +735,9 @@ class Tibble(pl.DataFrame):
         --------
         >>> df.to_polars()
         """
-        self.__class__ = pl.DataFrame
-        return self
+        out = super().clone()
+        out.__class__ = pl.DataFrame
+        return out
     
     def write_csv(self,
                   file: str = None,
