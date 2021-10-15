@@ -528,22 +528,25 @@ class Tibble(pl.DataFrame):
         """
         move_cols = _args_as_list(args)
         push_length = len(move_cols)
-        col_dict = dict((column.name, index) for index, column in enumerate(self)) 
+        col_dict = {name:index for index, name in enumerate(self.names)}
         
-        if (before == None) & (after == None) & (push_length == 0):
+        if push_length == 0:
             return self
+        elif (before == None) & (after == None):
+            before = self.names[0]
         elif (before != None) & (after != None):
             raise ValueError("Cannot provide both before and after")
-        elif before != None:
+
+        if before != None:
             anchor, push_cols = col_dict[before], (-1 - push_length)
             [col_dict.update({key : push_cols + val}) for key, val in col_dict.items() if val < anchor]
             [col_dict.update({key : anchor - (index + 1)}) for index, key in enumerate(reversed(move_cols))]
-        elif after != None:
+        else:
             anchor, push_cols = col_dict[after], (1 + push_length)
             [col_dict.update({key : push_cols + val}) for key, val in col_dict.items() if val > anchor]
             [col_dict.update({key : anchor + (index + 1)}) for index, key in enumerate(move_cols)]
 
-        ordered_cols = dict(sorted(col_dict.items(), key = lambda x:x[1])).keys()
+        ordered_cols = dict(sorted(col_dict.items(), key = lambda x: x[1])).keys()
         return self.select(list(ordered_cols))
    
     def rename(self, *args, **kwargs):
