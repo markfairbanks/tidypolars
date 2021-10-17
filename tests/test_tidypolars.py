@@ -55,6 +55,20 @@ def test_bind_rows_multiple():
     expected = tp.Tibble({'x': ['a', 'a', 'b', 'b'], 'y': [2, 1, 3, 3]})
     assert actual.frame_equal(expected), "bind_rows multiple failed"
 
+def test_count_no_args():
+    """Can bind rows (multiple)"""
+    df = tp.Tibble({'x': ['a', 'a', 'b'], 'y': [2, 1, 1]})
+    actual = df.count()
+    expected = tp.Tibble({'N': [3]})
+    assert actual.frame_equal(expected), "count with no args failed"
+
+def test_count_one_args():
+    """Can bind rows (multiple)"""
+    df = tp.Tibble({'x': ['a', 'a', 'b'], 'y': [2, 1, 1]})
+    actual = df.count('x', sort=True)
+    expected = tp.Tibble({'x': ['a', 'b'], 'N': [2, 1]})
+    assert actual.frame_equal(expected), "count with one args failed"
+
 def test_distinct_empty():
     """Can distinct columns"""
     df = tp.Tibble({'x': ['a', 'a', 'b'], 'y': ['a', 'a', 'b']})

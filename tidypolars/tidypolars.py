@@ -144,6 +144,41 @@ class Tibble(pl.DataFrame):
         """Very cheap deep clone"""
         return super().clone().pipe(from_polars)
 
+    def count(self, *args, sort: bool = False, name: str = 'N'):
+        """
+        Returns row counts of the dataset. 
+        If bare column names are provided, count() returns counts by group.
+
+        Parameters
+        ----------
+        *args : Union[str, Expr]
+            Columns to find distinct/unique rows
+        sort : bool
+            Should columns be ordered in descending order by count
+        name : str
+            The name of the new column in the output. If omitted, it will default to N.
+
+        Examples
+        --------
+        >>> df = tp.tibble({'a': range(3), 'b': ['a', 'a', 'b']})
+        >>> df.count()
+        >>> df.count('b')
+        """
+        #TODO: Create a better solution when no args are provided
+        #TODO: Add logic to arrange columns by distinct value by order in column
+        args = _args_as_list(args)
+        
+        if len(args) == 0:
+            cnt_value = super().shape[0]
+            df = Tibble({'N':[cnt_value]})
+        else:
+            df = self.summarize(pl.count(args[0]).alias(name), groupby = args)
+
+        if sort == True:
+            df = df.arrange(name, desc = True)
+
+        return df.pipe(from_polars)
+
     def distinct(self, *args):
         """
         Select distinct/unique rows
