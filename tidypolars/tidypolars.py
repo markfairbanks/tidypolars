@@ -160,7 +160,7 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.tibble({'a': range(3), 'b': ['a', 'a', 'b']})
+        >>> df = tp.Tibble({'a': range(3), 'b': ['a', 'a', 'b']})
         >>> df.count()
         >>> df.count('b')
         """
@@ -190,7 +190,7 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.tibble({'a': range(3), 'b': ['a', 'a', 'b']})
+        >>> df = tp.Tibble({'a': range(3), 'b': ['a', 'a', 'b']})
         >>> df.distinct()
         >>> df.distinct('b')
         """
