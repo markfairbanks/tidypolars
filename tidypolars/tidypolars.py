@@ -164,13 +164,11 @@ class Tibble(pl.DataFrame):
         >>> df.count()
         >>> df.count('b')
         """
-        #TODO: Create a better solution when no args are provided
         #TODO: Add logic to arrange columns by distinct value by order in column
         args = _args_as_list(args)
         
         if len(args) == 0:
-            cnt_value = super().shape[0]
-            df = Tibble({'N':[cnt_value]})
+            df = Tibble({'N':[self.nrow]})
         else:
             df = self.summarize(pl.count(args[0]).alias(name), groupby = args)
 
