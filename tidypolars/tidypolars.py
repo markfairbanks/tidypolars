@@ -168,7 +168,7 @@ class Tibble(pl.DataFrame):
         args = _args_as_list(args)
         
         if len(args) == 0:
-            df = Tibble({name:[self.nrow]})
+            df = Tibble({name: [self.nrow]})
         else:
             df = self.summarize(pl.count(args[0]).alias(name), groupby = args)
 
