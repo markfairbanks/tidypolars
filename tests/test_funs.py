@@ -1,12 +1,21 @@
 import tidypolars as tp
 from tidypolars import col
 
+def test_abso():
+    """Can get absolute value"""
+    df = tp.Tibble(x = range(-3, 0))
+    actual = df.mutate(abs_x = tp.abs('x'), abs_col_x = tp.abs(col('x')))
+    expected = tp.Tibble(x = range(-3, 0), abs_x = range(3, 0, -1), abs_col_x = range(3, 0, -1))
+    assert actual.frame_equal(expected), "case_when failed"
+
 def test_agg_stats():
     """Can get aggregation statistics"""
     df = tp.Tibble(x = range(3))
     actual = (
         df
         .summarize(
+            first_x = tp.first('x'), first_col_x = tp.first(col('x')),
+            last_x = tp.last('x'), last_col_x = tp.last(col('x')),
             max_x = tp.max('x'), max_col_x = tp.max(col('x')),
             mean_x = tp.mean('x'), mean_col_x = tp.mean(col('x')),
             median_x = tp.median('x'), median_col_x = tp.median(col('x')),
@@ -17,6 +26,8 @@ def test_agg_stats():
         )
     )
     expected = tp.Tibble(
+        first_x = [0], first_col_x = [0],
+        last_x = [2], last_col_x = [2],
         max_x = [2], max_col_x = [2],
         mean_x = [1], mean_col_x = [1],
         median_x = [1], median_col_x = [1],

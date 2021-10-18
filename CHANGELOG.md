@@ -9,9 +9,12 @@
   + `.write_parquet()`
 
 * New functions
+  + `tp.abs()`
   + `tp.case_when()`
+  + `tp.first()`
   + `tp.if_else()`
   + `tp.lag()`
+  + `tp.last()`
   + `tp.lead()`
   + `tp.max()`
   + `tp.mean()`

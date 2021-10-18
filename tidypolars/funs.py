@@ -3,15 +3,33 @@ from .tidypolars import from_polars
 from .utils import _col_expr
 
 __all__ = [
+    "abs",
     "case_when", "if_else",
     "lag", "lead",
     "read_csv", "read_parquet",
 
     # agg stats
+    "first", "last",
     "max", "mean", "median", "min",
     "n_distinct", "sd", "sum",
-    
 ]
+
+def abs(x):
+    """
+    Absolute value
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+
+    Examples
+    --------
+    >>> df.mutate(abs_x = tp.abs('x'))
+    >>> df.mutate(abs_x = tp.abs(col('x')))
+    """
+    x = _col_expr(x)
+    return x.abs()
 
 def case_when(expr):
     """
@@ -32,6 +50,23 @@ def case_when(expr):
     >>> )
     """
     return pl.when(expr)
+
+def first(x):
+    """
+    Get first value
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+
+    Examples
+    --------
+    >>> df.summarize(first_x = tp.first('x'))
+    >>> df.summarize(first_x = tp.first(col('x')))
+    """
+    x = _col_expr(x)
+    return x.first()
 
 def if_else(condition, true, false):
     """
@@ -81,6 +116,23 @@ def lag(x, n: int = 1, default = None):
     """
     x = _col_expr(x)
     return _shift(x, n, default)
+
+def last(x):
+    """
+    Get last value
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+
+    Examples
+    --------
+    >>> df.summarize(last_x = tp.last('x'))
+    >>> df.summarize(last_x = tp.last(col('x')))
+    """
+    x = _col_expr(x)
+    return x.last()
 
 def lead(x, n: int = 1, default = None):
     """
