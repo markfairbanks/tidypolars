@@ -1,5 +1,7 @@
 import polars as pl
 
+__all__ = []
+
 def _args_as_list(x):
     if len(x) == 0:
         return []

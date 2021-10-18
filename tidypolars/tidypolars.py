@@ -63,7 +63,6 @@ class Tibble(pl.DataFrame):
         return df.__str__()
 
     def __getattribute__(self, attr):
-        """Prevent access to polars attributes"""
         if attr in _polars_methods:
             raise AttributeError
         return pl.DataFrame.__getattribute__(self, attr)

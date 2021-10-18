@@ -47,7 +47,7 @@ Methods operate by group by calling the `groupby` arg.
 ```python
 (
     test_df
-    .summarize(avg_x = col('x').mean(),
+    .summarize(avg_x = tp.mean(col('x')),
                groupby = 'z')
 )
 ┌─────┬───────┐
