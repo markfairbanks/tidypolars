@@ -1,9 +1,16 @@
 import polars as pl
 from .tidypolars import from_polars
+from .utils import _col_expr
 
 __all__ = [
     "case_when", "if_else",
-    "read_csv", "read_parquet"
+    "lag", "lead",
+    "read_csv", "read_parquet",
+
+    # agg stats
+    "max", "mean", "median", "min",
+    "n_distinct", "sd", "sum",
+    
 ]
 
 def case_when(expr):
@@ -46,6 +53,143 @@ def if_else(condition, true, false):
     """
     return pl.when(condition).then(true).otherwise(false)
 
+def _shift(x, n, default):
+    if default == None:
+        return x.shift(n)
+    else:
+        return x.shift_and_fill(n, default)
+
+def lag(x, n: int = 1, default = None):
+    """
+    Get lagging values
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+
+    n : int
+        Number of positions to lag by
+
+    default : optional
+        Value to fill in missing values
+
+    Examples
+    --------
+    >>> df.mutate(lag_x = tp.lag(col('x')))
+    >>> df.mutate(lag_x = tp.lag('x'))
+    """
+    x = _col_expr(x)
+    return _shift(x, n, default)
+
+def lead(x, n: int = 1, default = None):
+    """
+    Get leading values
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+
+    n : int
+        Number of positions to lead by
+
+    default : optional
+        Value to fill in missing values
+
+    Examples
+    --------
+    >>> df.mutate(lead_x = tp.lead(col('x')))
+    >>> df.mutate(lead_x = col('x').lead())
+    """
+    x = _col_expr(x)
+    return _shift(x, -n, default)
+
+def max(x):
+    """
+    Get column max
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+
+    Examples
+    --------
+    >>> df.summarize(max_x = tp.max('x'))
+    >>> df.summarize(max_x = tp.max(col('x')))
+    """
+    x = _col_expr(x)
+    return x.max()
+
+def mean(x):
+    """
+    Get column mean
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+
+    Examples
+    --------
+    >>> df.summarize(mean_x = tp.mean('x'))
+    >>> df.summarize(mean_x = tp.mean(col('x')))
+    """
+    x = _col_expr(x)
+    return x.mean()
+
+def median(x):
+    """
+    Get column median
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+
+    Examples
+    --------
+    >>> df.summarize(median_x = tp.median('x'))
+    >>> df.summarize(median_x = tp.median(col('x')))
+    """
+    x = _col_expr(x)
+    return x.median()
+
+def min(x):
+    """
+    Get column minimum
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+
+    Examples
+    --------
+    >>> df.summarize(min_x = tp.min('x'))
+    >>> df.summarize(min_x = tp.min(col('x')))
+    """
+    x = _col_expr(x)
+    return x.min()
+
+def n_distinct(x):
+    """
+    Get number of distinct values in a column
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+
+    Examples
+    --------
+    >>> df.summarize(min_x = tp.n_distinct('x'))
+    >>> df.summarize(min_x = tp.n_distinct(col('x')))
+    """
+    x = _col_expr(x)
+    return x.n_unique()
+
 def read_csv(file: str,
              *args,
              **kwargs):
@@ -57,3 +201,37 @@ def read_parquet(source: str,
                  **kwargs):
     """Simple wrapper around polars.read_parquet"""
     return pl.read_parquet(source, *args, **kwargs).pipe(from_polars)
+
+def sd(x):
+    """
+    Get column standard deviation
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+
+    Examples
+    --------
+    >>> df.summarize(sd_x = tp.sd('x'))
+    >>> df.summarize(sd_x = tp.sd(col('x')))
+    """
+    x = _col_expr(x)
+    return x.std()
+
+def sum(x):
+    """
+    Get column sum
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+
+    Examples
+    --------
+    >>> df.summarize(sum_x = tp.sum('x'))
+    >>> df.summarize(sum_x = tp.sum(col('x')))
+    """
+    x = _col_expr(x)
+    return x.sum()
