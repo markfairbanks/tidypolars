@@ -67,7 +67,7 @@ class Tibble(pl.DataFrame):
 
     def __dir__(self):
         methods = [
-            'arrange', 'bind_cols', 'bind_rows', 'colnames', 'clone',
+            'arrange', 'bind_cols', 'bind_rows', 'colnames', 'clone', 'count',
             'distinct', 'drop', 'drop_null', 'head', 'fill', 'filter',
             'inner_join', 'left_join', 'mutate', 'names', 'nrow', 'ncol',
             'outer_join', 'pivot_longer', 'pivot_wider',
@@ -144,6 +144,39 @@ class Tibble(pl.DataFrame):
         """Very cheap deep clone"""
         return super().clone().pipe(from_polars)
 
+    def count(self, *args, sort: bool = False, name: str = 'n'):
+        """
+        Returns row counts of the dataset. 
+        If bare column names are provided, count() returns counts by group.
+
+        Parameters
+        ----------
+        *args : Union[str, Expr]
+            Columns to find distinct/unique rows
+        sort : bool
+            Should columns be ordered in descending order by count
+        name : str
+            The name of the new column in the output. If omitted, it will default to N.
+
+        Examples
+        --------
+        >>> df = tp.Tibble({'a': range(3), 'b': ['a', 'a', 'b']})
+        >>> df.count()
+        >>> df.count('b')
+        """
+        #TODO: Add logic to arrange columns by distinct value by order in column
+        args = _args_as_list(args)
+        
+        if len(args) == 0:
+            df = Tibble({name: [self.nrow]})
+        else:
+            df = self.summarize(pl.count(args[0]).alias(name), groupby = args)
+
+        if sort == True:
+            df = df.arrange(name, desc = True)
+
+        return df
+
     def distinct(self, *args):
         """
         Select distinct/unique rows
@@ -155,7 +188,7 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.tibble({'a': range(3), 'b': ['a', 'a', 'b']})
+        >>> df = tp.Tibble({'a': range(3), 'b': ['a', 'a', 'b']})
         >>> df.distinct()
         >>> df.distinct('b')
         """
