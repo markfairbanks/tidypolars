@@ -22,8 +22,7 @@ extensions = [
     "sphinx.ext.viewcode",
 ]
 autoapi_dirs = ["../tidypolars"]
-
-apidoc_excluded_paths = ["tests", "../tidypolars/utils.py"]
+autoapi_ignore = ["*utils*"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
