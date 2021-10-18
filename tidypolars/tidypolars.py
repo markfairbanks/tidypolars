@@ -67,7 +67,7 @@ class Tibble(pl.DataFrame):
 
     def __dir__(self):
         methods = [
-            'arrange', 'bind_cols', 'bind_rows', 'colnames', 'clone',
+            'arrange', 'bind_cols', 'bind_rows', 'colnames', 'clone', 'count',
             'distinct', 'drop', 'drop_null', 'head', 'fill', 'filter',
             'inner_join', 'left_join', 'mutate', 'names', 'nrow', 'ncol',
             'outer_join', 'pivot_longer', 'pivot_wider',
@@ -144,7 +144,7 @@ class Tibble(pl.DataFrame):
         """Very cheap deep clone"""
         return super().clone().pipe(from_polars)
 
-    def count(self, *args, sort: bool = False, name: str = 'N'):
+    def count(self, *args, sort: bool = False, name: str = 'n'):
         """
         Returns row counts of the dataset. 
         If bare column names are provided, count() returns counts by group.
@@ -175,7 +175,7 @@ class Tibble(pl.DataFrame):
         if sort == True:
             df = df.arrange(name, desc = True)
 
-        return df.pipe(from_polars)
+        return df
 
     def distinct(self, *args):
         """
