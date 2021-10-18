@@ -1,5 +1,4 @@
 import polars as pl
-from .reexports import *
 
 def _args_as_list(x):
     if len(x) == 0:
@@ -16,7 +15,7 @@ def _kwargs_as_exprs(kwargs):
     return [expr.alias(key) for key, expr in kwargs.items()]
 
 def _no_groupby(gb):
-    if isinstance(gb, Expr) | isinstance(gb, str) | isinstance(gb, list):
+    if isinstance(gb, pl.Expr) | isinstance(gb, str) | isinstance(gb, list):
         return False
     else:
         return True
@@ -35,9 +34,9 @@ def _col_exprs(x):
         return [_col_expr(x)]
 
 def _col_expr(x):
-    if isinstance(x, pl.Expr):
+    if isinstance(x, pl.Expr) | isinstance(x, pl.Series):
         return x
     elif isinstance(x, str):
-        return col(x)
+        return pl.col(x)
     else:
        raise ValueError("Invalid input for column selection") 

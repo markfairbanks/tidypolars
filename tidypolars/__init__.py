@@ -3,7 +3,6 @@ from importlib.metadata import version
 __version__ = version("tidypolars")
 
 from .tidypolars import *
-from .expr_funs import *
 from .reexports import *
 from .funs import *
 

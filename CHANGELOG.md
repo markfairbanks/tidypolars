@@ -11,6 +11,15 @@
 * New functions
   + `tp.case_when()`
   + `tp.if_else()`
+  + `tp.lag()`
+  + `tp.lead()`
+  + `tp.max()`
+  + `tp.mean()`
+  + `tp.median()`
+  + `tp.min()`
+  + `tp.n_distinct()`
+  + `tp.sd()`
+  + `tp.sum()`
   + `tp.read_csv()`
   + `tp.read_parquet()`
 
@@ -35,10 +44,6 @@
   + `.tail()`
   + `.slice_head()`
   + `.slice_tail()`
-
-* New expression methods
-  + `.lag()`
-  + `.lead()`
 
 ## v0.1.4 (2021/10/06)
 * New Tibble methods
