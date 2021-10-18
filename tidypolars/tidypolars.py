@@ -47,6 +47,9 @@ def from_pandas(df):
     return from_polars(pl.from_pandas(df))
 
 class Tibble(pl.DataFrame):
+    """
+    A data frame object that provides methods familiar to R tidyverse users.
+    """
     def __init__(self, *args, **kwargs):
         args = _args_as_list(args)
         if len(args) == 0:
