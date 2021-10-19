@@ -25,6 +25,11 @@
   + `tp.sum()`
   + `tp.read_csv()`
   + `tp.read_parquet()`
+  + tidyselect
+    - `tp.contains()`
+    - `tp.ends_with()`
+    - `tp.everything()`
+    - `tp.starts_with()`
 
 * Improved functionality
   + `.bind_cols()`/`.bind_rows()`: Can append multiple data frames in one call
