@@ -1,44 +1,49 @@
-import tidypolars as tp
 from tidypolars import col
 import polars as pl
 
 __all__ = ["contains", "ends_with", "everything", "starts_with" ]
 
-def contains(match: str, ignorecase = True):
+def contains(match: str, ignore_case = True):
     """
-    Contains a literal string.
+    Contains a literal string
 
     Parameters
     ----------
     match : str
         String to match columns
+
+    ignore_case : bool
+        If TRUE, the default, ignores case when matching names.
 
     Examples
     --------
     >>> df = tp.Tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
     >>> df.select(contains('c'))
     """
-    if ignorecase == True:
+    if ignore_case == True:
         out = col(f"^*(?i){match}.*$")
     else:
         out = col(f"^*{match}.*$")
     return out
 
-def ends_with(match: str, ignorecase = True):
+def ends_with(match: str, ignore_case = True):
     """
-    Ends with a suffix.
+    Ends with a suffix
 
     Parameters
     ----------
     match : str
         String to match columns
 
+    ignore_case : bool
+        If TRUE, the default, ignores case when matching names.
+
     Examples
     --------
     >>> df = tp.Tibble({'a': range(3), 'b_code': range(3), 'c_code': ['a', 'a', 'b']})
     >>> df.select(ends_with('code'))
     """
-    if ignorecase == True:
+    if ignore_case == True:
         out = col(f"^*(?i){match}$")
     else:
         out = col(f"^*{match}$")
@@ -46,7 +51,7 @@ def ends_with(match: str, ignorecase = True):
 
 def everything():
     """
-    Selects all columns.
+    Selects all columns
 
     Examples
     --------
@@ -55,21 +60,24 @@ def everything():
     """
     return pl.all()
 
-def starts_with(match: str, ignorecase = True):
+def starts_with(match: str, ignore_case = True):
     """
-    Starts with a prefix.
+    Starts with a prefix
 
     Parameters
     ----------
     match : str
         String to match columns
 
+    ignore_case : bool
+        If TRUE, the default, ignores case when matching names.
+
     Examples
     --------
     >>> df = tp.Tibble({'a': range(3), 'add': range(3), 'sub': ['a', 'a', 'b']})
     >>> df.select(starts_with('a'))
     """
-    if ignorecase == True:
+    if ignore_case == True:
         out = col(f"^(?i){match}.*$")
     else:
         out = col(f"^{match}.*$")
