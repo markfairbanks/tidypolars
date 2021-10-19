@@ -1,12 +1,12 @@
 import tidypolars as tp
 from tidypolars import col
 
-def test_abso():
+def test_abs():
     """Can get absolute value"""
     df = tp.Tibble(x = range(-3, 0))
     actual = df.mutate(abs_x = tp.abs('x'), abs_col_x = tp.abs(col('x')))
     expected = tp.Tibble(x = range(-3, 0), abs_x = range(3, 0, -1), abs_col_x = range(3, 0, -1))
-    assert actual.frame_equal(expected), "case_when failed"
+    assert actual.frame_equal(expected), "abs failed"
 
 def test_agg_stats():
     """Can get aggregation statistics"""

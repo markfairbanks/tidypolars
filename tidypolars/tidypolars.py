@@ -653,9 +653,9 @@ class Tibble(pl.DataFrame):
         """
         rows = _args_as_list(args)
         if _no_groupby(groupby):
-            df = super(Tibble, self).select(all().take(rows))
+            df = super(Tibble, self).select(pl.all().take(rows))
         else:
-            df = super(Tibble, self).groupby(groupby).apply(lambda x: x.select(all().take(rows)))
+            df = super(Tibble, self).groupby(groupby).apply(lambda x: x.select(pl.all().take(rows)))
         return df.pipe(from_polars)
 
     def slice_head(self, n: int = 5, *args, groupby = None):

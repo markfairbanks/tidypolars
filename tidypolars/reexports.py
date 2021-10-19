@@ -1,7 +1,7 @@
 import polars as pl
 
 __all__ = [
-    'all', 'col', 'exclude', 'lit', 'Expr', 'Series',
+    'col', 'exclude', 'lit', 'Expr', 'Series',
 
     # dtypes
     'Int8', 'Int16', 'Int32', 'Int64',
@@ -10,7 +10,6 @@ __all__ = [
     'List', 'Date', 'Datetime', 'Object'
 ]
 
-all = pl.all
 col = pl.col
 exclude = pl.exclude
 lit = pl.lit
