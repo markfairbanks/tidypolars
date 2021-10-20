@@ -1,4 +1,3 @@
-from tidypolars import col
 import polars as pl
 
 __all__ = ["contains", "ends_with", "everything", "starts_with" ]
@@ -21,9 +20,9 @@ def contains(match: str, ignore_case = True):
     >>> df.select(contains('c'))
     """
     if ignore_case == True:
-        out = col(f"^*(?i){match}.*$")
+        out = pl.col(f"^*(?i){match}.*$")
     else:
-        out = col(f"^*{match}.*$")
+        out = pl.col(f"^*{match}.*$")
     return out
 
 def ends_with(match: str, ignore_case = True):
@@ -44,9 +43,9 @@ def ends_with(match: str, ignore_case = True):
     >>> df.select(ends_with('code'))
     """
     if ignore_case == True:
-        out = col(f"^*(?i){match}$")
+        out = pl.col(f"^*(?i){match}$")
     else:
-        out = col(f"^*{match}$")
+        out = pl.col(f"^*{match}$")
     return out
 
 def everything():
@@ -78,8 +77,8 @@ def starts_with(match: str, ignore_case = True):
     >>> df.select(starts_with('a'))
     """
     if ignore_case == True:
-        out = col(f"^(?i){match}.*$")
+        out = pl.col(f"^(?i){match}.*$")
     else:
-        out = col(f"^{match}.*$")
+        out = pl.col(f"^{match}.*$")
 
     return out
