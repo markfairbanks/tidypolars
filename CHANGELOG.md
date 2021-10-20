@@ -1,5 +1,7 @@
 # Changelog
 
+## v0.1.8 (in development)
+
 ## v0.1.7 (2021/10/20)
 * New Tibble methods
   + `.count()`
