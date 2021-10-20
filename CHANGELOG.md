@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.1.7 (in development)
+## v0.1.7 (2021/10/20)
 * New Tibble methods
   + `.count()`
   + `.drop_null()`
