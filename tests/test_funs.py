@@ -1,5 +1,6 @@
 import tidypolars as tp
 from tidypolars import col
+import math
 
 def test_abs():
     """Can get absolute value"""
@@ -72,4 +73,41 @@ def test_if_else():
     df = tp.Tibble(x = range(1, 4))
     actual = df.mutate(case_x = tp.if_else(col('x') < 2, 1, 0))
     expected = tp.Tibble(x = range(1, 4), case_x = [1, 0, 0])
-    assert actual.frame_equal(expected), "case_when failed"
+    assert actual.frame_equal(expected), "if_else failed"
+
+def test_is_predicates():
+    """Can use is predicates"""
+    df = tp.Tibble(x = [0.0, 1.0, 2.0],
+                   y = [None, math.inf, math.nan])
+    actual = (
+        df
+        .mutate(
+            between = tp.between('x', 1, 2),
+            is_finite = tp.is_finite('x'),
+            is_in = tp.is_in('x', [1.0, 2.0]),
+            is_infinite = tp.is_infinite('y'),
+            is_not = tp.is_not(tp.is_finite(col('x'))),
+            is_not_in = tp.is_not_in('x', [1.0, 2.0]),
+            is_not_null = tp.is_not_null('y'),
+            is_null = tp.is_null('y')
+
+        )
+    ).drop(['x', 'y'])
+    expected = tp.Tibble(
+        between = [False, True, True],
+        is_finite = [True, True, True],
+        is_in = [False, True, True],
+        is_infinite = [None, True, False],
+        is_not = [False, False, False],
+        is_not_in = [True, False, False],
+        is_not_null = [False, True, True],
+        is_null = [True, False, False]
+    )
+    assert actual.frame_equal(expected, null_equal = True), "is_predicates failed"
+
+def test_round():
+    """Can round values"""
+    df = tp.Tibble(x = [1.11, 2.22, 3.33])
+    actual = df.mutate(x = tp.round(col('x'), 1))
+    expected = tp.Tibble(x = [1.1, 2.2, 3.3])
+    assert actual.frame_equal(expected), "round failed"
