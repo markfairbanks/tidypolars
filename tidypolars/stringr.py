@@ -6,13 +6,12 @@ from .funs import is_not
 
 __all__ = [
     "str_detect", 
-    "str_to_upper", 
-    "str_to_lower", 
+    "str_remove_all",
+    "str_remove", 
     "str_replace_all", 
     "str_replace", 
-    "str_remove_all",
-    "str_remove"
-    
+    "str_to_lower", 
+    "str_to_upper"
     ]
 
 def str_detect(string : str, pattern : str, negate: bool = False):
@@ -46,41 +45,41 @@ def str_detect(string : str, pattern : str, negate: bool = False):
     
     return exprs
 
-def str_to_upper(string : str):
+def str_remove_all(string : str, pattern : str):
     """
-    Convert case of a string
+    Removes all matched patterns in a string
 
     Parameters
     ----------
     string : str
-        Convert case of this string
+        Input series to operate on
+    pattern : str
+        Pattern to look for
 
     Examples
     --------
     >>> df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
-    >>> df.mutate(x = str_to_upper(col('name')))
+    >>> df.mutate(x = str_remove_all(col('name'), 'a'))
     """
+    return str_replace_all(string, pattern, "")
 
-    string = _col_expr(string)
-    return string.str.to_uppercase()
-
-def str_to_lower(string : str):
+def str_remove(string : str, pattern : str):
     """
-    Convert case of a string
+    Removes the first matched patterns in a string
 
     Parameters
     ----------
     string : str
-        Convert case of this string
+        Input series to operate on
+    pattern : str
+        Pattern to look for
 
     Examples
     --------
     >>> df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
-    >>> df.mutate(x = str_to_lower(col('name')))
+    >>> df.mutate(x = str_remove(col('name'), 'a'))
     """
-
-    string = _col_expr(string)
-    return string.str.to_lowercase()
+    return str_replace(string, pattern, "")
 
 def str_replace_all(string : str, pattern : str, replacement : str):
     """
@@ -126,38 +125,38 @@ def str_replace(string : str, pattern : str, replacement : str):
   
     return string.str.replace(pattern, replacement)
 
-def str_remove_all(string : str, pattern : str):
+def str_to_lower(string : str):
     """
-    Removes all matched patterns in a string
+    Convert case of a string
 
     Parameters
     ----------
     string : str
-        Input series to operate on
-    pattern : str
-        Pattern to look for
+        Convert case of this string
 
     Examples
     --------
     >>> df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
-    >>> df.mutate(x = str_remove_all(col('name'), 'a'))
+    >>> df.mutate(x = str_to_lower(col('name')))
     """
-    return str_replace_all(string, pattern, "")
 
-def str_remove(string : str, pattern : str):
+    string = _col_expr(string)
+    return string.str.to_lowercase()
+
+def str_to_upper(string : str):
     """
-    Removes the first matched patterns in a string
+    Convert case of a string
 
     Parameters
     ----------
     string : str
-        Input series to operate on
-    pattern : str
-        Pattern to look for
+        Convert case of this string
 
     Examples
     --------
     >>> df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
-    >>> df.mutate(x = str_remove(col('name'), 'a'))
+    >>> df.mutate(x = str_to_upper(col('name')))
     """
-    return str_replace(string, pattern, "")
+
+    string = _col_expr(string)
+    return string.str.to_uppercase()
