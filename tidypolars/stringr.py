@@ -5,14 +5,20 @@ from .utils import _col_expr
 from .funs import is_not
 
 __all__ = [
+    "str_count",
     "str_detect", 
     "str_remove_all",
     "str_remove", 
     "str_replace_all", 
     "str_replace", 
     "str_to_lower", 
-    "str_to_upper"
+    "str_to_upper", 
+    "str_length"
     ]
+
+def str_count(string : str):
+    """Alias for .str_length()"""
+    return str_length(string)
 
 def str_detect(string : str, pattern : str, negate: bool = False):
     """
@@ -44,6 +50,24 @@ def str_detect(string : str, pattern : str, negate: bool = False):
         exprs = exprs.is_not()
     
     return exprs
+
+def str_length(string : str):
+    """
+    Length of a string
+
+    Parameters
+    ----------
+    string : str
+        Input series to operate on
+
+    Examples
+    --------
+    >>> df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
+    >>> df.mutate(x = str_length(col('name')))
+    """
+    string = _col_expr(string)
+    return string.str.lengths()
+
 
 def str_remove_all(string : str, pattern : str):
     """
