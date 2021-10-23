@@ -11,6 +11,17 @@
 * `is_not_null()`
 * `is_null()`
 * `round()`
+* 'stringr'
+  + `.str_count()`
+  + `.str_detect()`
+  + `.str_length()`
+  + `.str_remove_all()`
+  + `.str_remove()`
+  + `.str_replace_all()`
+  + `.str_replace()`
+  + `.str_sub()`
+  + `.str_to_lower()`
+  + `.str_to_upper()`
 
 ## v0.1.7 (2021/10/20)
 #### New Tibble methods
