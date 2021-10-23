@@ -7,13 +7,14 @@ from .funs import is_not
 __all__ = [
     "str_count",
     "str_detect", 
+    "str_length",
     "str_remove_all",
     "str_remove", 
     "str_replace_all", 
     "str_replace", 
+    "str_sub",
     "str_to_lower", 
-    "str_to_upper", 
-    "str_length"
+    "str_to_upper"
     ]
 
 def str_count(string : str):
@@ -68,6 +69,27 @@ def str_length(string : str):
     string = _col_expr(string)
     return string.str.lengths()
 
+def str_sub(string : str, start : int = 0, end : int = None):
+    """
+    Extract portion of string based on start and end inputs
+
+    Parameters
+    ----------
+    string : str
+        Input series to operate on
+    start : int
+        First position of the character to return
+    end : int
+        Last position of the character to return
+
+    Examples
+    --------
+    >>> df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
+    >>> df.mutate(x = str_sub(col('name'), 0, 3))
+    """
+    #TODO: Should the index start at 0 or 1?
+    string = _col_expr(string) 
+    return string.str.slice(start, end)
 
 def str_remove_all(string : str, pattern : str):
     """

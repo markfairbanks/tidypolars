@@ -33,6 +33,14 @@ def test_str_length():
                         x = [5, 6, 4, 5])
     assert actual.frame_equal(expected), "str_length failed"
 
+def test_str_sub():
+    """Can str_sub can extract strings"""
+    df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
+    actual = df.mutate(x = tp.str_sub('name', 0, 3))
+    expected = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'], 
+                        x = ['app', 'ban', 'pea', 'gra'])
+    assert actual.frame_equal(expected), "str_sub failed"
+
 def test_str_remove_all():
     """Can str_remove_all find all strings and remove"""
     df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])

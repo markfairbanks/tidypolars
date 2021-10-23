@@ -19,6 +19,7 @@
   + `.str_remove()`
   + `.str_replace_all()`
   + `.str_replace()`
+  + `.str_sub()`
   + `.str_to_lower()`
   + `.str_to_upper()`
 
