@@ -23,3 +23,17 @@ def test_str_detect_multiple():
                         multiple = [True, False, True, True], 
                         multiple_negate = [False, True, False, False])
     assert actual.frame_equal(expected), "str_detect multiple failed"
+
+def test_str_to_upper():
+    """Can str_to_upper uppercase a string"""
+    df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
+    actual = df.mutate(name = tp.str_to_upper(tp.col('name')))
+    expected = tp.Tibble(name = ['APPLE', 'BANANA', 'PEAR', 'GRAPE'])
+    assert actual.frame_equal(expected), "str_to_upper multiple failed"
+
+def test_str_to_lower():
+    """Can str_to_lower lowercase a string"""
+    df = tp.Tibble(name = ['APPLE', 'BANANA', 'PEAR', 'GRAPE'])
+    actual = df.mutate(name = tp.str_to_lower(tp.col('name')))
+    expected = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
+    assert actual.frame_equal(expected), "str_to_lower multiple failed"
