@@ -146,7 +146,6 @@ def str_replace_all(string : str, pattern : str, replacement : str):
     >>> df.mutate(x = str_replace_all(col('name'), 'a', 'A'))
     """
     string = _col_expr(string)
-  
     return string.str.replace_all(pattern, replacement)
 
 def str_replace(string : str, pattern : str, replacement : str):
@@ -168,7 +167,6 @@ def str_replace(string : str, pattern : str, replacement : str):
     >>> df.mutate(x = str_replace(col('name'), 'a', 'A'))
     """
     string = _col_expr(string)
-  
     return string.str.replace(pattern, replacement)
 
 def str_to_lower(string : str):
@@ -185,7 +183,6 @@ def str_to_lower(string : str):
     >>> df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
     >>> df.mutate(x = str_to_lower(col('name')))
     """
-
     string = _col_expr(string)
     return string.str.to_lowercase()
 
@@ -203,6 +200,5 @@ def str_to_upper(string : str):
     >>> df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
     >>> df.mutate(x = str_to_upper(col('name')))
     """
-
     string = _col_expr(string)
     return string.str.to_uppercase()
