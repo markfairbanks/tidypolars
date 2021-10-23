@@ -7,7 +7,12 @@ from .funs import is_not
 __all__ = [
     "str_detect", 
     "str_to_upper", 
-    "str_to_lower"
+    "str_to_lower", 
+    "str_replace_all", 
+    "str_replace", 
+    "str_remove_all",
+    "str_remove"
+    
     ]
 
 def str_detect(string : str, pattern : str, negate: bool = False):
@@ -26,8 +31,8 @@ def str_detect(string : str, pattern : str, negate: bool = False):
     Examples
     --------
     >>> df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
-    >>> df.mutate(detect_single = str_detect('name', ['a']))
-    >>> df.mutate(detect_multiple = str_detect('name', ['a', 'e']))
+    >>> df.mutate(x = str_detect('name', ['a']))
+    >>> df.mutate(x = str_detect('name', ['a', 'e']))
     """
     if isinstance(pattern, str):
         [pattern]
@@ -53,7 +58,7 @@ def str_to_upper(string : str):
     Examples
     --------
     >>> df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
-    >>> df.mutate(case = str_to_upper(col('name')))
+    >>> df.mutate(x = str_to_upper(col('name')))
     """
 
     string = _col_expr(string)
@@ -71,16 +76,59 @@ def str_to_lower(string : str):
     Examples
     --------
     >>> df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
-    >>> df.mutate(case = str_to_lower(col('name')))
+    >>> df.mutate(x = str_to_lower(col('name')))
     """
 
     string = _col_expr(string)
     return string.str.to_lowercase()
 
-
 def str_replace_all(string : str, pattern : str, replacement : str):
     """
-    Replace matched patterns in a string
+    Replaces all matched patterns in a string
+
+    Parameters
+    ----------
+    string : str
+        Input series to operate on
+    pattern : str
+        Pattern to look for
+    replacement : str
+        String that replaces anything that matches the pattern
+
+    Examples
+    --------
+    >>> df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
+    >>> df.mutate(x = str_replace_all(col('name'), 'a', 'A'))
+    """
+    string = _col_expr(string)
+  
+    return string.str.replace_all(pattern, replacement)
+
+def str_replace(string : str, pattern : str, replacement : str):
+    """
+    Replaces the first matched patterns in a string
+
+    Parameters
+    ----------
+    string : str
+        Input series to operate on
+    pattern : str
+        Pattern to look for
+    replacement : str
+        String that replaces anything that matches the pattern
+
+    Examples
+    --------
+    >>> df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
+    >>> df.mutate(x = str_replace(col('name'), 'a', 'A'))
+    """
+    string = _col_expr(string)
+  
+    return string.str.replace(pattern, replacement)
+
+def str_remove_all(string : str, pattern : str):
+    """
+    Removes all matched patterns in a string
 
     Parameters
     ----------
@@ -92,15 +140,24 @@ def str_replace_all(string : str, pattern : str, replacement : str):
     Examples
     --------
     >>> df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
-    >>> df.mutate(detect_single = str_detect('name', ['a']))
-    >>> df.mutate(detect_multiple = str_detect('name', ['a', 'e']))
+    >>> df.mutate(x = str_remove_all(col('name'), 'a'))
     """
-    if isinstance(pattern, str):
-        [pattern]
-    
-    string = _col_expr(string)
+    return str_replace_all(string, pattern, "")
 
-    exprs = (string.str.contains(p) for p in pattern)
-    exprs = ft.reduce(lambda a, b : a & b, exprs)
-   
-    return exprs
+def str_remove(string : str, pattern : str):
+    """
+    Removes the first matched patterns in a string
+
+    Parameters
+    ----------
+    string : str
+        Input series to operate on
+    pattern : str
+        Pattern to look for
+
+    Examples
+    --------
+    >>> df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
+    >>> df.mutate(x = str_remove(col('name'), 'a'))
+    """
+    return str_replace(string, pattern, "")

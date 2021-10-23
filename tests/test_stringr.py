@@ -37,3 +37,31 @@ def test_str_to_lower():
     actual = df.mutate(name = tp.str_to_lower(tp.col('name')))
     expected = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
     assert actual.frame_equal(expected), "str_to_lower multiple failed"
+
+def test_str_replace_all():
+    """Can str_replace_all find all strings and replace"""
+    df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
+    actual = df.mutate(new_name = tp.str_replace_all(tp.col('name'), 'a', 'A'))
+    expected = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'], new_name = ['Apple', 'bAnAnA', 'peAr', 'grApe'])
+    assert actual.frame_equal(expected), "str_replace_all multiple failed"
+
+def test_str_replace():
+    """Can str_replace finds first instance of string and replace"""
+    df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
+    actual = df.mutate(new_name = tp.str_replace(tp.col('name'), 'a', 'A'))
+    expected = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'], new_name = ['Apple', 'bAnana', 'peAr', 'grApe'])
+    assert actual.frame_equal(expected), "str_replace multiple failed"
+
+def test_str_remove_all():
+    """Can str_remove_all find all strings and remove"""
+    df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
+    actual = df.mutate(new_name = tp.str_remove_all(tp.col('name'), 'a'))
+    expected = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'], new_name = ['pple', 'bnn', 'per', 'grpe'])
+    assert actual.frame_equal(expected), "str_remove_all multiple failed"
+
+def test_str_remove():
+    """Can str_remove finds first instance of string and remove"""
+    df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
+    actual = df.mutate(new_name = tp.str_remove(tp.col('name'), 'a'))
+    expected = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'], new_name = ['pple', 'bnana', 'per', 'grpe'])
+    assert actual.frame_equal(expected), "str_remove multiple failed"
