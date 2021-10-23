@@ -8,8 +8,25 @@ __all__ = [
     "str_detect"
     ]
 
-
 def str_detect(string : str, pattern : str, negate: bool = False):
+    """
+    Detect the presence or absence of a pattern in a string
+
+    Parameters
+    ----------
+    string : str
+        Input series to operate on
+    pattern : str
+        Pattern to look for
+    negate : bool
+        If True, return non-matching elements
+
+    Examples
+    --------
+    >>> df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
+    >>> df.mutate(detect_single = str_detect('name', ['a']))
+    >>> df.mutate(detect_multiple = str_detect('name', ['a', 'e']))
+    """
     if isinstance(pattern, str):
         [pattern]
     

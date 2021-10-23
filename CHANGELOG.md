@@ -11,6 +11,8 @@
 * `is_not_null()`
 * `is_null()`
 * `round()`
+* 'stringr'
+  + `.str_detect()`
 
 ## v0.1.7 (2021/10/20)
 #### New Tibble methods
