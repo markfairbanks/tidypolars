@@ -1,15 +1,10 @@
 import tidypolars as tp
-# ADD TP to all selects
-def _repeat(x, times):
-    if not isinstance(x, list):
-        x = [x]
-    return x * times
 
 def test_str_detect_single():
     """Can str_detect find a single string"""
     df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
-    actual = df.mutate(x = tp.str_detect('name', ['a']),
-                       y = tp.str_detect('name', ['a'], negate=True))
+    actual = df.mutate(x = tp.str_detect('name', 'a'),
+                       y = tp.str_detect('name', 'a', negate=True))
     expected = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'], 
                          x = [True, True, True, True], 
                          y = [False, False, False, False])

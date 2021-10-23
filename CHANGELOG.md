@@ -11,8 +11,7 @@
 * `is_not_null()`
 * `is_null()`
 * `round()`
-* 'stringr'
-  + `.str_count()`
+* `stringr`
   + `.str_detect()`
   + `.str_length()`
   + `.str_remove_all()`
