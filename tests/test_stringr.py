@@ -1,9 +1,4 @@
 import tidypolars as tp
-# ADD TP to all selects
-def _repeat(x, times):
-    if not isinstance(x, list):
-        x = [x]
-    return x * times
 
 def test_str_detect_single():
     """Can str_detect find a single string"""

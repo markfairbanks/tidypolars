@@ -82,7 +82,6 @@ def str_sub(string : str, start : int = 0, end : int = None):
     >>> df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
     >>> df.mutate(x = str_sub(col('name'), 0, 3))
     """
-    #TODO: Should the index start at 0 or 1?
     string = _col_expr(string) 
     return string.str.slice(start, end)
 
