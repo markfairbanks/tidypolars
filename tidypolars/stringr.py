@@ -198,6 +198,19 @@ def str_to_upper(string : str):
     return string.str.to_uppercase()
 
 def str_trim(string, side = "both"):
+    """
+    Trim whitespace
+
+    Parameters
+    ----------
+    string : Expr, Series
+        Column or series to operate on
+
+    Examples
+    --------
+    >>> df = tp.Tibble(x = [' a ', ' b ', ' c '])
+    >>> df.mutate(x = tp.str_trim(col('x')))
+    """
     string = _col_expr(string)
     if side == "both":
         out = _str_trim_right(_str_trim_left(string))
