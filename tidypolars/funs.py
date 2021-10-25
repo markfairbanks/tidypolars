@@ -3,21 +3,79 @@ from .tidypolars import from_polars
 from .utils import _col_expr
 
 __all__ = [
+    # General functions
     "abs",
     "case_when", "if_else",
     "lag", "lead",
     "read_csv", "read_parquet",
     "round",
 
-    # agg stats
+    # Agg stats
     "first", "last",
     "max", "mean", "median", "min",
     "n_distinct", "sd", "sum",
 
-    # predicates
+    # Predicates
     "between", "is_finite", "is_in", "is_infinite",
-    "is_nan", "is_not", "is_not_in", "is_not_null", "is_null"
+    "is_nan", "is_not", "is_not_in", "is_not_null", "is_null",
+
+    # Type conversion
+    "as_float", "as_integer", "as_string", "cast"
 ]
+
+def as_float(x, dtype = pl.Float64):
+    """
+    Convert to integer. Defaults to Float64.
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+    dtype : DataType
+        Type to convert to
+
+    Examples
+    --------
+    >>> df.mutate(abs_x = tp.as_float(col('x')))
+    """
+    x = _col_expr(x)
+    return x.cast(dtype)
+
+def as_integer(x, dtype = pl.Int64):
+    """
+    Convert to integer. Defaults to Int64.
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+    dtype : DataType
+        Type to convert to
+
+    Examples
+    --------
+    >>> df.mutate(abs_x = tp.as_integer(col('x')))
+    """
+    x = _col_expr(x)
+    return x.cast(dtype)
+
+def as_string(x, dtype = pl.Utf8):
+    """
+    Convert to string. Defaults to Utf8.
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+    dtype : DataType
+        Type to convert to
+
+    Examples
+    --------
+    >>> df.mutate(abs_x = tp.as_string(col('x')))
+    """
+    x = _col_expr(x)
+    return x.cast(dtype)
 
 def abs(x):
     """
@@ -76,6 +134,24 @@ def case_when(expr):
     >>> )
     """
     return pl.when(expr)
+
+def cast(x, dtype):
+    """
+    General type conversion.
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+    dtype : DataType
+        Type to convert to
+
+    Examples
+    --------
+    >>> df.mutate(abs_x = tp.cast(col('x'), tp.Float64))
+    """
+    x = _col_expr(x)
+    return x.cast(dtype)
 
 def first(x):
     """

@@ -48,6 +48,21 @@ def test_case_when():
     expected = tp.Tibble(x = range(1, 4), case_x = [0, 1, 0])
     assert actual.frame_equal(expected), "case_when failed"
 
+def test_casting():
+    """Can do type casting"""
+    df = tp.Tibble(int_col = range(1, 4), float_col = [1.0, 2.0, 3.0], chr_col = ["1", "2", "3"])
+    actual = (
+        df
+        .mutate(float_cast = tp.as_float('int_col'),
+                int_cast = tp.as_integer('float_col'),
+                string_cast = tp.as_string('int_col'))
+        .select('float_cast', 'int_cast', 'string_cast')
+    )
+    expected = tp.Tibble(float_cast = [1.0, 2.0, 3.0],
+                         int_cast = [1, 2, 3],
+                         string_cast = ["1", "2", "3"])
+    assert actual.frame_equal(expected), "case_when failed"
+
 def test_lag():
     """Can get lagging values with function"""
     df = tp.Tibble({'x': range(3)})
