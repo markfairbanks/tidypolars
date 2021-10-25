@@ -2,7 +2,6 @@ from tidypolars import col
 import polars as pl
 import functools as ft
 from .utils import _col_expr
-from .funs import is_not
 
 __all__ = [
     "str_detect", 
