@@ -8,7 +8,7 @@ def _args_as_list(x):
     elif isinstance(x[0], list):
         return x[0]
     elif isinstance(x[0], pl.Series):
-        return list(x[0])
+        return x[0].to_list()
     else:
         return [*x]
 
