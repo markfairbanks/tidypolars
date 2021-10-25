@@ -1,8 +1,8 @@
 import polars as pl
 
-__all__ = ["contains", "ends_with", "everything", "starts_with" ]
+__all__ = ["col_contains", "col_ends_with", "col_everything", "col_starts_with" ]
 
-def contains(match: str, ignore_case = True):
+def col_contains(match: str, ignore_case = True):
     """
     Contains a literal string
 
@@ -17,7 +17,7 @@ def contains(match: str, ignore_case = True):
     Examples
     --------
     >>> df = tp.Tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
-    >>> df.select(contains('c'))
+    >>> df.select(col_contains('c'))
     """
     if ignore_case == True:
         out = pl.col(f"^*(?i){match}.*$")
@@ -25,7 +25,7 @@ def contains(match: str, ignore_case = True):
         out = pl.col(f"^*{match}.*$")
     return out
 
-def ends_with(match: str, ignore_case = True):
+def col_ends_with(match: str, ignore_case = True):
     """
     Ends with a suffix
 
@@ -40,7 +40,7 @@ def ends_with(match: str, ignore_case = True):
     Examples
     --------
     >>> df = tp.Tibble({'a': range(3), 'b_code': range(3), 'c_code': ['a', 'a', 'b']})
-    >>> df.select(ends_with('code'))
+    >>> df.select(col_ends_with('code'))
     """
     if ignore_case == True:
         out = pl.col(f"^*(?i){match}$")
@@ -48,18 +48,18 @@ def ends_with(match: str, ignore_case = True):
         out = pl.col(f"^*{match}$")
     return out
 
-def everything():
+def col_everything():
     """
     Selects all columns
 
     Examples
     --------
     >>> df = tp.Tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
-    >>> df.select(everything())
+    >>> df.select(col_everything())
     """
     return pl.all()
 
-def starts_with(match: str, ignore_case = True):
+def col_starts_with(match: str, ignore_case = True):
     """
     Starts with a prefix
 
@@ -74,7 +74,7 @@ def starts_with(match: str, ignore_case = True):
     Examples
     --------
     >>> df = tp.Tibble({'a': range(3), 'add': range(3), 'sub': ['a', 'a', 'b']})
-    >>> df.select(starts_with('a'))
+    >>> df.select(col_starts_with('a'))
     """
     if ignore_case == True:
         out = pl.col(f"^(?i){match}.*$")
