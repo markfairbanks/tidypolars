@@ -1,7 +1,7 @@
 from tidypolars import col
 import polars as pl
 import functools as ft
-from .utils import _col_expr
+from .utils import _col_expr, _str_trim_left, _str_trim_right
 
 __all__ = [
     "str_detect", 
@@ -12,7 +12,8 @@ __all__ = [
     "str_replace", 
     "str_sub",
     "str_to_lower", 
-    "str_to_upper"
+    "str_to_upper",
+    "str_trim"
 ]
 
 def str_detect(string : str, pattern : str, negate: bool = False):
@@ -195,3 +196,13 @@ def str_to_upper(string : str):
     """
     string = _col_expr(string)
     return string.str.to_uppercase()
+
+def str_trim(string, side = "both"):
+    string = _col_expr(string)
+    if side == "both":
+        out = _str_trim_right(_str_trim_left(string))
+    if side == "left":
+        out = _str_trim_left(string)
+    if side == "right":
+        out = _str_trim_right(string)
+    return out

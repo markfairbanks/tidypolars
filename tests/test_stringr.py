@@ -77,3 +77,19 @@ def test_str_to_upper():
     actual = df.mutate(name = tp.str_to_upper(tp.col('name')))
     expected = tp.Tibble(name = ['APPLE', 'BANANA', 'PEAR', 'GRAPE'])
     assert actual.frame_equal(expected), "str_to_upper failed"
+
+def test_str_trim():
+    """Can str_to_upper uppercase a string"""
+    df = tp.Tibble(x = [' a ', ' b ', ' c '])
+    actual = (
+        df.mutate(both = tp.str_trim('x'),
+                  left = tp.str_trim('x', "left"),
+                  right = tp.str_trim('x', "right"))
+        .drop('x')
+    )
+    expected = tp.Tibble(
+        both = ['a', 'b', 'c'],
+        left = ['a ', 'b ', 'c '],
+        right = [' a', ' b', ' c']
+    )
+    assert actual.frame_equal(expected), "str_trim failed"
