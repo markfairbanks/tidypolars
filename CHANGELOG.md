@@ -2,7 +2,11 @@
 
 ## v0.1.8 (in development)
 #### New Functions
+* `as_float()`
+* `as_integer()`
+* `as_string()`
 * `between()`
+* `cast()`
 * `is_finite()`
 * `is_in()`
 * `is_infinite()`
