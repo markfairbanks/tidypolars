@@ -26,7 +26,7 @@ jobs:
       run: poetry install
     # Step 6. Run tests for pycounts
     - name: Test with pytest
-      run: poetry run pytest tests/ --cov=pycounts --cov-report=xml
+      run: poetry run pytest tests/
     # Step 8. Build documentation
     - name: Build documentation
       run: poetry run make html --directory docs/
