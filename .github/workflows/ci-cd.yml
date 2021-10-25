@@ -1,0 +1,32 @@
+name: ci-cd
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  ci:
+    # Step 1. Set up operating system
+    runs-on: ubuntu-latest
+    steps:
+    # Step 2. Set up Python 3.9
+    - uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    # Step 3. Check-out repository so we can access its contents
+    - uses: actions/checkout@v2
+    # Step 4. Install poetry
+    - uses: snok/install-poetry@v1
+    # Step 5. Install our pycounts package
+    - name: Install package
+      run: poetry install
+    # Step 6. Run tests for pycounts
+    - name: Test with pytest
+      run: poetry run pytest tests/
+    # Step 8. Build documentation
+    - name: Build documentation
+      run: poetry run make html --directory docs/
