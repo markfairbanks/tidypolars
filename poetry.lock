@@ -194,14 +194,14 @@ python-versions = ">=2.7"
 
 [[package]]
 name = "gitdb"
-version = "4.0.7"
+version = "4.0.9"
 description = "Git Object Database"
 category = "dev"
 optional = false
-python-versions = ">=3.4"
+python-versions = ">=3.6"
 
 [package.dependencies]
-smmap = ">=3.0.1,<5"
+smmap = ">=3.0.1,<6"
 
 [[package]]
 name = "gitpython"
@@ -698,8 +698,8 @@ testing = ["beautifulsoup4", "coverage", "docutils (>=0.17.0,<0.18.0)", "pytest 
 
 [[package]]
 name = "nbclassic"
-version = "0.3.2"
-description = "Jupyter Notebook as a Jupyter Server Extension."
+version = "0.3.3"
+description = "Jupyter Notebook as a Jupyter Server extension."
 category = "dev"
 optional = false
 python-versions = ">=3.6"
@@ -910,7 +910,7 @@ testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "polars"
-version = "0.10.7"
+version = "0.10.8"
 description = ""
 category = "main"
 optional = false
@@ -921,9 +921,9 @@ numpy = "*"
 
 [package.extras]
 fsspec = ["fsspec"]
+connectorx = ["connectorx"]
 pyarrow = ["pyarrow (>=4.0)"]
 pandas = ["pyarrow (>=4.0)", "pandas"]
-connectorx = ["connectorx"]
 
 [[package]]
 name = "prometheus-client"
@@ -938,7 +938,7 @@ twisted = ["twisted"]
 
 [[package]]
 name = "prompt-toolkit"
-version = "3.0.20"
+version = "3.0.21"
 description = "Library for building powerful interactive command lines in Python"
 category = "dev"
 optional = false
@@ -981,11 +981,14 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "pyparsing"
-version = "2.4.7"
+version = "3.0.1"
 description = "Python parsing module"
 category = "dev"
 optional = false
-python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
+python-versions = ">=3.6"
+
+[package.extras]
+diagrams = ["jinja2", "railroad-diagrams"]
 
 [[package]]
 name = "pyrsistent"
@@ -1124,11 +1127,11 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
 name = "smmap"
-version = "4.0.0"
+version = "5.0.0"
 description = "A pure Python implementation of a sliding window memory map manager"
 category = "dev"
 optional = false
-python-versions = ">=3.5"
+python-versions = ">=3.6"
 
 [[package]]
 name = "sniffio"
@@ -1375,7 +1378,7 @@ python-versions = ">= 3.5"
 
 [[package]]
 name = "traitlets"
-version = "5.1.0"
+version = "5.1.1"
 description = "Traitlets Python configuration system"
 category = "dev"
 optional = false
@@ -1475,7 +1478,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.9,<3.11"
-content-hash = "84c9f9c9345471f75f342acf65ef88041ca507b45337e81f0263e1d3633a25c0"
+content-hash = "031ba7c23bac0a042aaf9defd5f8beb886370156626da726326c0c1188d86627"
 
 [metadata.files]
 alabaster = [
@@ -1631,8 +1634,8 @@ entrypoints = [
     {file = "entrypoints-0.3.tar.gz", hash = "sha256:c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451"},
 ]
 gitdb = [
-    {file = "gitdb-4.0.7-py3-none-any.whl", hash = "sha256:6c4cc71933456991da20917998acbe6cf4fb41eeaab7d6d67fbc05ecd4c865b0"},
-    {file = "gitdb-4.0.7.tar.gz", hash = "sha256:96bf5c08b157a666fec41129e6d327235284cca4c81e92109260f353ba138005"},
+    {file = "gitdb-4.0.9-py3-none-any.whl", hash = "sha256:8033ad4e853066ba6ca92050b9df2f89301b8fc8bf7e9324d412a63f8bf1a8fd"},
+    {file = "gitdb-4.0.9.tar.gz", hash = "sha256:bac2fd45c0a1c9cf619e63a90d62bdc63892ef92387424b855792a6cabe789aa"},
 ]
 gitpython = [
     {file = "GitPython-3.1.24-py3-none-any.whl", hash = "sha256:dc0a7f2f697657acc8d7f89033e8b1ea94dd90356b2983bca89dc8d2ab3cc647"},
@@ -1883,8 +1886,8 @@ myst-parser = [
     {file = "myst_parser-0.15.2-py3-none-any.whl", hash = "sha256:40124b6f27a4c42ac7f06b385e23a9dcd03d84801e9c7130b59b3729a554b1f9"},
 ]
 nbclassic = [
-    {file = "nbclassic-0.3.2-py3-none-any.whl", hash = "sha256:57936a39410a18261442ca3b298421f859c9012272b87bf55e17b5507f052f4d"},
-    {file = "nbclassic-0.3.2.tar.gz", hash = "sha256:863462bf6a6e0e5e502dcc479ce2ea1edf60437c969f1850d0c0823dba0c39b7"},
+    {file = "nbclassic-0.3.3-py3-none-any.whl", hash = "sha256:59cbaf6cd25b6ba3e3cbceca048f19e74be39a40c7fa6a814b519ec1f9dca116"},
+    {file = "nbclassic-0.3.3.tar.gz", hash = "sha256:c332322864a0bf5866dec3149b4863d092178f144749183a704d39f0ebb7947d"},
 ]
 nbclient = [
     {file = "nbclient-0.5.4-py3-none-any.whl", hash = "sha256:95a300c6fbe73721736cf13972a46d8d666f78794b832866ed7197a504269e11"},
@@ -1970,19 +1973,19 @@ pluggy = [
     {file = "pluggy-1.0.0.tar.gz", hash = "sha256:4224373bacce55f955a878bf9cfa763c1e360858e330072059e10bad68531159"},
 ]
 polars = [
-    {file = "polars-0.10.7-cp36-abi3-macosx_10_7_x86_64.whl", hash = "sha256:75736f01a6c27d7bb68024ad8c876020adc0ee52995bc10d8c7b464ad4f42bd7"},
-    {file = "polars-0.10.7-cp36-abi3-macosx_10_9_x86_64.macosx_11_0_arm64.macosx_10_9_universal2.whl", hash = "sha256:b58db7733bd798358f4feaaaba3bef884dbf31aa8632c924967065d4e7318c99"},
-    {file = "polars-0.10.7-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:0010e77b5240c35f379aa7c9976c3a0814f11813a9c9cac8cc574633a914bb59"},
-    {file = "polars-0.10.7-cp36-abi3-win_amd64.whl", hash = "sha256:b26ec9ad3e01662d4356d0acdca3af2a767fef5d2b394bf456c48e7aed493751"},
-    {file = "polars-0.10.7.tar.gz", hash = "sha256:3fcb9bd3f2ad15644be7022cb08ee90c365516707b7b46742880b46b90f11cc5"},
+    {file = "polars-0.10.8-cp36-abi3-macosx_10_7_x86_64.whl", hash = "sha256:199defb0b56ca3805c6f2383ad0b427213e806f1cf727b8fa72dbb5ff6bab804"},
+    {file = "polars-0.10.8-cp36-abi3-macosx_10_9_x86_64.macosx_11_0_arm64.macosx_10_9_universal2.whl", hash = "sha256:103d18265567782ce867835f494eaaa7703cf5b8f131b844a55de5c380df203c"},
+    {file = "polars-0.10.8-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:731e2c47388a07e203cb948f1c034ee2e65e4ed828cbd7348dc6323abb418e36"},
+    {file = "polars-0.10.8-cp36-abi3-win_amd64.whl", hash = "sha256:5eb431d0a0c8afc2bf75dcc3f3392419d0f863f0cc9f7b828adfdea6235b4fcd"},
+    {file = "polars-0.10.8.tar.gz", hash = "sha256:caf80ed05787541985004f47987c37ead05e3a894a38e6228683e9b8930aee81"},
 ]
 prometheus-client = [
     {file = "prometheus_client-0.11.0-py2.py3-none-any.whl", hash = "sha256:b014bc76815eb1399da8ce5fc84b7717a3e63652b0c0f8804092c9363acab1b2"},
     {file = "prometheus_client-0.11.0.tar.gz", hash = "sha256:3a8baade6cb80bcfe43297e33e7623f3118d660d41387593758e2fb1ea173a86"},
 ]
 prompt-toolkit = [
-    {file = "prompt_toolkit-3.0.20-py3-none-any.whl", hash = "sha256:6076e46efae19b1e0ca1ec003ed37a933dc94b4d20f486235d436e64771dcd5c"},
-    {file = "prompt_toolkit-3.0.20.tar.gz", hash = "sha256:eb71d5a6b72ce6db177af4a7d4d7085b99756bf656d98ffcc4fecd36850eea6c"},
+    {file = "prompt_toolkit-3.0.21-py3-none-any.whl", hash = "sha256:62b3d3ea5a3ccee94dc1aac018279cf64866a76837156ebe159b981c42dd20a8"},
+    {file = "prompt_toolkit-3.0.21.tar.gz", hash = "sha256:27f13ff4e4850fe8f860b77414c7880f67c6158076a7b099062cc8570f1562e5"},
 ]
 ptyprocess = [
     {file = "ptyprocess-0.7.0-py2.py3-none-any.whl", hash = "sha256:4b41f3967fce3af57cc7e94b888626c18bf37a083e3651ca8feeb66d492fef35"},
@@ -2001,8 +2004,8 @@ pygments = [
     {file = "Pygments-2.10.0.tar.gz", hash = "sha256:f398865f7eb6874156579fdf36bc840a03cab64d1cde9e93d68f46a425ec52c6"},
 ]
 pyparsing = [
-    {file = "pyparsing-2.4.7-py2.py3-none-any.whl", hash = "sha256:ef9d7589ef3c200abe66653d3f1ab1033c3c419ae9b9bdb1240a85b024efc88b"},
-    {file = "pyparsing-2.4.7.tar.gz", hash = "sha256:c203ec8783bf771a155b207279b9bccb8dea02d8f0c9e5f8ead507bc3246ecc1"},
+    {file = "pyparsing-3.0.1-py3-none-any.whl", hash = "sha256:fd93fc45c47893c300bd98f5dd1b41c0e783eaeb727e7cea210dcc09d64ce7c3"},
+    {file = "pyparsing-3.0.1.tar.gz", hash = "sha256:84196357aa3566d64ad123d7a3c67b0e597a115c4934b097580e5ce220b91531"},
 ]
 pyrsistent = [
     {file = "pyrsistent-0.18.0-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:f4c8cabb46ff8e5d61f56a037974228e978f26bfefce4f61a4b1ac0ba7a2ab72"},
@@ -2149,8 +2152,8 @@ six = [
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
 ]
 smmap = [
-    {file = "smmap-4.0.0-py2.py3-none-any.whl", hash = "sha256:a9a7479e4c572e2e775c404dcd3080c8dc49f39918c2cf74913d30c4c478e3c2"},
-    {file = "smmap-4.0.0.tar.gz", hash = "sha256:7e65386bd122d45405ddf795637b7f7d2b532e7e401d46bbe3fb49b9986d5182"},
+    {file = "smmap-5.0.0-py3-none-any.whl", hash = "sha256:2aba19d6a040e78d8b09de5c57e96207b09ed71d8e55ce0959eeee6c8e190d94"},
+    {file = "smmap-5.0.0.tar.gz", hash = "sha256:c840e62059cd3be204b0c9c9f74be2c09d5648eddd4580d9314c3ecde0b30936"},
 ]
 sniffio = [
     {file = "sniffio-1.2.0-py3-none-any.whl", hash = "sha256:471b71698eac1c2112a40ce2752bb2f4a4814c22a54a3eed3676bc0f5ca9f663"},
@@ -2294,8 +2297,8 @@ tornado = [
     {file = "tornado-6.1.tar.gz", hash = "sha256:33c6e81d7bd55b468d2e793517c909b139960b6c790a60b7991b9b6b76fb9791"},
 ]
 traitlets = [
-    {file = "traitlets-5.1.0-py3-none-any.whl", hash = "sha256:03f172516916220b58c9f19d7f854734136dd9528103d04e9bf139a92c9f54c4"},
-    {file = "traitlets-5.1.0.tar.gz", hash = "sha256:bd382d7ea181fbbcce157c133db9a829ce06edffe097bcf3ab945b435452b46d"},
+    {file = "traitlets-5.1.1-py3-none-any.whl", hash = "sha256:2d313cc50a42cd6c277e7d7dc8d4d7fedd06a2c215f78766ae7b1a66277e0033"},
+    {file = "traitlets-5.1.1.tar.gz", hash = "sha256:059f456c5a7c1c82b98c2e8c799f39c9b8128f6d0d46941ee118daace9eb70c7"},
 ]
 typing-extensions = [
     {file = "typing_extensions-3.10.0.2-py2-none-any.whl", hash = "sha256:d8226d10bc02a29bcc81df19a26e56a9647f8b0a6d4a83924139f4a8b01f17b7"},
