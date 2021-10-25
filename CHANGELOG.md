@@ -11,16 +11,30 @@
 * `is_not_null()`
 * `is_null()`
 * `round()`
+* `lubridate`
+  + `dt_as_date()`
+  + `dt_as_datetime()`
+  + `dt_hour()`
+  + `dt_mday()`
+  + `dt_minute()`
+  + `dt_month()`
+  + `dt_quarter()`
+  + `dt_round()`
+  + `dt_second()`
+  + `dt_wday()`
+  + `dt_week()`
+  + `dt_yday()`
+  + `dt_year()`
 * `stringr`
-  + `.str_detect()`
-  + `.str_length()`
-  + `.str_remove_all()`
-  + `.str_remove()`
-  + `.str_replace_all()`
-  + `.str_replace()`
-  + `.str_sub()`
-  + `.str_to_lower()`
-  + `.str_to_upper()`
+  + `str_detect()`
+  + `str_length()`
+  + `str_remove_all()`
+  + `str_remove()`
+  + `str_replace_all()`
+  + `str_replace()`
+  + `str_sub()`
+  + `str_to_lower()`
+  + `str_to_upper()`
 
 ## v0.1.7 (2021/10/20)
 #### New Tibble methods
