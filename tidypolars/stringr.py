@@ -205,6 +205,11 @@ def str_trim(string, side = "both"):
     ----------
     string : Expr, Series
         Column or series to operate on
+    side : str
+        One of:
+            * "both"
+            * "left"
+            * "right"
 
     Examples
     --------
@@ -214,8 +219,10 @@ def str_trim(string, side = "both"):
     string = _col_expr(string)
     if side == "both":
         out = _str_trim_right(_str_trim_left(string))
-    if side == "left":
+    elif side == "left":
         out = _str_trim_left(string)
-    if side == "right":
+    elif side == "right":
         out = _str_trim_right(string)
+    else:
+        raise ValueError("side must be one of 'both', 'left', or 'right'")
     return out
