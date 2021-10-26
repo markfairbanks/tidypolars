@@ -7,6 +7,7 @@
 * `as_string()`
 * `between()`
 * `cast()`
+* `desc()`
 * `is_finite()`
 * `is_in()`
 * `is_infinite()`

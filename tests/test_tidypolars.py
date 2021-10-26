@@ -13,7 +13,7 @@ def test_arrange1():
 def test_arrange2():
     """Can arrange descending"""
     df = tp.Tibble({'x': ['a', 'a', 'b'], 'y': [2, 1, 3]})
-    actual = df.arrange('x', 'y', desc = [True, False])
+    actual = df.arrange(tp.desc('x'), 'y')
     expected = tp.Tibble({'x': ['b', 'a', 'a'], 'y': [3, 1, 2]})
     assert actual.frame_equal(expected), "arrange descending failed"
 
