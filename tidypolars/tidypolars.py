@@ -89,8 +89,6 @@ class Tibble(pl.DataFrame):
         ----------
         *args : str
             Columns to sort by
-        desc : bool
-            Should columns be ordered in descending order
 
         Examples
         --------
