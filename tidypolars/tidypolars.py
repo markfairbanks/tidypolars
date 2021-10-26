@@ -6,12 +6,14 @@ from .utils import (
     _args_as_list,
     _kwargs_as_exprs,
     _no_groupby,
+    _col_expr,
     _col_exprs
 )
 from .reexports import *
 
 __all__ = [
     "Tibble",
+    "desc",
     "from_pandas", "from_polars"
 ]
 
@@ -79,7 +81,7 @@ class Tibble(pl.DataFrame):
         ]
         return methods
 
-    def arrange(self, *args, desc: bool = False):
+    def arrange(self, *args):
         """
         Arrange/sort rows
 
@@ -87,8 +89,6 @@ class Tibble(pl.DataFrame):
         ----------
         *args : str
             Columns to sort by
-        desc : bool
-            Should columns be ordered in descending order
 
         Examples
         --------
@@ -97,9 +97,10 @@ class Tibble(pl.DataFrame):
         >>> df.arrange('x', 'y')
         ...
         >>> # Arrange some columns descending
-        >>> df.arrange('x', 'y', desc = [True, False])
+        >>> df.arrange(tp.desc('x'), 'y')
         """
         exprs = _args_as_list(args)
+        desc = [True if isinstance(expr, DescCol) else False for expr in exprs]
         return super().sort(exprs, reverse = desc).pipe(from_polars)
 
     def bind_cols(self, *args):
@@ -175,7 +176,7 @@ class Tibble(pl.DataFrame):
             df = self.summarize(pl.count(args[0]).alias(name), groupby = args)
 
         if sort == True:
-            df = df.arrange(name, desc = True)
+            df = df.arrange(desc(name))
 
         return df
 
@@ -790,6 +791,14 @@ class Tibble(pl.DataFrame):
                       **kwargs):
         """Write a data frame to a parquet"""
         return super().to_parquet(file, compression, use_pyarrow, **kwargs)
+
+def desc(x):
+    x = _col_expr(x)
+    x.__class__ = DescCol
+    return x
+
+class DescCol(pl.Expr):
+    pass
 
 _allowed_methods = [
     'dtypes', 'frame_equal',
