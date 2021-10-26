@@ -1,11 +1,7 @@
 import tidypolars as tp
 from tidypolars import col
 import polars as pl
-
-def _repeat(x, times):
-    if not isinstance(x, list):
-        x = [x]
-    return x * times
+from tidypolars.utils import _repeat
 
 def test_arrange1():
     """Can arrange ascending"""

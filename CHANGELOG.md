@@ -39,6 +39,7 @@
   + `str_sub()`
   + `str_to_lower()`
   + `str_to_upper()`
+  + `str_trim()`
 
 ## v0.1.7 (2021/10/20)
 #### New Tibble methods
