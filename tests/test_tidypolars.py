@@ -107,6 +107,22 @@ def test_filter():
     expected = tp.Tibble({'x': range(2), 'y': range(2)})
     assert actual.frame_equal(expected), "filter failed"
 
+# def test_full_join():
+#     """Can perform a full join"""
+#     df1 = tp.Tibble(x = ['a', 'a', 'b'], y = range(3))
+#     df2 = tp.Tibble(x = ['a'], z = range(1))
+#     actual = df1.full_join(df2)
+#     expected = tp.Tibble(y = [0, 1, 2], x = ['a', 'a', 'b'], z = [0, 0, None])
+#     assert actual.frame_equal(expected), "full_join failed"
+
+def test_inner_join():
+    """Can perform a inner join"""
+    df1 = tp.Tibble(x = ['a', 'a', 'b'], y = range(3))
+    df2 = tp.Tibble(x = ['a'], z = range(1))
+    actual = df1.inner_join(df2)
+    expected = tp.Tibble(x = ['a', 'a'], y = [0, 1], z = [0, 0])
+    assert actual.frame_equal(expected), "inner_join failed"
+
 def test_left_join():
     """Can perform a left join"""
     df1 = tp.Tibble(x = ['a', 'a', 'b'], y = range(3))
