@@ -7,13 +7,13 @@ def test_date():
     df = tp.Tibble(x = ['2021-01-01', '2021-10-01']).mutate(date = col('x').str.strptime(tp.Date))
     actual = (
         df
-        .mutate(date_check = tp.dt_as_date('x'),
-                mday = tp.dt_mday('date'),
-                quarter = tp.dt_quarter('date'),
-                wday = tp.dt_wday('date'),
-                week = tp.dt_week('date'),
-                yday = tp.dt_yday('date'),
-                year = tp.dt_year('date')
+        .mutate(date_check = tp.as_date('x'),
+                mday = tp.mday('date'),
+                quarter = tp.quarter('date'),
+                wday = tp.wday('date'),
+                week = tp.week('date'),
+                yday = tp.yday('date'),
+                year = tp.year('date')
         )
     )
     expected = (
