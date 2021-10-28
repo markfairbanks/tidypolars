@@ -2,22 +2,22 @@ import polars as pl
 from .utils import _col_expr
 
 __all__ = [
-    "dt_as_date",
-    "dt_as_datetime",
-    "dt_hour",
-    "dt_mday",
-    "dt_minute",
-    "dt_month",
-    "dt_quarter",
+    "as_date",
+    "as_datetime",
+    "as_hour",
+    "mday",
+    "minute",
+    "month",
+    "quarter",
     "dt_round",
-    "dt_second",
-    "dt_wday",
-    "dt_week",
-    "dt_yday",
-    "dt_year"
+    "second",
+    "wday",
+    "week",
+    "yday",
+    "year"
 ]
 
-def dt_as_date(x, fmt = None):
+def as_date(x, fmt = None):
     """
     Convert a string to a Date
 
@@ -31,12 +31,12 @@ def dt_as_date(x, fmt = None):
     Examples
     --------
     >>> df = tp.Tibble(x = ['2021-01-01', '2021-10-01'])
-    >>> df.mutate(date_x = tp.dt_as_date(col('x')))
+    >>> df.mutate(date_x = tp.as_date(col('x')))
     """
     x = _col_expr(x)
     return x.str.strptime(pl.Date)
 
-def dt_as_datetime(x, fmt = None):
+def as_datetime(x, fmt = None):
     """
     Convert a string to a Datetime
 
@@ -50,12 +50,12 @@ def dt_as_datetime(x, fmt = None):
     Examples
     --------
     >>> df = tp.Tibble(x = ['2021-01-01', '2021-10-01'])
-    >>> df.mutate(date_x = tp.dt_as_datetime(col('x')))
+    >>> df.mutate(date_x = tp.as_datetime(col('x')))
     """
     x = _col_expr(x)
     return x.str.strptime(pl.Datetime)
 
-def dt_hour(x):
+def as_hour(x):
     """
     Extract the hour from a datetime
 
@@ -66,12 +66,12 @@ def dt_hour(x):
 
     Examples
     --------
-    >>> df.mutate(hour = tp.dt_hour(col('x')))
+    >>> df.mutate(hour = tp.as_hour(col('x')))
     """
     x = _col_expr(x)
     return x.dt.hour()
 
-def dt_mday(x):
+def mday(x):
     """
     Extract the month day from a date from 1 to 31.
 
@@ -82,12 +82,12 @@ def dt_mday(x):
 
     Examples
     --------
-    >>> df.mutate(monthday = tp.dt_mday(col('x')))
+    >>> df.mutate(monthday = tp.mday(col('x')))
     """
     x = _col_expr(x)
     return x.dt.day()
 
-def dt_minute(x):
+def minute(x):
     """
     Extract the minute from a datetime
 
@@ -98,12 +98,12 @@ def dt_minute(x):
 
     Examples
     --------
-    >>> df.mutate(hour = tp.dt_minute(col('x')))
+    >>> df.mutate(hour = tp.minute(col('x')))
     """
     x = _col_expr(x)
     return x.dt.minute()
 
-def dt_month(x):
+def month(x):
     """
     Extract the month from a date
 
@@ -114,12 +114,12 @@ def dt_month(x):
 
     Examples
     --------
-    >>> df.mutate(year = tp.dt_month(col('x')))
+    >>> df.mutate(year = tp.month(col('x')))
     """
     x = _col_expr(x)
     return x.dt.month()
 
-def dt_quarter(x):
+def quarter(x):
     """
     Extract the quarter from a date
 
@@ -130,7 +130,7 @@ def dt_quarter(x):
 
     Examples
     --------
-    >>> df.mutate(quarter = tp.dt_quarter(col('x')))
+    >>> df.mutate(quarter = tp.quarter(col('x')))
     """
     x = _col_expr(x)
     return (x.dt.month() // 4) + 1
@@ -157,12 +157,12 @@ def dt_round(x, rule, n):
 
     Examples
     --------
-    >>> df.mutate(monthday = tp.dt_mday(col('x')))
+    >>> df.mutate(monthday = tp.mday(col('x')))
     """
     x = _col_expr(x)
     return x.dt.round()
 
-def dt_second(x):
+def second(x):
     """
     Extract the second from a datetime
 
@@ -173,12 +173,12 @@ def dt_second(x):
 
     Examples
     --------
-    >>> df.mutate(hour = tp.dt_minute(col('x')))
+    >>> df.mutate(hour = tp.minute(col('x')))
     """
     x = _col_expr(x)
     return x.dt.second()
 
-def dt_wday(x):
+def wday(x):
     """
     Extract the weekday from a date from sunday = 1 to saturday = 7.
 
@@ -189,12 +189,12 @@ def dt_wday(x):
 
     Examples
     --------
-    >>> df.mutate(weekday = tp.dt_wday(col('x')))
+    >>> df.mutate(weekday = tp.wday(col('x')))
     """
     x = _col_expr(x)
     return x.dt.weekday() + 1
 
-def dt_week(x):
+def week(x):
     """
     Extract the week from a date
 
@@ -205,12 +205,12 @@ def dt_week(x):
 
     Examples
     --------
-    >>> df.mutate(week = tp.dt_week(col('x')))
+    >>> df.mutate(week = tp.week(col('x')))
     """
     x = _col_expr(x)
     return x.dt.week()
 
-def dt_yday(x):
+def yday(x):
     """
     Extract the year day from a date from 1 to 366.
 
@@ -221,12 +221,12 @@ def dt_yday(x):
 
     Examples
     --------
-    >>> df.mutate(yearday = tp.dt_yday(col('x')))
+    >>> df.mutate(yearday = tp.yday(col('x')))
     """
     x = _col_expr(x)
     return x.dt.ordinal_day()
 
-def dt_year(x):
+def year(x):
     """
     Extract the year from a date
 
@@ -237,7 +237,7 @@ def dt_year(x):
 
     Examples
     --------
-    >>> df.mutate(year = tp.dt_year(col('x')))
+    >>> df.mutate(year = tp.year(col('x')))
     """
     x = _col_expr(x)
     return x.dt.year()
