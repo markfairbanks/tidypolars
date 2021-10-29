@@ -74,7 +74,7 @@ class Tibble(pl.DataFrame):
             'arrange', 'bind_cols', 'bind_rows', 'colnames', 'clone', 'count',
             'distinct', 'drop', 'drop_null', 'head', 'fill', 'filter',
             'inner_join', 'left_join', 'mutate', 'names', 'nrow', 'ncol',
-            'outer_join', 'pivot_longer', 'pivot_wider',
+            'full_join', 'pivot_longer', 'pivot_wider',
             'pull', 'relocate', 'rename', 'select', 'slice',
             'slice_head', 'slice_tail', 'summarize', 'tail',
             'to_pandas', 'to_polars', 'write_csv', 'write_parquet'
@@ -419,9 +419,9 @@ class Tibble(pl.DataFrame):
         """Get number of rows"""
         return super().shape[0]
 
-    def outer_join(self, df, left_on = None, right_on = None, on = None, suffix: str = '_right'):
+    def full_join(self, df, left_on = None, right_on = None, on = None, suffix: str = '_right'):
         """
-        Perform an outer join
+        Perform an full join
 
         Parameters
         ----------
@@ -438,9 +438,9 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        df1.outer_join(df2)
-        df1.outer_join(df2, on = 'x')
-        df1.outer_join(df2, left_on = 'left_x', right_on = 'x')
+        df1.full_join(df2)
+        df1.full_join(df2, on = 'x')
+        df1.full_join(df2, left_on = 'left_x', right_on = 'x')
         """
         if (left_on == None) & (right_on == None) & (on == None):
             on = list(set(self.names) & set(df.names))

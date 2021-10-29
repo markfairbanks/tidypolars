@@ -46,8 +46,8 @@
 #### New Tibble methods
 * `.count()`
 * `.drop_null()`
+* `.inner_join()`/`.left_join()`/`.full_join()`
 * `.frame_equal()`
-* `.inner_join()`/`.left_join()`/`.outer_join()`
 * `.write_csv()`
 * `.write_parquet()`
 
