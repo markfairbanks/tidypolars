@@ -314,6 +314,10 @@ class Tibble(pl.DataFrame):
             out = super().groupby(groupby).apply(lambda x: x.filter(exprs))
         
         return out.pipe(from_polars)
+    
+    def frame_equal(self, other, null_equal = True):
+        """Check if two Tibbles are equal"""
+        return super().frame_equal(other, null_equal = null_equal)
 
     def inner_join(self, df, left_on = None, right_on = None, on = None, suffix: str = '_right'):
         """

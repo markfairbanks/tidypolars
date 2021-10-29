@@ -49,7 +49,7 @@ tests = ["coverage[toml] (>=5.0.2)", "hypothesis", "pytest"]
 
 [[package]]
 name = "astroid"
-version = "2.8.3"
+version = "2.8.4"
 description = "An abstract syntax tree for Python with inference support."
 category = "dev"
 optional = false
@@ -762,7 +762,7 @@ webpdf = ["pyppeteer (==0.2.6)"]
 
 [[package]]
 name = "nbdime"
-version = "3.1.0"
+version = "3.1.1"
 description = "Diff and merge of Jupyter Notebooks"
 category = "dev"
 optional = false
@@ -1507,8 +1507,8 @@ argon2-cffi = [
     {file = "argon2_cffi-21.1.0-pp37-pypy37_pp73-win_amd64.whl", hash = "sha256:566ffb581bbd9db5562327aee71b2eda24a1c15b23a356740abe3c011bbe0dcb"},
 ]
 astroid = [
-    {file = "astroid-2.8.3-py3-none-any.whl", hash = "sha256:f9d66e3a4a0e5b52819b2ff41ac2b179df9d180697db71c92beb33a60c661794"},
-    {file = "astroid-2.8.3.tar.gz", hash = "sha256:0e361da0744d5011d4f5d57e64473ba9b7ab4da1e2d45d6631ebd67dd28c3cce"},
+    {file = "astroid-2.8.4-py3-none-any.whl", hash = "sha256:0755c998e7117078dcb7d0bda621391dd2a85da48052d948c7411ab187325346"},
+    {file = "astroid-2.8.4.tar.gz", hash = "sha256:1e83a69fd51b013ebf5912d26b9338d6643a55fec2f20c787792680610eed4a2"},
 ]
 atomicwrites = [
     {file = "atomicwrites-1.4.0-py2.py3-none-any.whl", hash = "sha256:6d1784dea7c0c8d4a5172b6c620f40b6e4cbfdf96d783691f2e1302a7b88e197"},
@@ -1898,8 +1898,8 @@ nbconvert = [
     {file = "nbconvert-6.2.0.tar.gz", hash = "sha256:16ceecd0afaa8fd26c245fa32e2c52066c02f13aa73387fffafd84750baea863"},
 ]
 nbdime = [
-    {file = "nbdime-3.1.0-py2.py3-none-any.whl", hash = "sha256:f341097d50c5459901a2be2eed221e1f936144741d96544372981051a3bec157"},
-    {file = "nbdime-3.1.0.tar.gz", hash = "sha256:12dc4390b355b26d07ac8d11d50efbcb54bae0ad5842b817131babd2f4567963"},
+    {file = "nbdime-3.1.1-py2.py3-none-any.whl", hash = "sha256:ea4ddf919e3035800ef8bd5552b814522207cb154ca7512565e4539a54c74dbf"},
+    {file = "nbdime-3.1.1.tar.gz", hash = "sha256:67767320e971374f701a175aa59abd3a554723039d39fae908e72d16330d648b"},
 ]
 nbformat = [
     {file = "nbformat-5.1.3-py3-none-any.whl", hash = "sha256:eb8447edd7127d043361bc17f2f5a807626bc8e878c7709a1c647abda28a9171"},

@@ -17,19 +17,19 @@
 * `is_null()`
 * `round()`
 * `lubridate`
-  + `dt_as_date()`
-  + `dt_as_datetime()`
-  + `dt_hour()`
-  + `dt_mday()`
-  + `dt_minute()`
-  + `dt_month()`
-  + `dt_quarter()`
+  + `as_date()`
+  + `as_datetime()`
   + `dt_round()`
-  + `dt_second()`
-  + `dt_wday()`
-  + `dt_week()`
-  + `dt_yday()`
-  + `dt_year()`
+  + `hour()`
+  + `mday()`
+  + `minute()`
+  + `month()`
+  + `quarter()`
+  + `second()`
+  + `wday()`
+  + `week()`
+  + `yday()`
+  + `year()`
 * `stringr`
   + `str_detect()`
   + `str_length()`
@@ -47,6 +47,7 @@
 * `.count()`
 * `.drop_null()`
 * `.inner_join()`/`.left_join()`/`.full_join()`
+* `.frame_equal()`
 * `.write_csv()`
 * `.write_parquet()`
 
