@@ -37,18 +37,18 @@ test_df = tp.Tibble(x = range(3), y = range(4, 7), z = ['a', 'a', 'b'])
 ```
 
 
-### Using `groupby`
+### Using `by`
 
-Methods operate by group by calling the `groupby` arg.
+Methods operate by group by calling the `by` arg.
 
-* A single column can be passed with `groupby = 'z'`
-* Multiple columns can be passed with `groupby = ['y', 'z']`
+* A single column can be passed with `by = 'z'`
+* Multiple columns can be passed with `by = ['y', 'z']`
 
 ```python
 (
     test_df
     .summarize(avg_x = tp.mean(col('x')),
-               groupby = 'z')
+               by = 'z')
 )
 ┌─────┬───────┐
 │ z   ┆ avg_x │

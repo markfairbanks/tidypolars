@@ -16,7 +16,7 @@ def _args_as_list(x):
 def _kwargs_as_exprs(kwargs):
     return [expr.alias(key) for key, expr in kwargs.items()]
 
-def _no_groupby(gb):
+def _no_by(gb):
     if isinstance(gb, pl.Expr) | isinstance(gb, str) | isinstance(gb, list):
         return False
     else:
