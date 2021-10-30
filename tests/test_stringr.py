@@ -21,12 +21,12 @@ def test_str_detect_multiple():
     assert actual.frame_equal(expected), "str_detect multiple failed"
 
 def test_str_extract():
-    """Can str_length count strings"""
+    """Can str_extract extract strings"""
     df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
     actual = df.mutate(x = tp.str_extract('name', 'pp'))
     expected = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'], 
                          x = ['pp', None, None, None])
-    assert actual.frame_equal(expected), "str_length failed"
+    assert actual.frame_equal(expected), "str_extract failed"
 
 def test_str_length():
     """Can str_length count strings"""
