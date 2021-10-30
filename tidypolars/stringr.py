@@ -5,6 +5,7 @@ from .utils import _col_expr, _str_trim_left, _str_trim_right
 
 __all__ = [
     "str_detect", 
+    "str_extract",
     "str_length",
     "str_remove_all",
     "str_remove", 
@@ -46,6 +47,25 @@ def str_detect(string : str, pattern : str, negate: bool = False):
         exprs = exprs.is_not()
     
     return exprs
+
+def str_extract(string : str, pattern : str):
+    """
+    Extract the target capture group from provided patterns
+
+    Parameters
+    ----------
+    string : str
+        Input series to operate on
+    pattern : str
+        Pattern to look for
+
+    Examples
+    --------
+    >>> df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
+    >>> df.mutate(x = str_extract(col('name'), 'e'))
+    """
+    string = _col_expr(string)
+    return string.str.extract(pattern, 0)
 
 def str_length(string : str):
     """

@@ -32,6 +32,7 @@
   + `year()`
 * `stringr`
   + `str_detect()`
+  + `str_extract()`
   + `str_length()`
   + `str_remove_all()`
   + `str_remove()`
