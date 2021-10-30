@@ -50,7 +50,7 @@ def str_detect(string : str, pattern : str, negate: bool = False):
 
 def str_extract(string : str, pattern : str):
     """
-    Extract portion of string based on start and end inputs
+    Extract the target capture group from provided patterns
 
     Parameters
     ----------
