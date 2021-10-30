@@ -5,7 +5,7 @@ import typing as typ
 from .utils import (
     _args_as_list,
     _kwargs_as_exprs,
-    _no_groupby,
+    _no_by,
     _col_expr,
     _col_exprs
 )
@@ -173,7 +173,7 @@ class Tibble(pl.DataFrame):
         if len(args) == 0:
             df = Tibble({name: [self.nrow]})
         else:
-            df = self.summarize(pl.count(args[0]).alias(name), groupby = args)
+            df = self.summarize(pl.count(args[0]).alias(name), by = args)
 
         if sort == True:
             df = df.arrange(desc(name))
@@ -243,11 +243,11 @@ class Tibble(pl.DataFrame):
             out = super().drop_nulls(args)
         return out.pipe(from_polars)
     
-    def head(self, n = 5, *args, groupby = None):
+    def head(self, n = 5, *args, by = None):
         """Alias for `.slice_head()`"""
-        return self.slice_tail(n, groupby = groupby)
+        return self.slice_tail(n, by = by)
 
-    def fill(self, *args, direction: str = 'down', groupby = None):
+    def fill(self, *args, direction: str = 'down', by = None):
         """
         Fill in missing values with previous or next value
 
@@ -257,7 +257,7 @@ class Tibble(pl.DataFrame):
             Columns to fill
         direction : str
             Direction to fill. One of ['down', 'up', 'downup', 'updown']
-        groupby : Union[str, Expr, typ.List[str], typ.List[Expr]]
+        by : Union[str, Expr, typ.List[str], typ.List[Expr]]
             Columns to group by
 
         Examples
@@ -266,7 +266,7 @@ class Tibble(pl.DataFrame):
         ...                 'b': [None, 2, None, None, 5],
         ...                 'groups': ['a', 'a', 'a', 'b', 'b']})
         >>> df.fill('a', 'b')
-        >>> df.fill('a', 'b', groupby = 'groups')
+        >>> df.fill('a', 'b', by = 'groups')
         >>> df.fill('a', 'b', direction = 'downup')
         """
         args = _args_as_list(args)
@@ -283,10 +283,10 @@ class Tibble(pl.DataFrame):
         else:
             raise ValueError("direction must be one of down, up, downup, or updown")
 
-        return self.mutate(*exprs, groupby = groupby)
+        return self.mutate(*exprs, by = by)
 
     def filter(self, *args,
-               groupby: Union[str, Expr, typ.List[str], typ.List[Expr]] = None):
+               by: Union[str, Expr, typ.List[str], typ.List[Expr]] = None):
         """
         Filter rows on one or more conditions
 
@@ -294,7 +294,7 @@ class Tibble(pl.DataFrame):
         ----------
         *args : Expr
             Conditions to filter by
-        groupby : Union[str, Expr, typ.List[str], typ.List[Expr]]
+        by : Union[str, Expr, typ.List[str], typ.List[Expr]]
             Columns to group by
 
         Examples
@@ -303,15 +303,15 @@ class Tibble(pl.DataFrame):
         >>> df.filter(col('a') < 2, col('c') == 'a')
         >>> df.filter((col('a') < 2) & (col('c') == 'a'))
         >>> df.filter(col('a') <= col('a').mean(),
-        ...           groupby = 'b')
+        ...           by = 'b')
         """
         args = _args_as_list(args)
         exprs = ft.reduce(lambda a, b: a & b, args)
 
-        if _no_groupby(groupby):
+        if _no_by(by):
             out = super().filter(exprs)
         else:
-            out = super().groupby(groupby).apply(lambda x: x.filter(exprs))
+            out = super().groupby(by).apply(lambda x: x.filter(exprs))
         
         return out.pipe(from_polars)
     
@@ -374,7 +374,7 @@ class Tibble(pl.DataFrame):
         return super().join(df, left_on, right_on, on, 'left', suffix).pipe(from_polars)
 
     def mutate(self, *args,
-               groupby: Union[str, Expr, typ.List[str], typ.List[Expr]] = None,
+               by: Union[str, Expr, typ.List[str], typ.List[Expr]] = None,
                **kwargs):
         """
         Add or modify columns
@@ -383,7 +383,7 @@ class Tibble(pl.DataFrame):
         ----------
         *args : Expr
             Column expressions to add or modify
-        groupby : Union[str, Expr, typ.List[str], typ.List[Expr]]
+        by : Union[str, Expr, typ.List[str], typ.List[Expr]]
             Columns to group by
         **kwargs : Expr
             Column expressions to add or modify
@@ -397,10 +397,10 @@ class Tibble(pl.DataFrame):
         ...           a_plus_b = col('a') + col('b'))
         """
         exprs = _args_as_list(args) + _kwargs_as_exprs(kwargs)
-        if _no_groupby(groupby):
+        if _no_by(by):
             out = super(Tibble, self).with_columns(exprs)
         else:
-            out = super(Tibble, self).groupby(groupby).apply(lambda x: x.with_columns(exprs))
+            out = super(Tibble, self).groupby(by).apply(lambda x: x.with_columns(exprs))
         
         return out.pipe(from_polars)
 
@@ -639,7 +639,7 @@ class Tibble(pl.DataFrame):
         args = _args_as_list(args)
         return super().select(args).pipe(from_polars)
 
-    def slice(self, *args, groupby = None):
+    def slice(self, *args, by = None):
         """
         Grab rows from a data frame
 
@@ -647,23 +647,23 @@ class Tibble(pl.DataFrame):
         ----------
         *args : Union[int, typ.List[int]]
             Rows to grab
-        groupby : Union[str, Expr, typ.List[str], typ.List[Expr]]
+        by : Union[str, Expr, typ.List[str], typ.List[Expr]]
             Columns to group by
 
         Examples
         --------
         >>> df = tp.Tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
         >>> df.slice(0, 1)
-        >>> df.slice(0, groupby = 'c')
+        >>> df.slice(0, by = 'c')
         """
         rows = _args_as_list(args)
-        if _no_groupby(groupby):
+        if _no_by(by):
             df = super(Tibble, self).select(pl.all().take(rows))
         else:
-            df = super(Tibble, self).groupby(groupby).apply(lambda x: x.select(pl.all().take(rows)))
+            df = super(Tibble, self).groupby(by).apply(lambda x: x.select(pl.all().take(rows)))
         return df.pipe(from_polars)
 
-    def slice_head(self, n: int = 5, *args, groupby = None):
+    def slice_head(self, n: int = 5, *args, by = None):
         """
         Grab top rows from a data frame
 
@@ -673,24 +673,24 @@ class Tibble(pl.DataFrame):
             Number of rows to grab
         *args :
             Currently unused
-        groupby : Union[str, Expr, typ.List[str], typ.List[Expr]]
+        by : Union[str, Expr, typ.List[str], typ.List[Expr]]
             Columns to group by
 
         Examples
         --------
         >>> df = tp.Tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
         >>> df.slice_head(2)
-        >>> df.slice_head(1, groupby = 'c')
+        >>> df.slice_head(1, by = 'c')
         """
         args = _args_as_list(args)
         col_order = self.names
-        if _no_groupby(groupby):
+        if _no_by(by):
             df = super(Tibble, self).head(n)
         else:
-            df = super(Tibble, self).groupby(groupby).head(n)
+            df = super(Tibble, self).groupby(by).head(n)
         return df.pipe(from_polars).select(col_order)
 
-    def slice_tail(self, n: int = 5, *args, groupby = None):
+    def slice_tail(self, n: int = 5, *args, by = None):
         """
         Grab bottom rows from a data frame
 
@@ -700,31 +700,31 @@ class Tibble(pl.DataFrame):
             Number of rows to grab
         *args :
             Currently unused
-        groupby : Union[str, Expr, typ.List[str], typ.List[Expr]]
+        by : Union[str, Expr, typ.List[str], typ.List[Expr]]
             Columns to group by
 
         Examples
         --------
         >>> df = tp.Tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
         >>> df.slice_tail(2)
-        >>> df.slice_tail(1, groupby = 'c')
+        >>> df.slice_tail(1, by = 'c')
         """
         args = _args_as_list(args)
         col_order = self.names
-        if _no_groupby(groupby):
+        if _no_by(by):
             df = super(Tibble, self).tail(n)
         else:
-            df = super(Tibble, self).groupby(groupby).tail(n)
+            df = super(Tibble, self).groupby(by).tail(n)
         return df.pipe(from_polars).select(col_order)
     
     def summarise(self, *args,
-                  groupby: Union[str, Expr, typ.List[str], typ.List[Expr]] = None,
+                  by: Union[str, Expr, typ.List[str], typ.List[Expr]] = None,
                   **kwargs):
         """Alias for .summarize()"""
-        return self.summarize(*args, groupby = groupby, **kwargs)
+        return self.summarize(*args, by = by, **kwargs)
     
     def summarize(self, *args,
-                  groupby: Union[str, Expr, typ.List[str], typ.List[Expr]] = None,
+                  by: Union[str, Expr, typ.List[str], typ.List[Expr]] = None,
                   **kwargs):
         """
         Aggregate data with summary statistics
@@ -733,7 +733,7 @@ class Tibble(pl.DataFrame):
         ----------
         *args : Expr
             Column expressions to add or modify
-        groupby : Union[str, Expr, typ.List[str], typ.List[Expr]]
+        by : Union[str, Expr, typ.List[str], typ.List[Expr]]
             Columns to group by
         **kwargs : Expr
             Column expressions to add or modify
@@ -743,22 +743,22 @@ class Tibble(pl.DataFrame):
         >>> df = tp.Tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
         >>> df.summarize(avg_a = col('a').mean())
         >>> df.summarize(avg_a = col('a').mean(),
-        ...              groupby = 'c')
+        ...              by = 'c')
         >>> df.summarize(avg_a = col('a').mean(),
         ...              max_b = col('b').max())
         """
         exprs = _args_as_list(args) + _kwargs_as_exprs(kwargs)
 
-        if _no_groupby(groupby):
+        if _no_by(by):
             out = super(Tibble, self).select(exprs)
         else:
-            out = super(Tibble, self).groupby(groupby).agg(exprs)
+            out = super(Tibble, self).groupby(by).agg(exprs)
         
         return out.pipe(from_polars)
 
-    def tail(self, n = 5, *args, groupby = None):
+    def tail(self, n = 5, *args, by = None):
         """Alias for `.slice_tail()`"""
-        return self.slice_tail(n, groupby = groupby)
+        return self.slice_tail(n, by = by)
 
     def to_pandas(self):
         """

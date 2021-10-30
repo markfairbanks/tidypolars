@@ -105,7 +105,7 @@
 * `.rename()`
 * `.slice()`
 
-#### Methods with new `groupby` arg:
+#### Methods with new `by` arg:
 * `.filter()`
 * `.mutate()`
 * `.slice()`

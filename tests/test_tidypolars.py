@@ -302,7 +302,7 @@ def test_summarize():
 def test_summarize_grouped():
     """Can use summarize by group"""
     df = tp.Tibble({'x': range(3), 'y': range(3), 'z': ['a', 'a', 'b']})
-    actual = df.summarize(avg_x = col('x').mean(), groupby = 'z').arrange('z')
+    actual = df.summarize(avg_x = col('x').mean(), by = 'z').arrange('z')
     expected = tp.Tibble(z = ['a', 'b'], avg_x = [.5, 2])
     assert actual.frame_equal(expected), "grouped summarize failed"
 
