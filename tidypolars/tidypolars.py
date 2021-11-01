@@ -302,8 +302,7 @@ class Tibble(pl.DataFrame):
         >>> df = tp.Tibble({'a': range(3), 'b': ['a', 'a', 'b']})
         >>> df.filter(col('a') < 2, col('c') == 'a')
         >>> df.filter((col('a') < 2) & (col('c') == 'a'))
-        >>> df.filter(col('a') <= col('a').mean(),
-        ...           by = 'b')
+        >>> df.filter(col('a') <= tp.mean(col('a')), by = 'b')
         """
         args = _args_as_list(args)
         exprs = ft.reduce(lambda a, b: a & b, args)
@@ -741,11 +740,11 @@ class Tibble(pl.DataFrame):
         Examples
         --------
         >>> df = tp.Tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
-        >>> df.summarize(avg_a = col('a').mean())
-        >>> df.summarize(avg_a = col('a').mean(),
+        >>> df.summarize(avg_a = tp.mean(col('a')))
+        >>> df.summarize(avg_a = tp.mean(col('a')),
         ...              by = 'c')
-        >>> df.summarize(avg_a = col('a').mean(),
-        ...              max_b = col('b').max())
+        >>> df.summarize(avg_a = tp.mean(col('a')),
+        ...              max_b = tp.max(col('b')))
         """
         exprs = _args_as_list(args) + _kwargs_as_exprs(kwargs)
 
