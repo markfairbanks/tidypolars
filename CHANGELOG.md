@@ -70,10 +70,10 @@
 * `sd()`
 * `sum()`
 * `tidyselect`
-  + `col_contains()`
-  + `col_ends_with()`
-  + `col_everything()`
-  + `col_starts_with()`
+  + `contains()`
+  + `ends_with()`
+  + `everything()`
+  + `starts_with()`
 
 #### Improved functionality
 * `.bind_cols()`/`.bind_rows()`: Can append multiple data frames in one call
