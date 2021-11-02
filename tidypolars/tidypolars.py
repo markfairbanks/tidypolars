@@ -71,10 +71,10 @@ class Tibble(pl.DataFrame):
 
     def __dir__(self):
         methods = [
-            'arrange', 'bind_cols', 'bind_rows', 'colnames', 'clone', 'count',
-            'distinct', 'drop', 'drop_null', 'head', 'fill', 'filter',
-            'inner_join', 'left_join', 'mutate', 'names', 'nrow', 'ncol',
-            'full_join', 'pivot_longer', 'pivot_wider',
+            'arrange', 'bind_cols', 'bind_rows', 'colnames', 'clean_names', 
+            'clone', 'count', 'distinct', 'drop', 'drop_null', 'head', 'fill', 
+            'filter', 'inner_join', 'left_join', 'mutate', 'names', 'nrow', 
+            'ncol', 'full_join', 'pivot_longer', 'pivot_wider',
             'pull', 'relocate', 'rename', 'select', 'slice',
             'slice_head', 'slice_tail', 'summarize', 'tail',
             'to_pandas', 'to_polars', 'write_csv', 'write_parquet'
@@ -146,6 +146,23 @@ class Tibble(pl.DataFrame):
     def clone(self):
         """Very cheap deep clone"""
         return super().clone().pipe(from_polars)
+
+    def clean_names(self):
+        old_names = self.names
+        new_names = list(
+            pl.Series(old_names)
+            .str.replace("'", "")
+            .str.replace("\"", "")
+            .str.replace("%", "percent")
+            .str.replace("^[ ]+", "")
+            .str.replace("[.]+", "_")
+            .str.replace("[_]+", "_")
+            .str.to_lowercase()
+            .str.replace("_$", "")
+        )
+        rename_dict = {key:value for key, value in zip(old_names, new_names)}
+        print(rename_dict)
+        return self.rename(rename_dict)
 
     def count(self, *args, sort: bool = False, name: str = 'n'):
         """
