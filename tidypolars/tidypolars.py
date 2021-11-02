@@ -10,6 +10,7 @@ from .utils import (
     _col_exprs
 )
 from .reexports import *
+import re
 
 __all__ = [
     "Tibble",
@@ -149,19 +150,17 @@ class Tibble(pl.DataFrame):
 
     def clean_names(self):
         old_names = self.names
+
+        new_names = [re.sub(r"""["',;/*@?!&$\\]+ \ * """, "", items, flags=re.VERBOSE) for items in old_names]
+        new_names = [re.sub(r"""[ ._]+ \ * """, "_", items, flags=re.VERBOSE) for items in new_names]
+
         new_names = list(
-            pl.Series(old_names)
-            .str.replace("'", "")
-            .str.replace("\"", "")
-            .str.replace("%", "percent")
-            .str.replace("^[ ]+", "")
-            .str.replace("[.]+", "_")
-            .str.replace("[_]+", "_")
+            pl.Series(new_names)
+            .str.replace("%", "_percent_")
+            .str.replace("#", "_number_")
             .str.to_lowercase()
-            .str.replace("_$", "")
         )
         rename_dict = {key:value for key, value in zip(old_names, new_names)}
-        print(rename_dict)
         return self.rename(rename_dict)
 
     def count(self, *args, sort: bool = False, name: str = 'n'):
