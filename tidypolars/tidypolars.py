@@ -153,7 +153,6 @@ class Tibble(pl.DataFrame):
 
         new_names = [re.sub(r"""["',;/*@?!&$\\]+ \ * """, "", items, flags=re.VERBOSE) for items in old_names]
         new_names = [re.sub(r"""[ ._]+ \ * """, "_", items, flags=re.VERBOSE) for items in new_names]
-
         new_names = list(
             pl.Series(new_names)
             .str.replace("%", "_percent_")
