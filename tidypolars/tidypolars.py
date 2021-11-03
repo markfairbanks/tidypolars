@@ -72,7 +72,7 @@ class Tibble(pl.DataFrame):
 
     def __dir__(self):
         methods = [
-            'arrange', 'bind_cols', 'bind_rows', 'colnames', 'clean_names', 
+            'arrange', 'bind_cols', 'bind_rows', 'colnames', 'clean_names_one', 'clean_names_two', 
             'clone', 'count', 'distinct', 'drop', 'drop_null', 'head', 'fill', 
             'filter', 'inner_join', 'left_join', 'mutate', 'names', 'nrow', 
             'ncol', 'full_join', 'pivot_longer', 'pivot_wider',
@@ -148,21 +148,36 @@ class Tibble(pl.DataFrame):
         """Very cheap deep clone"""
         return super().clone().pipe(from_polars)
 
-    def clean_names(self):
-        old_names,  new_names = self.names, self.names
-              
-        # new_names = list(
-        #     pl.Series(new_names)
-        #     .str.replace("%", "Percent")
-        #     .str.replace("#", "Number")
-        # )
+    def clean_names_one(self):
+        regex_tup = (
+            (r'(?<!^)(?<!\. )[A-Z][a-z]+' , ' \g<0>'), #Camel Case
+            (r"""["',;/?!&$\\]+ \ * """ , ''), #Remove List
+            (r'[._ @*]+ \ * ' , "_"), #Replace with Underscore
+            (r'%' , "Percent"), #Replace Percent
+            (r'[#]' , "Number"), #Replace Number
+        )
+        
+        old_names, new_names = self.names, self.names
+        
+        for reg in regex_tup:
+            new_names = [re.sub(reg[0], reg[1], name, flags=re.VERBOSE).lower() for name in new_names]
+        
+        rename_dict = {key:value for key, value in zip(old_names, new_names)}
+        return self.rename(rename_dict)
 
-        new_names = (re.sub(r'(?<!^)(?<!\. )[A-Z][a-z]+', ' \g<0>', items,  flags=re.VERBOSE) for items in new_names)
-        new_names = (re.sub(r"""["',;/?!&$\\]+ \ * """, "", items, flags=re.VERBOSE) for items in new_names)
-        new_names = (re.sub(r'[._ @*]+ \ * ', "_", items, flags=re.VERBOSE) for items in new_names)
-        new_names = (re.sub(r'%', "Percent", items, flags=re.VERBOSE) for items in new_names)
-        new_names = (re.sub(r'[#]', "Number", items, flags=re.VERBOSE) for items in new_names)
-        new_names = (items.lower() for items in new_names)
+    def clean_names_two(self):
+        regex_dict = {
+            'Middle Caps' : (r'(?<!^)(?<!\. )[A-Z][a-z]+' , ' \g<0>'), 
+            'Removes' : (r"""["',;/?!&$\\]+ \ * """ , ''), 
+            'Underscores' : (r'[._ @*]+ \ * ' , "_"), 
+            "Percent" : (r'%' , "Percent"), 
+            "Number" : (r'[#]' , "Number")
+        }
+        
+        old_names, new_names = self.names, self.names
+              
+        for reg in regex_dict.values():    
+            new_names = [re.sub(reg[0], reg[1], name, flags=re.VERBOSE).lower() for name in new_names]
         
         rename_dict = {key:value for key, value in zip(old_names, new_names)}
         return self.rename(rename_dict)
