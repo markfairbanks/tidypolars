@@ -149,18 +149,21 @@ class Tibble(pl.DataFrame):
         return super().clone().pipe(from_polars)
 
     def clean_names(self):
-        #TODO: Figure out how to add _ when uppercase - find uppercase and add _ in front of it
         old_names,  new_names = self.names, self.names
+              
+        # new_names = list(
+        #     pl.Series(new_names)
+        #     .str.replace("%", "Percent")
+        #     .str.replace("#", "Number")
+        # )
 
-        new_names = [re.sub(r"""["',;/*?!&$\\]+ \ * """, "", items, flags=re.VERBOSE) for items in new_names]
-        new_names = [re.sub(r"""[._ @]+ \ * """, "_", items, flags=re.VERBOSE) for items in new_names]
-        # new_names = [re.sub(r'[^.]\s([A-Z]\w+)', "_",  items, flags=re.VERBOSE) for items in new_names]
-        new_names = list(
-            pl.Series(new_names)
-            .str.replace("%", "_percent_")
-            .str.replace("#", "_number_")
-            # .str.to_lowercase()
-        )
+        new_names = (re.sub(r'(?<!^)(?<!\. )[A-Z][a-z]+', ' \g<0>', items,  flags=re.VERBOSE) for items in new_names)
+        new_names = (re.sub(r"""["',;/?!&$\\]+ \ * """, "", items, flags=re.VERBOSE) for items in new_names)
+        new_names = (re.sub(r'[._ @*]+ \ * ', "_", items, flags=re.VERBOSE) for items in new_names)
+        new_names = (re.sub(r'%', "Percent", items, flags=re.VERBOSE) for items in new_names)
+        new_names = (re.sub(r'[#]', "Number", items, flags=re.VERBOSE) for items in new_names)
+        new_names = (items.lower() for items in new_names)
+        
         rename_dict = {key:value for key, value in zip(old_names, new_names)}
         return self.rename(rename_dict)
 
