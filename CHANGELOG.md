@@ -43,6 +43,9 @@
   + `str_to_upper()`
   + `str_trim()`
 
+#### Improved functionality
+* `.drop()`: tidyselect helpers work
+
 ## v0.1.7 (2021/10/20)
 #### New Tibble methods
 * `.count()`
@@ -70,10 +73,10 @@
 * `sd()`
 * `sum()`
 * `tidyselect`
-  + `col_contains()`
-  + `col_ends_with()`
-  + `col_everything()`
-  + `col_starts_with()`
+  + `contains()`
+  + `ends_with()`
+  + `everything()`
+  + `starts_with()`
 
 #### Improved functionality
 * `.bind_cols()`/`.bind_rows()`: Can append multiple data frames in one call

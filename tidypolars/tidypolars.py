@@ -219,7 +219,7 @@ class Tibble(pl.DataFrame):
         >>> df.drop('x', 'y')
         """
         args = _args_as_list(args)
-        return super().drop(args).pipe(from_polars)
+        return self.select(pl.exclude(args))
 
     def drop_null(self, *args):
         """
