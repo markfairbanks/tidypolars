@@ -1,4 +1,3 @@
-from tidypolars import col
 import polars as pl
 import functools as ft
 from .utils import _col_expr, _str_trim_left, _str_trim_right
