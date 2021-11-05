@@ -1,6 +1,6 @@
 import polars as pl
 
-__all__ = ["contains", "ends_with", "everything", "starts_with" ]
+__all__ = ["contains", "ends_with", "everything", "starts_with"]
 
 def contains(match: str, ignore_case = False):
     """

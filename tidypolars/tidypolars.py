@@ -852,7 +852,7 @@ _polars_methods = [
     'sort',
     'std',
     'sum',
-    'to_arrow',
+    #'to_arrow',
     'to_dict',
     'to_dicts',
     'to_dummies',

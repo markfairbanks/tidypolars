@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.1.8 (in development)
+## v0.2.0 (2021/11/05)
 #### New Functions
 * `as_float()`
 * `as_integer()`
