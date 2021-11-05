@@ -43,6 +43,9 @@
   + `str_to_upper()`
   + `str_trim()`
 
+#### Improved functionality
+* `.drop()`: tidyselect helpers work
+
 ## v0.1.7 (2021/10/20)
 #### New Tibble methods
 * `.count()`

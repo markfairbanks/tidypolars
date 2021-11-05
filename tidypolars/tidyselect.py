@@ -2,7 +2,7 @@ import polars as pl
 
 __all__ = ["contains", "ends_with", "everything", "starts_with" ]
 
-def contains(match: str, ignore_case = True):
+def contains(match: str, ignore_case = False):
     """
     Contains a literal string
 
@@ -25,7 +25,7 @@ def contains(match: str, ignore_case = True):
         out = f"^*{match}.*$"
     return out
 
-def ends_with(match: str, ignore_case = True):
+def ends_with(match: str, ignore_case = False):
     """
     Ends with a suffix
 
@@ -43,9 +43,9 @@ def ends_with(match: str, ignore_case = True):
     >>> df.select(ends_with('code'))
     """
     if ignore_case == True:
-        out = f"^*(?i){match}$"
+        out = f"^.*(?i){match}$"
     else:
-        out = f"^*{match}$"
+        out = f"^.*{match}$"
     return out
 
 def everything():
@@ -59,7 +59,7 @@ def everything():
     """
     return "*"
 
-def starts_with(match: str, ignore_case = True):
+def starts_with(match: str, ignore_case = False):
     """
     Starts with a prefix
 
@@ -67,7 +67,6 @@ def starts_with(match: str, ignore_case = True):
     ----------
     match : str
         String to match columns
-
     ignore_case : bool
         If TRUE, the default, ignores case when matching names.
 
@@ -80,5 +79,4 @@ def starts_with(match: str, ignore_case = True):
         out = f"^(?i){match}.*$"
     else:
         out = f"^{match}.*$"
-
     return out

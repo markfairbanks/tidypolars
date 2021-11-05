@@ -8,7 +8,7 @@ def _repeat(x, times):
 def test_contains_ignore_case():
     """Can find columns that contain and ignores case"""
     df = tp.Tibble({'name': ['a', 'a', 'b'], 'NUMBER': [2, 1, 1]})
-    actual = df.select(tp.contains('M'))
+    actual = df.select(tp.contains('M', True))
     expected = tp.Tibble({'name': ['a', 'a', 'b'], 'NUMBER': [2, 1, 1]})
     assert actual.frame_equal(expected), "contains ignore case failed"
 
@@ -22,7 +22,7 @@ def test_contains_include_case():
 def test_ends_with_ignore_case():
     """Can find columns that ends_with and ignores case"""
     df = tp.Tibble({'writer': ['a', 'a', 'b'], 'NUMBER': [2, 1, 1]})
-    actual = df.select(tp.ends_with('er'))
+    actual = df.select(tp.ends_with('er', True))
     expected = tp.Tibble({'writer': ['a', 'a', 'b'], 'NUMBER': [2, 1, 1]})
     assert actual.frame_equal(expected), "ends_with ignore case failed"
 
@@ -43,7 +43,7 @@ def test_everything():
 def test_starts_with_ignore_case():
     """Can find columns that starts_with and ignores case"""
     df = tp.Tibble({'name': ['a', 'a', 'b'], 'Number': [2, 1, 1]})
-    actual = df.select(tp.starts_with('n'))
+    actual = df.select(tp.starts_with('n', True))
     expected = tp.Tibble({'name': ['a', 'a', 'b'], 'Number': [2, 1, 1]})
     assert actual.frame_equal(expected), "starts_with ignore case failed"
 
