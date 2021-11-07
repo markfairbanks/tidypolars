@@ -9,7 +9,7 @@ $ pip3 install tidypolars
 
 ### General syntax
 
-tidypolars methods are designed to work like tidyverse functions.
+tidypolars methods are designed to work like tidyverse functions:
 
 ```python
 import tidypolars as tp
@@ -118,13 +118,13 @@ To do this you'll first need to install pyarrow:
 pip3 install pyarrow
 ```
 
-Then you can do conversions:
+To convert to a pandas `DataFrame`:
 
 ```python
 df = df.to_pandas()
 ```
 
-To convert back to a tidypolars `Tibble`:
+To convert from a pandas `DataFrame` to a tidypolars `Tibble`:
 
 ```python
 df = tp.from_pandas(df)
