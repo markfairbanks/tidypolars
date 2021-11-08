@@ -101,17 +101,17 @@
 
 ## Converting from/to pandas DataFrame
 
-* `from_pandas()`
-* `.to_pandas()`
+* [`from_pandas()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.from_pandas)
+* [`.to_pandas()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.to_pandas)
 
 ## Reading/writing data
 
 #### Tibble Methods
 
-* `.write_csv()`
-* `.write_parquet()`
+* [`.write_csv()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.write_csv)
+* [`.write_parquet()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.write_parquet)
 
 #### Functions
 
-* `read_csv()`
-* `.read_parquet()`
+* [`read_csv()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html?highlight=read_csv#tidypolars.funs.read_csv)
+* [`.read_parquet()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html?highlight=read_csv#tidypolars.funs.read_parquet)
