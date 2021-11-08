@@ -210,7 +210,7 @@ class Tibble(pl.DataFrame):
             out = super().drop_nulls(args)
         return out.pipe(from_polars)
     
-    def head(self, n = 5, *args, by = None):
+    def head(self, n = 5, *, by = None):
         """Alias for `.slice_head()`"""
         return self.slice_tail(n, by = by)
 
@@ -504,7 +504,7 @@ class Tibble(pl.DataFrame):
 
         return out
 
-    def pull(self, var: str = None):
+    def pull(self, var = None):
         """
         Extract a column as a series
 
@@ -523,7 +523,7 @@ class Tibble(pl.DataFrame):
         
         return super().get_column(var)
     
-    def relocate(self, *args, before: str = None, after: str = None):
+    def relocate(self, *args, before = None, after = None):
         """
         Move a column or columns to a new position
 
