@@ -1,7 +1,5 @@
 import polars as pl
 import functools as ft
-from typing import Dict, Union
-import typing as typ
 from .utils import (
     _args_as_list,
     _kwargs_as_exprs,
@@ -130,7 +128,7 @@ class Tibble(pl.DataFrame):
 
         Parameters
         ----------
-        *args : Union[Tibble, typ.List[Tibble]]
+        *args : Tibble, list
             Data frames to bind by row
 
         Examples
@@ -147,14 +145,14 @@ class Tibble(pl.DataFrame):
         """Very cheap deep clone"""
         return super().clone().pipe(from_polars)
 
-    def count(self, *args, sort: bool = False, name: str = 'n'):
+    def count(self, *args, sort = False, name = 'n'):
         """
         Returns row counts of the dataset. 
         If bare column names are provided, count() returns counts by group.
 
         Parameters
         ----------
-        *args : Union[str, Expr]
+        *args : str, Expr
             Columns to find distinct/unique rows
         sort : bool
             Should columns be ordered in descending order by count
@@ -167,7 +165,6 @@ class Tibble(pl.DataFrame):
         >>> df.count()
         >>> df.count('b')
         """
-        #TODO: Add logic to arrange columns by distinct value by order in column
         args = _args_as_list(args)
         
         if len(args) == 0:
@@ -186,7 +183,7 @@ class Tibble(pl.DataFrame):
 
         Parameters
         ----------
-        *args : Union[str, Expr]
+        *args : str, Expr
             Columns to find distinct/unique rows
 
         Examples
@@ -195,7 +192,6 @@ class Tibble(pl.DataFrame):
         >>> df.distinct()
         >>> df.distinct('b')
         """
-        # TODO: Create for series
         args = _args_as_list(args)
 
         if len(args) == 0:
@@ -247,7 +243,7 @@ class Tibble(pl.DataFrame):
         """Alias for `.slice_head()`"""
         return self.slice_tail(n, by = by)
 
-    def fill(self, *args, direction: str = 'down', by = None):
+    def fill(self, *args, direction = 'down', by = None):
         """
         Fill in missing values with previous or next value
 
@@ -257,7 +253,7 @@ class Tibble(pl.DataFrame):
             Columns to fill
         direction : str
             Direction to fill. One of ['down', 'up', 'downup', 'updown']
-        by : Union[str, Expr, typ.List[str], typ.List[Expr]]
+        by : str, list
             Columns to group by
 
         Examples
@@ -286,7 +282,7 @@ class Tibble(pl.DataFrame):
         return self.mutate(*exprs, by = by)
 
     def filter(self, *args,
-               by: Union[str, Expr, typ.List[str], typ.List[Expr]] = None):
+               by = None):
         """
         Filter rows on one or more conditions
 
@@ -294,7 +290,7 @@ class Tibble(pl.DataFrame):
         ----------
         *args : Expr
             Conditions to filter by
-        by : Union[str, Expr, typ.List[str], typ.List[Expr]]
+        by : str, list
             Columns to group by
 
         Examples
@@ -318,7 +314,7 @@ class Tibble(pl.DataFrame):
         """Check if two Tibbles are equal"""
         return super().frame_equal(other, null_equal = null_equal)
 
-    def inner_join(self, df, left_on = None, right_on = None, on = None, suffix: str = '_right'):
+    def inner_join(self, df, left_on = None, right_on = None, on = None, suffix = '_right'):
         """
         Perform an inner join
 
@@ -345,7 +341,7 @@ class Tibble(pl.DataFrame):
             on = list(set(self.names) & set(df.names))
         return super().join(df, left_on, right_on, on, 'inner', suffix).pipe(from_polars)
 
-    def left_join(self, df, left_on = None, right_on = None, on = None, suffix: str = '_right'):
+    def left_join(self, df, left_on = None, right_on = None, on = None, suffix = '_right'):
         """
         Perform a left join
 
@@ -373,7 +369,7 @@ class Tibble(pl.DataFrame):
         return super().join(df, left_on, right_on, on, 'left', suffix).pipe(from_polars)
 
     def mutate(self, *args,
-               by: Union[str, Expr, typ.List[str], typ.List[Expr]] = None,
+               by = None,
                **kwargs):
         """
         Add or modify columns
@@ -382,7 +378,7 @@ class Tibble(pl.DataFrame):
         ----------
         *args : Expr
             Column expressions to add or modify
-        by : Union[str, Expr, typ.List[str], typ.List[Expr]]
+        by : str, list
             Columns to group by
         **kwargs : Expr
             Column expressions to add or modify
@@ -474,11 +470,11 @@ class Tibble(pl.DataFrame):
         return out.pipe(from_polars)
 
     def pivot_wider(self,
-                    names_from: str = 'name',
-                    values_from: str = 'value',
-                    id_cols: Union[str, typ.List[str]] = None,
-                    values_fn: str = 'first', 
-                    values_fill: Union[str, int, float] = None):
+                    names_from = 'name',
+                    values_from = 'value',
+                    id_cols = None,
+                    values_fn = 'first', 
+                    values_fill = None):
         """
         Pivot data from long to wide
 
@@ -488,7 +484,7 @@ class Tibble(pl.DataFrame):
             Column to get the new column names from.
         values_from : str
             Column to get the new column values from
-        id_cols : str
+        id_cols : str, list
             A set of columns that uniquely identifies each observation.
             Defaults to all columns in the data table except for the columns specified in
             `names_from` and `values_from`.
@@ -556,7 +552,7 @@ class Tibble(pl.DataFrame):
 
         Parameters
         ----------
-        *args : Union[str, Expr]
+        *args : str, Expr
             Columns to move
 
         Examples
@@ -594,8 +590,10 @@ class Tibble(pl.DataFrame):
 
         Parameters
         ----------
-        *args : Dict[str, str]
+        *args : dict
             Dictionary mapping of new names
+        **kwargs : str
+            key-value pair of new name from old name
 
         Examples
         --------
@@ -626,7 +624,7 @@ class Tibble(pl.DataFrame):
 
         Parameters
         ----------
-        *args : Union[str, Expr]
+        *args : str, Expr
             Columns to select
 
         Examples
@@ -644,9 +642,9 @@ class Tibble(pl.DataFrame):
 
         Parameters
         ----------
-        *args : Union[int, typ.List[int]]
+        *args : int, list
             Rows to grab
-        by : Union[str, Expr, typ.List[str], typ.List[Expr]]
+        by : str, list
             Columns to group by
 
         Examples
@@ -662,7 +660,7 @@ class Tibble(pl.DataFrame):
             df = super(Tibble, self).groupby(by).apply(lambda x: x.select(pl.all().take(rows)))
         return df.pipe(from_polars)
 
-    def slice_head(self, n: int = 5, *args, by = None):
+    def slice_head(self, n = 5, *, by = None):
         """
         Grab top rows from a data frame
 
@@ -670,9 +668,7 @@ class Tibble(pl.DataFrame):
         ----------
         n : int
             Number of rows to grab
-        *args :
-            Currently unused
-        by : Union[str, Expr, typ.List[str], typ.List[Expr]]
+        by : str, list
             Columns to group by
 
         Examples
@@ -681,7 +677,6 @@ class Tibble(pl.DataFrame):
         >>> df.slice_head(2)
         >>> df.slice_head(1, by = 'c')
         """
-        args = _args_as_list(args)
         col_order = self.names
         if _no_by(by):
             df = super(Tibble, self).head(n)
@@ -689,7 +684,7 @@ class Tibble(pl.DataFrame):
             df = super(Tibble, self).groupby(by).head(n)
         return df.pipe(from_polars).select(col_order)
 
-    def slice_tail(self, n: int = 5, *args, by = None):
+    def slice_tail(self, n = 5, *, by = None):
         """
         Grab bottom rows from a data frame
 
@@ -697,9 +692,7 @@ class Tibble(pl.DataFrame):
         ----------
         n : int
             Number of rows to grab
-        *args :
-            Currently unused
-        by : Union[str, Expr, typ.List[str], typ.List[Expr]]
+        by : str, list
             Columns to group by
 
         Examples
@@ -708,7 +701,6 @@ class Tibble(pl.DataFrame):
         >>> df.slice_tail(2)
         >>> df.slice_tail(1, by = 'c')
         """
-        args = _args_as_list(args)
         col_order = self.names
         if _no_by(by):
             df = super(Tibble, self).tail(n)
@@ -717,13 +709,13 @@ class Tibble(pl.DataFrame):
         return df.pipe(from_polars).select(col_order)
     
     def summarise(self, *args,
-                  by: Union[str, Expr, typ.List[str], typ.List[Expr]] = None,
+                  by = None,
                   **kwargs):
         """Alias for .summarize()"""
         return self.summarize(*args, by = by, **kwargs)
     
     def summarize(self, *args,
-                  by: Union[str, Expr, typ.List[str], typ.List[Expr]] = None,
+                  by = None,
                   **kwargs):
         """
         Aggregate data with summary statistics
@@ -732,7 +724,7 @@ class Tibble(pl.DataFrame):
         ----------
         *args : Expr
             Column expressions to add or modify
-        by : Union[str, Expr, typ.List[str], typ.List[Expr]]
+        by : str, list
             Columns to group by
         **kwargs : Expr
             Column expressions to add or modify
@@ -755,7 +747,7 @@ class Tibble(pl.DataFrame):
         
         return out.pipe(from_polars)
 
-    def tail(self, n = 5, *args, by = None):
+    def tail(self, n = 5, *, by = None):
         """Alias for `.slice_tail()`"""
         return self.slice_tail(n, by = by)
 
@@ -777,25 +769,29 @@ class Tibble(pl.DataFrame):
         --------
         >>> df.to_polars()
         """
+        self = copy.copy(self)
         self.__class__ = pl.DataFrame
         return self
     
     def write_csv(self,
-                  file: str = None,
-                  has_headers: bool = True,
-                  sep: str = ','):
+                  file = None,
+                  has_headers = True,
+                  sep = ','):
         """Write a data frame to a csv"""
         return super().to_csv(file, has_headers, sep)
 
     def write_parquet(self,
-                      file: str,
-                      compression: str = 'snappy',
-                      use_pyarrow: bool = False,
+                      file = str,
+                      compression = 'snappy',
+                      use_pyarrow = False,
                       **kwargs):
         """Write a data frame to a parquet"""
         return super().to_parquet(file, compression, use_pyarrow, **kwargs)
 
+import copy
 def desc(x):
+    """Mark a column to order in descending"""
+    x = copy.copy(x)
     x = _col_expr(x)
     x.__class__ = DescCol
     return x

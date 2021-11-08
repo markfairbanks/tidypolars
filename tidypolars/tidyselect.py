@@ -2,7 +2,7 @@ import polars as pl
 
 __all__ = ["contains", "ends_with", "everything", "starts_with"]
 
-def contains(match: str, ignore_case = False):
+def contains(match, ignore_case = True):
     """
     Contains a literal string
 
@@ -25,7 +25,7 @@ def contains(match: str, ignore_case = False):
         out = f"^*{match}.*$"
     return out
 
-def ends_with(match: str, ignore_case = False):
+def ends_with(match, ignore_case = True):
     """
     Ends with a suffix
 
@@ -59,7 +59,7 @@ def everything():
     """
     return "*"
 
-def starts_with(match: str, ignore_case = False):
+def starts_with(match, ignore_case = False):
     """
     Starts with a prefix
 
