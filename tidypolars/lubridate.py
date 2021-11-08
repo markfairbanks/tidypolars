@@ -4,7 +4,7 @@ from .utils import _col_expr
 __all__ = [
     "as_date",
     "as_datetime",
-    "as_hour",
+    "hour",
     "mday",
     "minute",
     "month",
@@ -55,7 +55,7 @@ def as_datetime(x, fmt = None):
     x = _col_expr(x)
     return x.str.strptime(pl.Datetime)
 
-def as_hour(x):
+def hour(x):
     """
     Extract the hour from a datetime
 

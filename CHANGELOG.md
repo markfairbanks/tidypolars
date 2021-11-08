@@ -1,7 +1,9 @@
 # Changelog
 
 ## v0.2.0 (2021/11/05)
+
 #### New Functions
+
 * `as_float()`
 * `as_integer()`
 * `as_string()`
@@ -17,37 +19,40 @@
 * `is_null()`
 * `round()`
 * `lubridate`
-  + `as_date()`
-  + `as_datetime()`
-  + `dt_round()`
-  + `hour()`
-  + `mday()`
-  + `minute()`
-  + `month()`
-  + `quarter()`
-  + `second()`
-  + `wday()`
-  + `week()`
-  + `yday()`
-  + `year()`
+  * `as_date()`
+  * `as_datetime()`
+  * `dt_round()`
+  * `hour()`
+  * `mday()`
+  * `minute()`
+  * `month()`
+  * `quarter()`
+  * `second()`
+  * `wday()`
+  * `week()`
+  * `yday()`
+  * `year()`
 * `stringr`
-  + `str_detect()`
-  + `str_extract()`
-  + `str_length()`
-  + `str_remove_all()`
-  + `str_remove()`
-  + `str_replace_all()`
-  + `str_replace()`
-  + `str_sub()`
-  + `str_to_lower()`
-  + `str_to_upper()`
-  + `str_trim()`
+  * `str_detect()`
+  * `str_extract()`
+  * `str_length()`
+  * `str_remove_all()`
+  * `str_remove()`
+  * `str_replace_all()`
+  * `str_replace()`
+  * `str_sub()`
+  * `str_to_lower()`
+  * `str_to_upper()`
+  * `str_trim()`
 
 #### Improved functionality
+
 * `.drop()`: tidyselect helpers work
 
 ## v0.1.7 (2021/10/20)
+
 #### New Tibble methods
+
 * `.count()`
 * `.drop_null()`
 * `.inner_join()`/`.left_join()`/`.full_join()`
@@ -56,6 +61,7 @@
 * `.write_parquet()`
 
 #### New functions
+
 * `abs()`
 * `case_when()`
 * `first()`
@@ -73,16 +79,19 @@
 * `sd()`
 * `sum()`
 * `tidyselect`
-  + `contains()`
-  + `ends_with()`
-  + `everything()`
-  + `starts_with()`
+  * `contains()`
+  * `ends_with()`
+  * `everything()`
+  * `starts_with()`
 
 #### Improved functionality
+
 * `.bind_cols()`/`.bind_rows()`: Can append multiple data frames in one call
 
 ## v0.1.6 (2021/10/13)
+
 #### Improved functionality
+
 * `.rename()`: Can now use both a dplyr-like and pandas-like interface
   
 #### New attributes
@@ -91,7 +100,9 @@
 * `.nrow`
 
 ## v0.1.5 (2021/10/12)
+
 #### New Tibble methods
+
 * `.fill()`
 * `.head()`
 * `.pivot_longer()`
@@ -101,7 +112,9 @@
 * `.slice_tail()`
 
 ## v0.1.4 (2021/10/06)
+
 #### New Tibble methods
+
 * `.bind_cols()`
 * `.bind_rows()`
 * `.distinct()`
@@ -109,13 +122,15 @@
 * `.rename()`
 * `.slice()`
 
-#### Methods with new `by` arg:
+#### Methods with new `by` arg
+
 * `.filter()`
 * `.mutate()`
 * `.slice()`
 * `.summarize()`
 
 #### Miscellaneous
+
 * Class name changed from tibble to Tibble
 
 ## v0.1.3 (2021/10/04)
