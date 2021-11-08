@@ -91,7 +91,13 @@
 * `str_to_upper()`
 * `str_trim()`
 
-## Converting from/to pandas `DataFrame`
+#### tidyselect
+* `contains()`
+* `ends_with()`
+* `everything()`
+* `starts_with()`
+
+## Converting from/to pandas DataFrame
 
 * `from_pandas()`
 * `.to_pandas()`
