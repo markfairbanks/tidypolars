@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.2.1 (2021/11/08)
+
+#### New methods
+* `.set_names()`
+
 ## v0.2.0 (2021/11/05)
 
 #### New Functions

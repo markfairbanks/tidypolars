@@ -44,8 +44,8 @@ class Tibble(pl.DataFrame):
             'distinct', 'drop', 'drop_null', 'head', 'fill', 'filter',
             'inner_join', 'left_join', 'mutate', 'names', 'nrow', 'ncol',
             'full_join', 'pivot_longer', 'pivot_wider',
-            'pull', 'relocate', 'rename', 'select', 'slice',
-            'slice_head', 'slice_tail', 'summarize', 'tail',
+            'pull', 'relocate', 'rename', 'select', 'set_names',
+            'slice', 'slice_head', 'slice_tail', 'summarize', 'tail',
             'to_pandas', 'to_polars', 'write_csv', 'write_parquet'
         ]
         return methods
@@ -594,6 +594,11 @@ class Tibble(pl.DataFrame):
         else:
             mapping = {value:key for key, value in kwargs.items()}
         return super().rename(mapping).pipe(from_polars)
+
+    def set_names(self, nm = None):
+        if nm == None: nm = self.names
+        rename_dict = {k:v for k, v in zip(self.names, nm)}
+        return self.rename(rename_dict)
     
     def select(self, *args):
         """
