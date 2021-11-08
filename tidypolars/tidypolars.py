@@ -29,7 +29,7 @@ class Tibble(pl.DataFrame):
         super().__init__(data)
     
     def __repr__(self) -> str:
-        df = self.to_polars()
+        df = self.to_polars(copy = False)
         return df.__str__()
 
     def __getattribute__(self, attr):
@@ -731,7 +731,7 @@ class Tibble(pl.DataFrame):
         """
         return super().to_pandas()
 
-    def to_polars(self):
+    def to_polars(self, copy = True):
         """
         Convert to a polars DataFrame
 
@@ -739,7 +739,7 @@ class Tibble(pl.DataFrame):
         --------
         >>> df.to_polars()
         """
-        self = copy.copy(self)
+        if copy: self = copy.copy(self)
         self.__class__ = pl.DataFrame
         return self
     
