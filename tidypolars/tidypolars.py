@@ -9,6 +9,7 @@ from .utils import (
 )
 import copy
 from .reexports import *
+from .tidyselect import everything
 
 __all__ = [
     "Tibble",
@@ -209,7 +210,7 @@ class Tibble(pl.DataFrame):
             out = super().drop_nulls(args)
         return out.pipe(from_polars)
     
-    def head(self, n = 5, *args, by = None):
+    def head(self, n = 5, *, by = None):
         """Alias for `.slice_head()`"""
         return self.slice_tail(n, by = by)
 
@@ -358,7 +359,7 @@ class Tibble(pl.DataFrame):
         >>> df = tp.Tibble({'a': range(3), 'b': range(3)})
         >>> df.mutate(double_a = col('a') * 2,
         ...           a_plus_b = col('a') + col('b'))
-        >>> df.mutate((col(['a', 'b]) * 2).prefix('double_'),
+        >>> df.mutate((col(['a', 'b']) * 2).prefix('double_'),
         ...           a_plus_b = col('a') + col('b'))
         """
         exprs = _args_as_list(args) + _kwargs_as_exprs(kwargs)
@@ -412,9 +413,9 @@ class Tibble(pl.DataFrame):
         return super().join(df, left_on, right_on, on, 'outer', suffix).pipe(from_polars)
 
     def pivot_longer(self,
-                     cols: Expr = pl.all(),
-                     names_to: str = "name",
-                     values_to: str = "value"):
+                     cols = everything(),
+                     names_to = "name",
+                     values_to = "value"):
         """
         Pivot data from wide to long
 
@@ -491,13 +492,19 @@ class Tibble(pl.DataFrame):
 
         out = values_fn(super(Tibble, self).groupby(id_cols).pivot(names_from, values_from))
 
-        if values_fill != None: out = out.fill_null(values_fill)
+        out = out.pipe(from_polars)
+
+        if values_fill != None:
+            new_cols = pl.Series(out.names)
+            new_cols = new_cols[~new_cols.is_in(id_cols)]
+            fill_exprs = [col(new_col).fill_null(values_fill) for new_col in new_cols]
+            out = out.mutate(*fill_exprs)
 
         if no_id: out = out.drop('_id')
 
-        return out.pipe(from_polars)
+        return out
 
-    def pull(self, var: str = None):
+    def pull(self, var = None):
         """
         Extract a column as a series
 
@@ -516,7 +523,7 @@ class Tibble(pl.DataFrame):
         
         return super().get_column(var)
     
-    def relocate(self, *args, before: str = None, after: str = None):
+    def relocate(self, *args, before = None, after = None):
         """
         Move a column or columns to a new position
 
