@@ -7,6 +7,7 @@ from .utils import (
     _col_expr,
     _col_exprs
 )
+import copy
 from .reexports import *
 
 __all__ = [
@@ -14,37 +15,6 @@ __all__ = [
     "desc",
     "from_pandas", "from_polars"
 ]
-
-def from_polars(df):
-    """
-    Convert from polars DataFrame to Tibble
-
-    Parameters
-    ----------
-    df : DataFrame
-        pl.DataFrame to convert to a Tibble
-
-    Examples
-    --------
-    >>> tp.from_polars(df)
-    """
-    df.__class__ = Tibble
-    return df
-
-def from_pandas(df):
-    """
-    Convert from pandas DataFrame to Tibble
-
-    Parameters
-    ----------
-    df : DataFrame
-        pd.DataFrame to convert to a Tibble
-
-    Examples
-    --------
-    >>> tp.from_pandas(df)
-    """
-    return from_polars(pl.from_pandas(df))
 
 class Tibble(pl.DataFrame):
     """
@@ -788,7 +758,6 @@ class Tibble(pl.DataFrame):
         """Write a data frame to a parquet"""
         return super().to_parquet(file, compression, use_pyarrow, **kwargs)
 
-import copy
 def desc(x):
     """Mark a column to order in descending"""
     x = copy.copy(x)
@@ -798,6 +767,38 @@ def desc(x):
 
 class DescCol(pl.Expr):
     pass
+
+def from_polars(df):
+    """
+    Convert from polars DataFrame to Tibble
+
+    Parameters
+    ----------
+    df : DataFrame
+        pl.DataFrame to convert to a Tibble
+
+    Examples
+    --------
+    >>> tp.from_polars(df)
+    """
+    df = copy.copy(df)
+    df.__class__ = Tibble
+    return df
+
+def from_pandas(df):
+    """
+    Convert from pandas DataFrame to Tibble
+
+    Parameters
+    ----------
+    df : DataFrame
+        pd.DataFrame to convert to a Tibble
+
+    Examples
+    --------
+    >>> tp.from_pandas(df)
+    """
+    return from_polars(pl.from_pandas(df))
 
 _allowed_methods = [
     'dtypes', 'frame_equal',
