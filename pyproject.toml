@@ -15,7 +15,6 @@ pytest = "^6.2.5"
 jupyterlab = "^3.1.18"
 myst-nb = "^0.13.1"
 sphinx-autoapi = "^1.8.4"
-sphinx-rtd-theme = "^1.0.0"
 sphinx-material = "^0.0.35"
 
 [build-system]

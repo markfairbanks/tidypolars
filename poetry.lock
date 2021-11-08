@@ -1262,21 +1262,6 @@ sphinx = ">=2.0"
 dev = ["black (==19.10b0)"]
 
 [[package]]
-name = "sphinx-rtd-theme"
-version = "1.0.0"
-description = "Read the Docs theme for Sphinx"
-category = "dev"
-optional = false
-python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
-
-[package.dependencies]
-docutils = "<0.18"
-sphinx = ">=1.6"
-
-[package.extras]
-dev = ["transifex-client", "sphinxcontrib-httpdomain", "bump2version"]
-
-[[package]]
 name = "sphinx-togglebutton"
 version = "0.2.3"
 description = "Toggle page content and collapse admonitions in Sphinx."
@@ -1547,7 +1532,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.9,<3.11"
-content-hash = "a6fc5954624b8da39cd3c8abd1c1017cd63bd6e108d4bcf4391194f6147cd931"
+content-hash = "f2b586bf888c048c3f31a4b2dbacf7d8fee6643b937df851e486e10402f3605d"
 
 [metadata.files]
 alabaster = [
@@ -2316,10 +2301,6 @@ sphinx-autoapi = [
 sphinx-material = [
     {file = "sphinx_material-0.0.35-py3-none-any.whl", hash = "sha256:a62a0a48d4c32edc260f9bdbca658e7d149beb10e1d338848b0076bb13be0775"},
     {file = "sphinx_material-0.0.35.tar.gz", hash = "sha256:27f0f1084aa0201b43879aef24a0521b78dc8df4942b003a4e7d79ab11515852"},
-]
-sphinx-rtd-theme = [
-    {file = "sphinx_rtd_theme-1.0.0-py2.py3-none-any.whl", hash = "sha256:4d35a56f4508cfee4c4fb604373ede6feae2a306731d533f409ef5c3496fdbd8"},
-    {file = "sphinx_rtd_theme-1.0.0.tar.gz", hash = "sha256:eec6d497e4c2195fa0e8b2016b337532b8a699a68bcb22a512870e16925c6a5c"},
 ]
 sphinx-togglebutton = [
     {file = "sphinx-togglebutton-0.2.3.tar.gz", hash = "sha256:41cbe2f87459eade8dc5718bb56146e8e113a05fb97459b90472470f0d357b55"},
