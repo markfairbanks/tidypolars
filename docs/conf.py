@@ -37,6 +37,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # html_theme = "sphinx_rtd_theme"
 html_theme = "sphinx_material"
 
+# Needed for sphinx_material theme
 html_sidebars = {
     "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
 }

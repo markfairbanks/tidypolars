@@ -29,7 +29,7 @@ class Tibble(pl.DataFrame):
         super().__init__(data)
     
     def __repr__(self) -> str:
-        df = self.to_polars(copy = False)
+        df = self.to_polars(shallow_copy = False)
         return df.__str__()
 
     def __getattribute__(self, attr):
@@ -731,15 +731,20 @@ class Tibble(pl.DataFrame):
         """
         return super().to_pandas()
 
-    def to_polars(self, copy = True):
+    def to_polars(self, shallow_copy = True):
         """
         Convert to a polars DataFrame
+
+        Parameters
+        ----------
+        by_ref : bool
+            Whether a shallow copy should be made
 
         Examples
         --------
         >>> df.to_polars()
         """
-        if copy: self = copy.copy(self)
+        if shallow_copy == True: self = copy.copy(self)
         self.__class__ = pl.DataFrame
         return self
     
