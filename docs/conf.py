@@ -41,3 +41,6 @@ html_theme = "sphinx_material"
 html_sidebars = {
     "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
 }
+
+# Don't prefix functions with module names
+add_module_names = False

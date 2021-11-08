@@ -120,6 +120,13 @@ def test_is_predicates():
     )
     assert actual.frame_equal(expected, null_equal = True), "is_predicates failed"
 
+def test_replace_null():
+    """Can replace nulls"""
+    df = tp.Tibble(x = [0, None], y = [None, None])
+    actual = df.mutate(x = tp.replace_null(col('x'), 1))
+    expected = tp.Tibble(x = [0, 1], y = [None, None])
+    assert actual.frame_equal(expected), "replace_null function failed"
+
 def test_round():
     """Can round values"""
     df = tp.Tibble(x = [1.11, 2.22, 3.33])

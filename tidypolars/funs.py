@@ -8,6 +8,7 @@ __all__ = [
     "case_when", "if_else",
     "lag", "lead",
     "read_csv", "read_parquet",
+    "replace_null",
     "round",
 
     # Agg stats
@@ -495,6 +496,23 @@ def read_parquet(source: str,
                  **kwargs):
     """Simple wrapper around polars.read_parquet"""
     return pl.read_parquet(source, *args, **kwargs).pipe(from_polars)
+
+def replace_null(x, replace = None):
+    """
+    Replace null values
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+
+    Examples
+    --------
+    >>> df = tp.Tibble(x = [0, None], y = [None, None])
+    >>> df.mutate(x = tp.replace_null(col('x'), 1))
+    """
+    if replace == None: return x
+    return x.fill_null(replace)
 
 def round(x, decimals = 0):
     """

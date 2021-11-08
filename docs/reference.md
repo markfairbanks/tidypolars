@@ -31,6 +31,7 @@
 * [`.fill()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.fill)
 * [`.pivot_longer()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.pivot_longer)
 * [`.pivot_wider()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.pivot_wider)
+* [`.replace_null()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.replace_null)
 
 
 ## Functions
@@ -62,6 +63,7 @@
 * [`median()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.median)
 * [`min()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.min)
 * [`n_distinct()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.n_distinct)
+* [`replace_null()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.replace_null)
 * [`sd()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.sd)
 * [`sum()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.sum)
 

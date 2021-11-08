@@ -16,7 +16,7 @@ __all__ = [
     "str_trim"
 ]
 
-def str_detect(string : str, pattern : str, negate: bool = False):
+def str_detect(string, pattern, negate = False):
     """
     Detect the presence or absence of a pattern in a string
 
@@ -47,7 +47,7 @@ def str_detect(string : str, pattern : str, negate: bool = False):
     
     return exprs
 
-def str_extract(string : str, pattern : str):
+def str_extract(string, pattern):
     """
     Extract the target capture group from provided patterns
 
@@ -66,7 +66,7 @@ def str_extract(string : str, pattern : str):
     string = _col_expr(string)
     return string.str.extract(pattern, 0)
 
-def str_length(string : str):
+def str_length(string):
     """
     Length of a string
 
@@ -83,7 +83,7 @@ def str_length(string : str):
     string = _col_expr(string)
     return string.str.lengths()
 
-def str_sub(string : str, start : int = 0, end : int = None):
+def str_sub(string, start = 0, end = None):
     """
     Extract portion of string based on start and end inputs
 
@@ -104,7 +104,7 @@ def str_sub(string : str, start : int = 0, end : int = None):
     string = _col_expr(string) 
     return string.str.slice(start, end)
 
-def str_remove_all(string : str, pattern : str):
+def str_remove_all(string, pattern):
     """
     Removes all matched patterns in a string
 
@@ -122,7 +122,7 @@ def str_remove_all(string : str, pattern : str):
     """
     return str_replace_all(string, pattern, "")
 
-def str_remove(string : str, pattern : str):
+def str_remove(string, pattern):
     """
     Removes the first matched patterns in a string
 
@@ -140,7 +140,7 @@ def str_remove(string : str, pattern : str):
     """
     return str_replace(string, pattern, "")
 
-def str_replace_all(string : str, pattern : str, replacement : str):
+def str_replace_all(string, pattern, replacement):
     """
     Replaces all matched patterns in a string
 
@@ -161,7 +161,7 @@ def str_replace_all(string : str, pattern : str, replacement : str):
     string = _col_expr(string)
     return string.str.replace_all(pattern, replacement)
 
-def str_replace(string : str, pattern : str, replacement : str):
+def str_replace(string, pattern, replacement):
     """
     Replaces the first matched patterns in a string
 
@@ -182,7 +182,7 @@ def str_replace(string : str, pattern : str, replacement : str):
     string = _col_expr(string)
     return string.str.replace(pattern, replacement)
 
-def str_to_lower(string : str):
+def str_to_lower(string):
     """
     Convert case of a string
 
@@ -199,7 +199,7 @@ def str_to_lower(string : str):
     string = _col_expr(string)
     return string.str.to_lowercase()
 
-def str_to_upper(string : str):
+def str_to_upper(string):
     """
     Convert case of a string
 

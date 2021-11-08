@@ -268,6 +268,13 @@ def test_rename_pandas():
     expected = tp.Tibble({'new_x': range(3), 'y': range(3), 'z': range(3)})
     assert actual.frame_equal(expected), "pandas rename failed"
 
+def test_replace_null():
+    """Can replace nulls"""
+    df = tp.Tibble(x = [0, None], y = [None, None])
+    actual = df.replace_null(dict(x = 1, y = 2))
+    expected = tp.Tibble(x = [0, 1], y = [2, 2])
+    assert actual.frame_equal(expected), "replace_null method failed"
+
 def test_set_names():
     """Can set_names"""
     df = tp.Tibble(x = range(3), y = range(3))

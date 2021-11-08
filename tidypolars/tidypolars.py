@@ -44,7 +44,7 @@ class Tibble(pl.DataFrame):
             'distinct', 'drop', 'drop_null', 'head', 'fill', 'filter',
             'inner_join', 'left_join', 'mutate', 'names', 'nrow', 'ncol',
             'full_join', 'pivot_longer', 'pivot_wider',
-            'pull', 'relocate', 'rename', 'select', 'set_names',
+            'pull', 'relocate', 'rename', "replace_null", 'select', 'set_names',
             'slice', 'slice_head', 'slice_tail', 'summarize', 'tail',
             'to_pandas', 'to_polars', 'write_csv', 'write_parquet'
         ]
@@ -594,6 +594,26 @@ class Tibble(pl.DataFrame):
         else:
             mapping = {value:key for key, value in kwargs.items()}
         return super().rename(mapping).pipe(from_polars)
+
+    def replace_null(self, replace = None):
+        """
+        Replace null values
+
+        Parameters
+        ----------
+        replace : dict
+            Dictionary of column/replacement pairs
+
+        Examples
+        --------
+        >>> df = tp.Tibble(x = [0, None], y = [None, None])
+        >>> df.replace_null(dict(x = 1, y = 2))
+        """
+        if replace == None: return self
+        if type(replace) != dict:
+            ValueError("replace must be a dictionary of column/replacement pairs")
+        replace_exprs = [col(key).fill_null(value).keep_name() for key, value in replace.items()]
+        return self.mutate(*replace_exprs)
 
     def set_names(self, nm = None):
         if nm == None: nm = self.names
