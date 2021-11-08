@@ -4,23 +4,25 @@
 
 #### dplyr
 
-* `.arrange()`
-* `.bind_cols()`/`.bind_rows()`
-* `.count()`
-* `.distinct()`
-* `.drop()`
-* `.head()`
-* `.filter()`
+* [`.arrange()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.arrange)
+* [`.bind_cols()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.bind_cols)
+* [`.bind_rows()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.bind_rows)
+* [`.count()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.count)
+* [`.distinct()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.distinct)
+* [`.drop()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.drop)
+* [`.head()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.head)
+* [`.filter()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.filter)
 * Joins
-  * `.full_join()`
-  * `.inner_join()`
-  * `.left_join()`
-  * `.right_join()`
-* `.pull()`
-* `.relocate()`
-* `.slice()`/`.slice_head()`/`slice_tail()`
-* `.summarize()`
-* `.tail()`
+  * [`.full_join()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.full_join)
+  * [`.inner_join()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.inner_join)
+  * [`.left_join()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.left_join)
+* [`.pull()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.pull)
+* [`.relocate()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.relocate)
+* [`.slice()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.slice)
+* [`.slice_head()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.slice_head)
+* [`.slice_tail()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.slice_tail)
+* [`.summarize()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.summarize)
+* [`.tail()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.tail)
 
 #### tidyr
 
