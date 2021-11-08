@@ -208,6 +208,17 @@ def test_pivot_wider3():
     expected = tp.Tibble({'val': [1, 2, 3], 'x': [1, 0, 0], 'y': [0, 1, 0], 'z': [0, 0, 1]})
     assert actual.frame_equal(expected), "pivot_wider with values filled failed"
 
+def test_pivot_wider4():
+    """Can pivot cols to wide with values filled - doesn't affect id col"""
+    df = tp.Tibble(id = [None, 2], var = ["x", "y"], val = [1, 2])
+    actual = (
+        df.pivot_wider(names_from = "var", values_from = "val", values_fill = 0)
+        .select('id', 'x', 'y')
+        .arrange('y')
+    )
+    expected = tp.Tibble({'id': [None, 2], 'x': [1, 0], 'y': [0, 2]})
+    assert actual.frame_equal(expected), "pivot_wider with values filled failed"
+
 def test_pull():
     """Can use pull"""
     df = tp.Tibble({'x': _repeat(1, 3), 'y': _repeat(2, 3)})
