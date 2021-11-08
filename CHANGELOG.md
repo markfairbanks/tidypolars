@@ -2,8 +2,12 @@
 
 ## v0.2.1 (2021/11/08)
 
-#### New methods
+#### New Tibble methods
+* `.replace_null()`
 * `.set_names()`
+
+#### New functions
+* `replace_null()`
 
 ## v0.2.0 (2021/11/05)
 
