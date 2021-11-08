@@ -26,78 +26,78 @@
 
 #### tidyr
 
-* `.drop_null()`
-* `.fill()`
-* `.pivot_longer()`
-* `.pivot_wider()`
+* [`.drop_null()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.drop_null)
+* [`.fill()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.fill)
+* [`.pivot_longer()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.pivot_longer)
+* [`.pivot_wider()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.Tibble.pivot_wider)
 
 
 ## Functions
 
 #### General functions
 
-* `abs()`
-* `as_float()`
-* `as_integer()`
-* `as_string()`
-* `between()`
-* `case_when()`
-* `cast()`
-* `first()`
-* `if_else()`
-* `is_finite()`
-* `is_in()`
-* `is_infinite()`
-* `is_nan()`
-* `is_not()`
-* `is_not_in()`
-* `is_not_null()`
-* `is_null()`
-* `lag()`
-* `last()`
-* `lead()`
-* `max()`
-* `mean()`
-* `median()`
-* `min()`
-* `n_distinct()`
-* `sd()`
-* `sum()`
+* [`abs()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.abs)
+* [`as_float()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.as_float)
+* [`as_integer()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.as_integer)
+* [`as_string()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.as_string)
+* [`between()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.between)
+* [`case_when()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.case_when)
+* [`cast()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.cast)
+* [`first()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.first)
+* [`if_else()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.if_else)
+* [`is_finite()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.is_finite)
+* [`is_in()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.is_in)
+* [`is_infinite()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.is_infinite)
+* [`is_nan()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.is_nan)
+* [`is_not()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.is_not)
+* [`is_not_in()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.is_not_in)
+* [`is_not_null()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.is_not_null)
+* [`is_null()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.is_null)
+* [`lag()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.lag)
+* [`last()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.last)
+* [`lead()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.lead)
+* [`max()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.max)
+* [`mean()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.mean)
+* [`median()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.median)
+* [`min()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.min)
+* [`n_distinct()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.n_distinct)
+* [`sd()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.sd)
+* [`sum()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.sum)
 
 #### lubridate
 
-* `as_date()`
-* `as_datetime()`
-* `dt_round()`
-* `hour()`
-* `mday()`
-* `minute()`
-* `month()`
-* `quarter()`
-* `second()`
-* `wday()`
-* `yday()`
-* `year()`
+* [`as_date()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/lubridate/index.html#tidypolars.lubridate.as_date)
+* [`as_datetime()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/lubridate/index.html#tidypolars.lubridate.as_datetime)
+* [`dt_round()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/lubridate/index.html#tidypolars.lubridate.dt_round)
+* [`hour()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/lubridate/index.html#tidypolars.lubridate.hour)
+* [`mday()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/lubridate/index.html#tidypolars.lubridate.mday)
+* [`minute()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/lubridate/index.html#tidypolars.lubridate.minute)
+* [`month()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/lubridate/index.html#tidypolars.lubridate.month)
+* [`quarter()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/lubridate/index.html#tidypolars.lubridate.quarter)
+* [`second()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/lubridate/index.html#tidypolars.lubridate.second)
+* [`wday()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/lubridate/index.html#tidypolars.lubridate.wday)
+* [`yday()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/lubridate/index.html#tidypolars.lubridate.yday)
+* [`year()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/lubridate/index.html#tidypolars.lubridate.year)
 
 #### stringr
 
-* `str_detect()`
-* `str_extract()`
-* `str_length()`
-* `str_remove_all()`
-* `str_remove()`
-* `str_replace_all()`
-* `str_replace()`
-* `str_sub()`
-* `str_to_lower()`
-* `str_to_upper()`
-* `str_trim()`
+* [`str_detect()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/stringr/index.html#tidypolars.stringr.str_detect)
+* [`str_extract()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/stringr/index.html#tidypolars.stringr.str_extract)
+* [`str_length()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/stringr/index.html#tidypolars.stringr.str_length)
+* [`str_remove_all()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/stringr/index.html#tidypolars.stringr.str_remove_all)
+* [`str_remove()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/stringr/index.html#tidypolars.stringr.str_remove)
+* [`str_replace_all()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/stringr/index.html#tidypolars.stringr.str_replace_all)
+* [`str_replace()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/stringr/index.html#tidypolars.stringr.str_replace)
+* [`str_sub()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/stringr/index.html#tidypolars.stringr.str_sub)
+* [`str_to_lower()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/stringr/index.html#tidypolars.stringr.str_to_lower)
+* [`str_to_upper()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/stringr/index.html#tidypolars.stringr.str_to_upper)
+* [`str_trim()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/stringr/index.html#tidypolars.stringr.str_trim)
 
 #### tidyselect
-* `contains()`
-* `ends_with()`
-* `everything()`
-* `starts_with()`
+* [`contains()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidyselect/index.html#tidypolars.tidyselect.contains)
+* [`ends_with()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidyselect/index.html#tidypolars.tidyselect.ends_with)
+* [`everything()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidyselect/index.html#tidypolars.tidyselect.everything)
+* [`starts_with()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidyselect/index.html#tidypolars.tidyselect.starts_with)
 
 ## Converting from/to pandas DataFrame
 
