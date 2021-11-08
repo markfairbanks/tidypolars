@@ -268,6 +268,13 @@ def test_rename_pandas():
     expected = tp.Tibble({'new_x': range(3), 'y': range(3), 'z': range(3)})
     assert actual.frame_equal(expected), "pandas rename failed"
 
+def test_set_names():
+    """Can set_names"""
+    df = tp.Tibble(x = range(3), y = range(3))
+    actual = df.set_names(['a', 'b'])
+    expected = tp.Tibble(a = range(3), b = range(3))
+    assert actual.frame_equal(expected), "set_names failed"
+
 def test_select():
     """Can select columns"""
     df = tp.Tibble({'x': range(3), 'y': range(3), 'z': range(3)})
