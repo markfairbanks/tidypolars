@@ -539,6 +539,7 @@ class Tibble(pl.DataFrame):
         >>> df.relocate('b', after = 'c')
         """
         move_cols = _args_as_list(args)
+        move_cols = self.select(move_cols).names
         push_length = len(move_cols)
         col_dict = {name:index for index, name in enumerate(self.names)}
         
