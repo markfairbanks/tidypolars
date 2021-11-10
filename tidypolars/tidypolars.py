@@ -267,8 +267,8 @@ class Tibble(pl.DataFrame):
         Examples
         --------
         >>> df = tp.Tibble({'a': range(3), 'b': ['a', 'a', 'b']})
-        >>> df.filter(col('a') < 2, col('c') == 'a')
-        >>> df.filter((col('a') < 2) & (col('c') == 'a'))
+        >>> df.filter(col('a') < 2, col('b') == 'a')
+        >>> df.filter((col('a') < 2) & (col('b') == 'a'))
         >>> df.filter(col('a') <= tp.mean(col('a')), by = 'b')
         """
         args = _args_as_list(args)
