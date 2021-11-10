@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.2 (in development)
+
+#### Improved functionality
+
+* `.relocate()`: tidyselect helpers work
+
 ## v0.2.1 (2021/11/08)
 
 #### New Tibble methods
