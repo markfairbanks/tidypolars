@@ -617,7 +617,21 @@ class Tibble(pl.DataFrame):
         return self.mutate(*replace_exprs)
 
     def set_names(self, nm = None):
+        """
+        Change the column names of the data frame
+
+        Parameters
+        ----------
+        nm : list
+            A list of new names for the data frame
+
+        Examples
+        --------
+        >>> df = tp.Tibble(x = range(3), y = range(3))
+        >>> df.set_names(['a', 'b'])
+        """
         if nm == None: nm = self.names
+        nm = _args_as_list(nm)
         rename_dict = {k:v for k, v in zip(self.names, nm)}
         return self.rename(rename_dict)
     
