@@ -84,6 +84,8 @@
 
 #### stringr
 
+* [`paste()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/stringr/index.html#tidypolars.stringr.paste)
+* [`paste0()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/stringr/index.html#tidypolars.stringr.paste0)
 * [`str_detect()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/stringr/index.html#tidypolars.stringr.str_detect)
 * [`str_extract()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/stringr/index.html#tidypolars.stringr.str_extract)
 * [`str_length()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/stringr/index.html#tidypolars.stringr.str_length)

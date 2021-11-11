@@ -1,4 +1,19 @@
 import tidypolars as tp
+from tidypolars import col
+
+def test_paste():
+    """Can use paste"""
+    df = tp.Tibble(x = ['a', 'b', 'c'])
+    actual = df.mutate(x_end = tp.paste(col('x'), 'end', sep = '_'))
+    expected = tp.Tibble(x = ['a', 'b', 'c'], x_end = ['a_end', 'b_end', 'c_end'])
+    assert actual.frame_equal(expected), "paste failed"
+
+def test_paste0():
+    """Can use paste0"""
+    df = tp.Tibble(x = ['a', 'b', 'c'])
+    actual = df.mutate(x_end = tp.paste0(col('x'), '_end'))
+    expected = tp.Tibble(x = ['a', 'b', 'c'], x_end = ['a_end', 'b_end', 'c_end'])
+    assert actual.frame_equal(expected), "paste0 failed"
 
 def test_str_detect_single():
     """Can str_detect find a single string"""
