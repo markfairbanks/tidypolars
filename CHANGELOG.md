@@ -2,6 +2,10 @@
 
 ## v0.2.2 (in development)
 
+#### New functions
+* `paste()`
+* `paste0()`
+
 #### Improved functionality
 
 * `.relocate()`: tidyselect helpers work

@@ -1,8 +1,10 @@
 import polars as pl
 import functools as ft
-from .utils import _col_expr, _str_trim_left, _str_trim_right
+from .utils import _args_as_list, _col_expr, _str_trim_left, _str_trim_right
 
 __all__ = [
+    "paste",
+    "paste0",
     "str_detect", 
     "str_extract",
     "str_length",
@@ -15,6 +17,42 @@ __all__ = [
     "str_to_upper",
     "str_trim"
 ]
+
+def paste(*args, sep = ' '):
+    """
+    Concatenate strings together
+
+    Parameters
+    ----------
+    args : Expr, str
+        Columns and or strings to concatenate
+
+    Examples
+    --------
+    >>> df = tp.Tibble(x = ['a', 'b', 'c'])
+    >>> df.mutate(x_end = tp.paste(col('x'), 'end', sep = '_'))
+    """
+    args = _args_as_list(args)
+    args = [pl.lit(arg) if not isinstance(arg, pl.Expr) else arg for arg in args]
+    curlies = ['{}'] * len(args)
+    string_format = sep.join(curlies)
+    return pl.format(string_format, *args)
+
+def paste0(*args):
+    """
+    Concatenate strings together with no separator
+
+    Parameters
+    ----------
+    args : Expr, str
+        Columns and or strings to concatenate
+
+    Examples
+    --------
+    >>> df = tp.Tibble(x = ['a', 'b', 'c'])
+    >>> df.mutate(xend = tp.paste0(col('x'), 'end'))
+    """
+    return paste(*args, sep = '')
 
 def str_detect(string, pattern, negate = False):
     """
@@ -32,7 +70,7 @@ def str_detect(string, pattern, negate = False):
     Examples
     --------
     >>> df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
-    >>> df.mutate(x = str_detect('name', ['a']))
+    >>> df.mutate(x = str_detect('name', 'a'))
     >>> df.mutate(x = str_detect('name', ['a', 'e']))
     """
     if isinstance(pattern, str):
