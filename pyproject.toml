@@ -2,7 +2,7 @@
 name = "tidypolars"
 version = "0.2.2"
 description = "Tidy interface to polars"
-authors = ["Mark Fairbanks"]
+authors = ["Mark Fairbanks", "Matt Carlson"]
 license = "MIT"
 readme = "README.md"
 
