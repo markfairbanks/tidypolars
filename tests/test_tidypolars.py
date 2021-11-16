@@ -226,6 +226,13 @@ def test_pivot_wider4():
     expected = tp.Tibble({'id': [None, 2], 'x': [1, 0], 'y': [0, 2]})
     assert actual.frame_equal(expected), "pivot_wider with values filled failed"
 
+def test_print():
+    """Printing doesn't alter class of df"""
+    df = tp.Tibble(x = range(3), y = range(3))
+    repr(df)
+    print(df)
+    assert isinstance(df, tp.Tibble), "Printing failed"
+
 def test_pull():
     """Can use pull"""
     df = tp.Tibble({'x': _repeat(1, 3), 'y': _repeat(2, 3)})
