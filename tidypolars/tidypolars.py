@@ -190,11 +190,8 @@ class Tibble(pl.DataFrame):
         >>> df.drop('x', 'y')
         """
         args = _args_as_list(args)
-        drop_cols = pl.Series(self.select(args).names)
-        df_cols = pl.Series(self.names)
-        keep_cols = df_cols[~df_cols.is_in(drop_cols)]
-        return super().select(keep_cols).pipe(from_polars)
-
+        drop_cols = self.select(args).names
+        return super().drop(drop_cols).pipe(from_polars)
 
     def drop_null(self, *args):
         """
