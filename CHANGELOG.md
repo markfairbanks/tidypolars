@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.2.2 (in development)
+## v0.2.2 (2021/11/15)
 
 #### New functions
 * `paste()`
