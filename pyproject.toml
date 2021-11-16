@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "tidypolars"
-version = "0.2.5"
+version = "0.2.6"
 description = "Tidy interface to polars"
 authors = ["Mark Fairbanks", "Matt Carlson"]
 license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.11"
+python = ">=3.8,<3.11"
 polars = ">=0.10.17"
 
 [tool.poetry.dev-dependencies]
