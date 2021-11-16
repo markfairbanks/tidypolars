@@ -30,14 +30,16 @@ class Tibble(pl.DataFrame):
         super().__init__(data)
     
     def __repr__(self):
-        df = copy.copy(self)
-        df = df.to_polars()
+        df = self.to_polars()
         return df.__str__()
+    
+    def _repr_html_(self):
+        df = self.to_polars()
+        return df._repr_html_()
 
-    # def __str__(self):
-    #     df = copy.deepcopy(self)
-    #     df.__class__ = pl.DataFrame
-    #     return df.__str__()
+    def __str__(self):
+        df = self.to_polars()
+        return df.__str__()
 
     def __getattribute__(self, attr):
         if attr in _polars_methods:
@@ -219,7 +221,7 @@ class Tibble(pl.DataFrame):
     
     def head(self, n = 5, *, by = None):
         """Alias for `.slice_head()`"""
-        return self.slice_tail(n, by = by)
+        return self.slice_head(n, by = by)
 
     def fill(self, *args, direction = 'down', by = None):
         """
@@ -785,7 +787,7 @@ class Tibble(pl.DataFrame):
         """
         return super().to_pandas()
 
-    def to_polars(self, shallow_copy = True):
+    def to_polars(self):
         """
         Convert to a polars DataFrame
 
@@ -798,7 +800,7 @@ class Tibble(pl.DataFrame):
         --------
         >>> df.to_polars()
         """
-        if shallow_copy == True: self = copy.copy(self)
+        self = copy.copy(self)
         self.__class__ = pl.DataFrame
         return self
     
@@ -909,7 +911,7 @@ _polars_methods = [
     'std',
     'sum',
     #'to_arrow',
-    'to_dict',
+    # 'to_dict',
     'to_dicts',
     'to_dummies',
     'to_ipc',
