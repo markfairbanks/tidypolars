@@ -30,12 +30,14 @@ class Tibble(pl.DataFrame):
         super().__init__(data)
     
     def __repr__(self):
-        df = self.to_polars(False)
+        df = copy.copy(self)
+        df = df.to_polars()
         return df.__str__()
 
-    def __str__(self):
-        df = self.to_polars(False)
-        return df.__str__()
+    # def __str__(self):
+    #     df = copy.deepcopy(self)
+    #     df.__class__ = pl.DataFrame
+    #     return df.__str__()
 
     def __getattribute__(self, attr):
         if attr in _polars_methods:
