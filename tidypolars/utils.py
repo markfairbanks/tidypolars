@@ -47,15 +47,3 @@ def _repeat(x, times):
     if not isinstance(x, list):
         x = [x]
     return x * times
-
-def _str_trim_left(x):
-    """
-    Remove leading whitespace.
-    """
-    return x.str.replace(r"^\s*", "")
-
-def _str_trim_right(x):
-    """
-    Remove trailing whitespace.
-    """
-    return x.str.replace(r"[ \t]+$", "")
