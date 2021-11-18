@@ -1,6 +1,6 @@
 import polars as pl
 import functools as ft
-from .utils import _args_as_list, _col_expr, _str_trim_left, _str_trim_right
+from .utils import _args_as_list, _col_expr
 
 __all__ = [
     "paste",
@@ -283,3 +283,15 @@ def str_trim(string, side = "both"):
     else:
         raise ValueError("side must be one of 'both', 'left', or 'right'")
     return out
+
+def _str_trim_left(x):
+    """
+    Remove leading whitespace.
+    """
+    return x.str.replace(r"^\s*", "")
+
+def _str_trim_right(x):
+    """
+    Remove trailing whitespace.
+    """
+    return x.str.replace(r"[ \t]+$", "")

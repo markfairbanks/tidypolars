@@ -5,16 +5,19 @@ from .utils import _col_expr
 __all__ = [
     # General functions
     "abs",
-    "case_when", "if_else",
+    "case_when",
+    "floor",
+    "if_else",
     "lag", "lead",
     "read_csv", "read_parquet",
     "replace_null",
     "round",
+    "sqrt",
 
     # Agg stats
-    "first", "last",
+    "count", "first", "last", "length",
     "max", "mean", "median", "min",
-    "n_distinct", "sd", "sum",
+    "n_distinct", "quantile", "sd", "sum",
 
     # Predicates
     "between", "is_finite", "is_in", "is_infinite",
@@ -26,7 +29,7 @@ __all__ = [
 
 def as_float(x, dtype = pl.Float64):
     """
-    Convert to integer. Defaults to Float64.
+    Convert to float. Defaults to Float64.
 
     Parameters
     ----------
@@ -154,6 +157,22 @@ def cast(x, dtype):
     x = _col_expr(x)
     return x.cast(dtype)
 
+def count(x):
+    """
+    Number of observations in each group
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+
+    Examples
+    --------
+    >>> df.summarize(count = tp.count(col('x')))
+    """
+    x = _col_expr(x)
+    return x.count()
+
 def first(x):
     """
     Get first value
@@ -170,6 +189,22 @@ def first(x):
     """
     x = _col_expr(x)
     return x.first()
+
+def floor(x):
+    """
+    Round numbers down to the lower integer
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+
+    Examples
+    --------
+    >>> df.mutate(floor_x = tp.floor(col('x')))
+    """
+    x = _col_expr(x)
+    return x.floor()
 
 def if_else(condition, true, false):
     """
@@ -400,6 +435,22 @@ def lead(x, n: int = 1, default = None):
     x = _col_expr(x)
     return _shift(x, -n, default)
 
+def length(x):
+    """
+    Number of observations in each group
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+
+    Examples
+    --------
+    >>> df.summarize(length = tp.length(col('x')))
+    """
+    x = _col_expr(x)
+    return x.count()
+
 def max(x):
     """
     Get column max
@@ -485,6 +536,25 @@ def n_distinct(x):
     x = _col_expr(x)
     return x.n_unique()
 
+def quantile(x, quantile = .5):
+    """
+    Get number of distinct values in a column
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+
+    quantile : float
+        Quantile to return
+
+    Examples
+    --------
+    >>> df.summarize(quantile_x = tp.quantile('x', .25))
+    """
+    x = _col_expr(x)
+    return x.quantile(quantile)
+
 def read_csv(file: str,
              *args,
              **kwargs):
@@ -548,6 +618,22 @@ def sd(x):
     """
     x = _col_expr(x)
     return x.std()
+
+def sqrt(x):
+    """
+    Get column square root
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+
+    Examples
+    --------
+    >>> df.mutate(sqrt_x = tp.sqrt('x'))
+    """
+    x = _col_expr(x)
+    return x.sqrt()
 
 def sum(x):
     """

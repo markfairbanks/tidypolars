@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.2.6 (in development)
+
+#### New functions
+* `count()`
+* `floor()`
+* `length()`
+* `quantile()`
+* `sqrt()`
+
 ## v0.2.5 (2021/11/16)
 
 ## v0.2.4 (2021/11/15)
