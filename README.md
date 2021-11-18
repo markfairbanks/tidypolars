@@ -1,4 +1,5 @@
 # tidypolars
+[![PyPI Latest Release](https://img.shields.io/pypi/v/tidypolars.svg)](https://pypi.org/project/tidypolars/)
 
 tidypolars is a data frame library built on top of the blazingly fast [polars](https://github.com/pola-rs/polars) library that gives access to methods and functions familiar to R tidyverse users.
 
