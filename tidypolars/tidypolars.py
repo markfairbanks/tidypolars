@@ -117,7 +117,7 @@ class Tibble(pl.DataFrame):
         >>> df1.bind_rows(df2)
         """
         frames = _args_as_list(args)
-        out = pl.concat([self, *frames])
+        out = pl.concat([self, *frames], how = "diagonal")
         return out.pipe(from_polars)
 
     def clone(self):
