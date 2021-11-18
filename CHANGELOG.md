@@ -3,11 +3,16 @@
 ## v0.2.6 (in development)
 
 #### New functions
+
 * `count()`
 * `floor()`
 * `length()`
 * `quantile()`
 * `sqrt()`
+
+#### Functionality improvements
+
+* `.bind_rows()`: Auto-aligns columns by name
 
 ## v0.2.5 (2021/11/16)
 
@@ -28,10 +33,12 @@
 ## v0.2.1 (2021/11/08)
 
 #### New Tibble methods
+
 * `.replace_null()`
 * `.set_names()`
 
 #### New functions
+
 * `replace_null()`
 
 ## v0.2.0 (2021/11/05)

@@ -42,6 +42,14 @@ def test_bind_rows_single():
     expected = tp.Tibble({'x': ['a', 'a', 'b'], 'y': [2, 1, 3]})
     assert actual.frame_equal(expected), "bind_rows failed"
 
+def test_bind_rows_auto_align():
+    """Can bind rows"""
+    df1 = tp.Tibble(x = ['a', 'a'], y = [2, 1])
+    df2 = tp.Tibble(y = [3], x = ['b'])
+    actual = df1.bind_rows(df2)
+    expected = tp.Tibble({'x': ['a', 'a', 'b'], 'y': [2, 1, 3]})
+    assert actual.frame_equal(expected), "bind_rows auto-align failed"
+
 def test_bind_rows_multiple():
     """Can bind rows (multiple)"""
     df1 = tp.Tibble({'x': ['a', 'a'], 'y': [2, 1]})
