@@ -1,5 +1,5 @@
 import polars as pl
-from .tidypolars import from_polars
+from .tibble import from_polars
 from .utils import _col_expr
 
 __all__ = [
