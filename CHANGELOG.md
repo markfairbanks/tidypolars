@@ -1,6 +1,9 @@
 # Changelog
 
-## v0.2.7 (in development)
+## v0.2.7 (2021/11/19)
+
+#### New Tibble methods
+* `.to_dict()`
 
 ## v0.2.6 (2021/11/18)
 

@@ -109,10 +109,15 @@
 * [`everything()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidyselect/index.html#tidypolars.tidyselect.everything)
 * [`starts_with()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidyselect/index.html#tidypolars.tidyselect.starts_with)
 
-## Converting from/to pandas DataFrame
+## Conversions
+
+#### Converting to/from a pandas DataFrame
 
 * [`from_pandas()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.from_pandas)
 * [`.to_pandas()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.to_pandas)
+
+#### Converting to a dict
+* [`.to_dict()`]https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tidypolars/index.html#tidypolars.tidypolars.to_dict)
 
 ## Reading/writing data
 
@@ -124,4 +129,4 @@
 #### Functions
 
 * [`read_csv()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html?highlight=read_csv#tidypolars.funs.read_csv)
-* [`.read_parquet()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html?highlight=read_csv#tidypolars.funs.read_parquet)
+* [`read_parquet()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html?highlight=read_csv#tidypolars.funs.read_parquet)

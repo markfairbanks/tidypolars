@@ -777,6 +777,23 @@ class Tibble(pl.DataFrame):
         """Alias for `.slice_tail()`"""
         return self.slice_tail(n, by = by)
 
+    def to_dict(self, as_series = True):
+        """
+        Aggregate data with summary statistics
+
+        Parameters
+        ----------
+        as_series : bool
+            If True - returns the dict values as Series
+            If False - returns the dict values as lists
+
+        Examples
+        --------
+        >>> df.to_dict()
+        >>> df.to_dict(as_series = False)
+        """
+        return super().to_dict(as_series)
+
     def to_pandas(self):
         """
         Convert to a polars DataFrame

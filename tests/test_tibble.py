@@ -361,6 +361,12 @@ def test_summarize_across():
     expected = tp.Tibble({'max_x': [2], 'max_y': [2], 'avg_x': [1]})
     assert actual.frame_equal(expected), "ungrouped summarize across failed"
 
+def test_to_dict():
+    """Can convert to a dictionary"""
+    df = tp.Tibble({'x': range(3), 'y': range(3)})
+    assert df.to_dict() == {'x': pl.Series(range(3)), 'y': pl.Series(range(3))}
+    assert df.to_dict() == {'x': list(range(3)), 'y': list(range(3))}
+
 def test_to_polars():
     """Can convert to a polars DataFrame"""
     df = tp.Tibble({'x': range(3), 'y': range(3), 'z': range(3)})
