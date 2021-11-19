@@ -59,7 +59,7 @@ def everything():
     """
     return "*"
 
-def starts_with(match, ignore_case = False):
+def starts_with(match, ignore_case = True):
     """
     Starts with a prefix
 
