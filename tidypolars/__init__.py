@@ -6,7 +6,7 @@ from .funs import *
 from .lubridate import *
 from .reexports import *
 from .stringr import *
-from .tidypolars import *
+from .tibble import *
 from .tidyselect import *
 
 __all__ = (
@@ -14,6 +14,6 @@ __all__ = (
     lubridate.__all__ +
     reexports.__all__ +
     stringr.__all__ +
-    tidypolars.__all__ +
+    tibble.__all__ +
     tidyselect.__all__ 
 )
