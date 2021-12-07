@@ -8,7 +8,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.11"
-polars = ">=0.10.17"
+polars = ">=0.10.27"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
