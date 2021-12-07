@@ -63,14 +63,14 @@ def test_count_no_args():
     """Can count rows (no args)"""
     df = tp.Tibble({'x': ['a', 'a', 'b'], 'y': [2, 1, 1]})
     actual = df.count()
-    expected = tp.Tibble({'N': [3]})
+    expected = tp.Tibble({'n': [3]})
     assert actual.frame_equal(expected), "count with no args failed"
 
 def test_count_one_arg():
     """Can count rows (one arg)"""
     df = tp.Tibble({'x': ['a', 'a', 'b'], 'y': [2, 1, 1]})
     actual = df.count('x', sort=True)
-    expected = tp.Tibble({'x': ['a', 'b'], 'N': [2, 1]})
+    expected = tp.Tibble({'x': ['a', 'b'], 'n': [2, 1]})
     assert actual.frame_equal(expected), "count with one arg failed"
 
 def test_distinct_empty():
@@ -287,7 +287,7 @@ def test_rename_pandas():
     """Can rename - pandas interface"""
     df = tp.Tibble({'x': range(3), 'y': range(3), 'z': range(3)})
     actual = df.rename({'x': 'new_x', 'y': 'new_y'})
-    expected = tp.Tibble({'new_x': range(3), 'y': range(3), 'z': range(3)})
+    expected = tp.Tibble({'new_x': range(3), 'new_y': range(3), 'z': range(3)})
     assert actual.frame_equal(expected), "pandas rename failed"
 
 def test_replace_null():

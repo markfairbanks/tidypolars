@@ -491,10 +491,10 @@ class Tibble(pl.DataFrame):
             self = self.mutate(_id = pl.lit(1))
         
         fn_options = {
-            'first': pl.eager.frame.PivotOps.first,
-            'count': pl.eager.frame.PivotOps.count,
-            'mean': pl.eager.frame.PivotOps.mean,
-            'sum': pl.eager.frame.PivotOps.sum,
+            'first': pl.internals.frame.PivotOps.first,
+            'count': pl.internals.frame.PivotOps.count,
+            'mean': pl.internals.frame.PivotOps.mean,
+            'sum': pl.internals.frame.PivotOps.sum,
         }
 
         values_fn = fn_options[values_fn]
