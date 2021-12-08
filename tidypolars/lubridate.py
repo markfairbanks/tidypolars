@@ -34,7 +34,7 @@ def as_date(x, fmt = None):
     >>> df.mutate(date_x = tp.as_date(col('x')))
     """
     x = _col_expr(x)
-    return x.str.strptime(pl.Date)
+    return x.str.strptime(pl.Date, fmt = fmt)
 
 def as_datetime(x, fmt = None):
     """
@@ -53,7 +53,7 @@ def as_datetime(x, fmt = None):
     >>> df.mutate(date_x = tp.as_datetime(col('x')))
     """
     x = _col_expr(x)
-    return x.str.strptime(pl.Datetime)
+    return x.str.strptime(pl.Datetime, fmt = fmt)
 
 def hour(x):
     """

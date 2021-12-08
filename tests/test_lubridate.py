@@ -29,3 +29,9 @@ def test_date():
                 )
     )
     assert actual.frame_equal(expected), "date operations failed"
+
+def as_date_fmt():
+    """Can pass fmt to as_date"""
+    df = tp.Tibble(date = ['12/31/2021'])
+    out = df.mutate(date_parsed = tp.as_date(col('date'), fmt='%m/%d/%Y'))
+    assert out.pull().is_datetime(), "as_date fmt failed"
