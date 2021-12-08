@@ -1,6 +1,9 @@
 # Changelog
 
-## v0.2.8 (in development)
+## v0.2.8 (2021/12/08)
+
+#### Bug fixes
+* Can use `fmt` arg in `as_date()` and `as_datetime()` (#155)
 
 ## v0.2.7 (2021/11/19)
 
