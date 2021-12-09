@@ -313,9 +313,9 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        df1.inner_join(df2)
-        df1.inner_join(df2, on = 'x')
-        df1.inner_join(df2, left_on = 'left_x', right_on = 'x')
+        >>> df1.inner_join(df2)
+        >>> df1.inner_join(df2, on = 'x')
+        >>> df1.inner_join(df2, left_on = 'left_x', right_on = 'x')
         """
         if (left_on == None) & (right_on == None) & (on == None):
             on = list(set(self.names) & set(df.names))
@@ -340,9 +340,9 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        df1.left_join(df2)
-        df1.left_join(df2, on = 'x')
-        df1.left_join(df2, left_on = 'left_x', right_on = 'x')
+        >>> df1.left_join(df2)
+        >>> df1.left_join(df2, on = 'x')
+        >>> df1.left_join(df2, left_on = 'left_x', right_on = 'x')
         """
         if (left_on == None) & (right_on == None) & (on == None):
             on = list(set(self.names) & set(df.names))
@@ -431,9 +431,9 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        df1.full_join(df2)
-        df1.full_join(df2, on = 'x')
-        df1.full_join(df2, left_on = 'left_x', right_on = 'x')
+        >>> df1.full_join(df2)
+        >>> df1.full_join(df2, on = 'x')
+        >>> df1.full_join(df2, left_on = 'left_x', right_on = 'x')
         """
         if (left_on == None) & (right_on == None) & (on == None):
             on = list(set(self.names) & set(df.names))
