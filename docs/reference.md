@@ -120,10 +120,11 @@
 #### Converting to/from a pandas DataFrame
 
 * [`from_pandas()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.from_pandas)
-* [`.to_pandas()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.to_pandas)
+* [`.to_pandas()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.Tibble.to_pandas)
+
 
 #### Converting to a dict
-* [`.to_dict()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.to_dict)
+* [`.to_dict()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.Tibble.to_dict)
 
 ## Reading/writing data
 
