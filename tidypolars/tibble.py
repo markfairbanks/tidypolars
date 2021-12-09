@@ -52,7 +52,7 @@ class Tibble(pl.DataFrame):
             'distinct', 'drop', 'drop_null', 'head', 'fill', 'filter',
             'inner_join', 'left_join', 'mutate', 'names', 'nrow', 'ncol',
             'full_join', 'pivot_longer', 'pivot_wider',
-            'pull', 'relocate', 'rename', "replace_null", 'select', 'set_names',
+            'pull', 'relocate', 'rename', 'replace_null', 'select', 'set_names',
             'slice', 'slice_head', 'slice_tail', 'summarize', 'tail',
             'to_pandas', 'to_polars', 'write_csv', 'write_parquet'
         ]
@@ -381,17 +381,35 @@ class Tibble(pl.DataFrame):
 
     @property
     def names(self):
-        """Get column names"""
+        """
+        Get column names
+        
+        Examples
+        --------
+        >>> df.names
+        """
         return super().columns
 
     @property
     def ncol(self):
-        """Get number of columns"""
+        """
+        Get number of columns
+        
+        Examples
+        --------
+        >>> df.ncol
+        """
         return super().shape[1]
 
     @property
     def nrow(self):
-        """Get number of rows"""
+        """
+        Get number of rows
+        
+        Examples
+        --------
+        >>> df.nrow
+        """
         return super().shape[0]
 
     def full_join(self, df, left_on = None, right_on = None, on = None, suffix: str = '_right'):

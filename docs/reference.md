@@ -18,6 +18,7 @@
   * [`.left_join()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.Tibble.left_join)
 * [`.pull()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.Tibble.pull)
 * [`.relocate()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.Tibble.relocate)
+* [`.rename()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.Tibble.rename)
 * [`.set_names()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.Tibble.set_names)
 * [`.slice()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.Tibble.slice)
 * [`.slice_head()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.Tibble.slice_head)
@@ -33,6 +34,11 @@
 * [`.pivot_wider()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.Tibble.pivot_wider)
 * [`.replace_null()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.Tibble.replace_null)
 
+#### Tibble attributes
+
+* [`.names`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.Tibble.names)
+* [`.ncol`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.Tibble.ncol)
+* [`.nrow`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.Tibble.nrow)
 
 ## Functions
 
@@ -117,7 +123,7 @@
 * [`.to_pandas()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.to_pandas)
 
 #### Converting to a dict
-* [`.to_dict()`]https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.to_dict)
+* [`.to_dict()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.to_dict)
 
 ## Reading/writing data
 
