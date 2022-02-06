@@ -132,7 +132,7 @@ class Tibble(pl.DataFrame):
         Parameters
         ----------
         *args : str, Expr
-            Columns to find distinct/unique rows
+            Columns to group by
         sort : bool
             Should columns be ordered in descending order by count
         name : str
@@ -174,9 +174,9 @@ class Tibble(pl.DataFrame):
         args = _args_as_list(args)
 
         if len(args) == 0:
-            df = super().drop_duplicates()
+            df = super().distinct()
         else:
-            df = super().select(args).drop_duplicates()
+            df = super().select(args).distinct()
         
         return df.pipe(from_polars)
 
