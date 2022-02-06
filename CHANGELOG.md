@@ -1,11 +1,11 @@
 # Changelog
 
-## v0.2.9
+## v0.2.9 (2022/1/6)
 
 ### Bug fixes
 * Update `.distinct()` to work with polars >= 0.12.20
 
-## v0.2.8 (2021/12/08)
+## v0.2.8 (2021/12/8)
 
 #### Bug fixes
 * Can use `fmt` arg in `as_date()` and `as_datetime()` (#155)
@@ -45,7 +45,7 @@
 
 * `.relocate()`: tidyselect helpers work
 
-## v0.2.1 (2021/11/08)
+## v0.2.1 (2021/11/8)
 
 #### New Tibble methods
 
@@ -56,7 +56,7 @@
 
 * `replace_null()`
 
-## v0.2.0 (2021/11/05)
+## v0.2.0 (2021/11/5)
 
 #### New Functions
 
@@ -167,7 +167,7 @@
 * `.slice_head()`
 * `.slice_tail()`
 
-## v0.1.4 (2021/10/06)
+## v0.1.4 (2021/10/6)
 
 #### New Tibble methods
 
@@ -189,14 +189,14 @@
 
 * Class name changed from tibble to Tibble
 
-## v0.1.3 (2021/10/04)
+## v0.1.3 (2021/10/4)
 
 * Class name changed from tidyframe to tibble
 
-## v0.1.2 (2021/10/04)
+## v0.1.2 (2021/10/4)
 
-## v0.1.1 (2021/10/04)
+## v0.1.1 (2021/10/4)
 
-## v0.1.0 (2021/10/02)
+## v0.1.0 (2021/10/2)
 
 * First release of `tidypolars`
