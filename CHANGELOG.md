@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.2.9
+
+### Bug fixes
+* Update `.distinct()` to work with polars >= 0.12.20
+
 ## v0.2.8 (2021/12/08)
 
 #### Bug fixes
