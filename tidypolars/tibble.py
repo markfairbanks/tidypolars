@@ -372,10 +372,6 @@ class Tibble(pl.DataFrame):
         ...           a_plus_b = col('a') + col('b'))
         """
         exprs = _args_as_list(args) + _kwargs_as_exprs(kwargs)
-        # if not _no_by(by):
-        #     exprs = [expr.over(by) for expr in exprs]
-
-        # out = super(Tibble, self).with_columns(exprs)
 
         if _no_by(by):
             out = super(Tibble, self).with_columns(exprs)
@@ -647,6 +643,44 @@ class Tibble(pl.DataFrame):
             ValueError("replace must be a dictionary of column/replacement pairs")
         replace_exprs = [col(key).fill_null(value).keep_name() for key, value in replace.items()]
         return self.mutate(*replace_exprs)
+
+    def separate(self, sep_col, into, sep = '_', remove = True):
+        """
+        Separate a character column into multiple columns
+
+        Parameters
+        ----------
+        sep_col : str
+            Column to split into multiple columns
+        into : list
+            List of new column names
+        sep : str
+            Separator to split on. Default to '_'
+        remove : bool
+            If True removes the input column from the output data frame
+
+        Examples
+        --------
+        >>> df = tp.Tibble(x = ['a_a', 'b_b', 'c_c'])
+        >>> df.separate('x', into = ['left', 'right'])
+        """
+        sep_col = _col_expr(sep_col)
+        into = _args_as_list(into)
+        out = (
+            self
+            .mutate(
+                __split_names__ = lit("_".join(into)).str.split("_"),
+                __split_vals__ = sep_col.str.split(sep)
+            )
+            .to_polars()
+            .explode(['__split_names__', '__split_vals__'])
+            .pipe(from_polars)
+            .pivot_wider(names_from = '__split_names__',
+                        values_from = '__split_vals__')
+        )
+        if remove == True:
+            out = out.drop(sep_col)
+        return out
 
     def set_names(self, nm = None):
         """

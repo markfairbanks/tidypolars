@@ -311,6 +311,13 @@ def test_select():
     expected = df[['x', 'z']]
     assert actual.frame_equal(expected), "select failed"
 
+def test_separate():
+    """Can separate"""
+    df = tp.Tibble(x = ['a_a', 'b_b', 'c_c'])
+    actual = df.separate('x', into = ['left', 'right']).arrange('left')
+    expected = tp.Tibble(left = ['a', 'b', 'c'], right = ['a', 'b', 'c'])
+    assert actual.frame_equal(expected), "separate failed"
+
 def test_slice():
     """Can slice"""
     df = tp.Tibble({'x': range(3), 'y': ['a', 'a', 'b']})
