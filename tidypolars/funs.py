@@ -1,11 +1,12 @@
 import polars as pl
 from .tibble import from_polars
-from .utils import _col_expr
+from .utils import _args_as_list, _col_expr
 
 __all__ = [
     # General functions
     "abs",
     "case_when",
+    "coalesce",
     "floor",
     "if_else",
     "lag", "lead",
@@ -157,6 +158,27 @@ def cast(x, dtype):
     """
     x = _col_expr(x)
     return x.cast(dtype)
+
+def coalesce(*args):
+    """
+    General type conversion.
+
+    Parameters
+    ----------
+    args : Columns to coalesce
+        Column to operate on
+
+    Examples
+    --------
+    >>> df.mutate(abs_x = tp.cast(col('x'), tp.Float64))
+    """
+    args = _args_as_list(args)
+    expr = if_else(args[0].is_null(), args[1], args[0])
+    if len(args) > 2:
+        locs = range(2, len(args))
+        for i in locs:
+            expr = if_else(expr.is_null(), args[i], expr)
+    return expr
 
 def count(x):
     """

@@ -67,7 +67,20 @@ def test_casting():
     expected = tp.Tibble(float_cast = [1.0, 2.0, 3.0],
                          int_cast = [1, 2, 3],
                          string_cast = ["1", "2", "3"])
-    assert actual.frame_equal(expected), "case_when failed"
+    assert actual.frame_equal(expected), "casting failed"
+
+def test_coalesce():
+    """Can use coalesce"""
+    df = tp.Tibble(x = [None, None, 1], y = [2, None, 2], z = [3, 3, 3])
+    actual = (
+        df
+        .mutate(
+            coalesce_x = tp.coalesce(col('x'), col('y'), col('z'))
+        )
+        .select('coalesce_x')
+    )
+    expected = tp.Tibble(coalesce_x = [2, 3, 1])
+    assert actual.frame_equal(expected), "coalesce failed"
 
 def test_floor():
     """Can get the floor"""
