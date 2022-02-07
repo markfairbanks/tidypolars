@@ -376,10 +376,7 @@ class Tibble(pl.DataFrame):
         if _no_by(by):
             out = super(Tibble, self).with_columns(exprs)
         else:
-            out = (
-                super(Tibble, self).groupby(by, maintain_order = True)
-                .apply(lambda x: x.with_columns(exprs))
-            )
+            out = super(Tibble, self).groupby(by).apply(lambda x: x.with_columns(exprs))
         
         return out.pipe(from_polars)
 
