@@ -523,11 +523,6 @@ def n():
     """
     Number of observations in each group
 
-    Parameters
-    ----------
-    x : Expr, Series
-        Column to operate on
-
     Examples
     --------
     >>> df.summarize(count = tp.n())
