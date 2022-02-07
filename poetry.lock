@@ -1064,7 +1064,7 @@ testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "polars"
-version = "0.12.21"
+version = "0.12.22"
 description = "Blazingly fast DataFrame library"
 category = "main"
 optional = false
@@ -1075,10 +1075,10 @@ numpy = ">=1.16.0"
 typing_extensions = {version = ">=4.0.0", markers = "python_version < \"3.10\""}
 
 [package.extras]
-fsspec = ["fsspec"]
-pyarrow = ["pyarrow (>=4.0)"]
-connectorx = ["connectorx"]
 pandas = ["pyarrow (>=4.0)", "pandas"]
+pyarrow = ["pyarrow (>=4.0)"]
+fsspec = ["fsspec"]
+connectorx = ["connectorx"]
 
 [[package]]
 name = "prometheus-client"
@@ -1093,7 +1093,7 @@ twisted = ["twisted"]
 
 [[package]]
 name = "prompt-toolkit"
-version = "3.0.26"
+version = "3.0.27"
 description = "Library for building powerful interactive command lines in Python"
 category = "dev"
 optional = false
@@ -2326,19 +2326,19 @@ pluggy = [
     {file = "pluggy-1.0.0.tar.gz", hash = "sha256:4224373bacce55f955a878bf9cfa763c1e360858e330072059e10bad68531159"},
 ]
 polars = [
-    {file = "polars-0.12.21-cp36-abi3-macosx_10_7_x86_64.whl", hash = "sha256:91d435032771198066eb1e9ba15b249499ed9f9aa9f274765d473977b6a7efa9"},
-    {file = "polars-0.12.21-cp36-abi3-macosx_10_9_x86_64.macosx_11_0_arm64.macosx_10_9_universal2.whl", hash = "sha256:5230f6b9fd7d3a1cbad1f8d316109e83bfb90d491d4e961218470cf3bbaba1e4"},
-    {file = "polars-0.12.21-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:e2a4a54a34b623ab4ec748b0600d82041ef65ff3097e180bce800cefc96585e7"},
-    {file = "polars-0.12.21-cp36-abi3-win_amd64.whl", hash = "sha256:ce1a897659fa2c4601b2e356fadabe3f0d6121185a9bfe1f44bc45ed35d55c97"},
-    {file = "polars-0.12.21.tar.gz", hash = "sha256:9133730a0c430b9424ec53e2d2e903d7b9e008635b503eaa0f8f7d653cdee480"},
+    {file = "polars-0.12.22-cp36-abi3-macosx_10_7_x86_64.whl", hash = "sha256:b11a6556887d34617f5ac1a1a39965003d611ae6114da07000a7a365f05e4f4a"},
+    {file = "polars-0.12.22-cp36-abi3-macosx_10_9_x86_64.macosx_11_0_arm64.macosx_10_9_universal2.whl", hash = "sha256:e640cbd49b5ea124abedbce2f1bdd93b02ea65fa559f573c866cfdcd056081c5"},
+    {file = "polars-0.12.22-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:9f20da81070c60c6976a92c9c3734c454507cd77115f78ea45ed18c26ccf9443"},
+    {file = "polars-0.12.22-cp36-abi3-win_amd64.whl", hash = "sha256:cac54c4720dbc9139bc3292b184df1deb31d3ae5fcf219e0445529527b87342c"},
+    {file = "polars-0.12.22.tar.gz", hash = "sha256:9f6ca76512639495c56cc99b4c1b72603ea5e146f87d80074b06a24feb48b9fb"},
 ]
 prometheus-client = [
     {file = "prometheus_client-0.13.1-py3-none-any.whl", hash = "sha256:357a447fd2359b0a1d2e9b311a0c5778c330cfbe186d880ad5a6b39884652316"},
     {file = "prometheus_client-0.13.1.tar.gz", hash = "sha256:ada41b891b79fca5638bd5cfe149efa86512eaa55987893becd2c6d8d0a5dfc5"},
 ]
 prompt-toolkit = [
-    {file = "prompt_toolkit-3.0.26-py3-none-any.whl", hash = "sha256:4bcf119be2200c17ed0d518872ef922f1de336eb6d1ddbd1e089ceb6447d97c6"},
-    {file = "prompt_toolkit-3.0.26.tar.gz", hash = "sha256:a51d41a6a45fd9def54365bca8f0402c8f182f2b6f7e29c74d55faeb9fb38ac4"},
+    {file = "prompt_toolkit-3.0.27-py3-none-any.whl", hash = "sha256:cb7dae7d2c59188c85a1d6c944fad19aded6a26bd9c8ae115a4e1c20eb90b713"},
+    {file = "prompt_toolkit-3.0.27.tar.gz", hash = "sha256:f2b6a8067a4fb959d3677d1ed764cc4e63e0f6f565b9a4fc7edc2b18bf80217b"},
 ]
 ptyprocess = [
     {file = "ptyprocess-0.7.0-py2.py3-none-any.whl", hash = "sha256:4b41f3967fce3af57cc7e94b888626c18bf37a083e3651ca8feeb66d492fef35"},
