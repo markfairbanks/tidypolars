@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.10 (in development)
+
+#### New functions
+
+* `n()`
+
 ## v0.2.9 (2022/1/6)
 
 ### Bug fixes
