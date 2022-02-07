@@ -8,6 +8,7 @@
 
 #### New functions
 
+* `coalesce()`
 * `n()`
 * `row_number()`
 * `str_c()`
