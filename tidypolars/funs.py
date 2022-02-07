@@ -16,7 +16,7 @@ __all__ = [
 
     # Agg stats
     "count", "first", "last", "length",
-    "max", "mean", "median", "min",
+    "max", "mean", "median", "min", "n",
     "n_distinct", "quantile", "sd", "sum",
 
     # Predicates
@@ -518,6 +518,21 @@ def min(x):
     """
     x = _col_expr(x)
     return x.min()
+
+def n():
+    """
+    Number of observations in each group
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+
+    Examples
+    --------
+    >>> df.summarize(count = tp.n())
+    """
+    return pl.count()
 
 def n_distinct(x):
     """
