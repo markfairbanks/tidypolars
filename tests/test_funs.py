@@ -140,6 +140,20 @@ def test_replace_null():
     expected = tp.Tibble(x = [0, 1], y = [None, None])
     assert actual.frame_equal(expected), "replace_null function failed"
 
+def test_row_number():
+    """Can get row number"""
+    df = tp.Tibble(x = ['a', 'a', 'b'])
+    actual = df.mutate(row_num = tp.row_number())
+    expected = tp.Tibble(x = ['a', 'a', 'b'], row_num = [1, 2, 3])
+    assert actual.frame_equal(expected), "row_number failed"
+
+def test_row_number_group():
+    """Can get row number by group"""
+    df = tp.Tibble(x = ['a', 'a', 'b'])
+    actual = df.mutate(group_row_num = tp.row_number(), by = 'x')
+    expected = tp.Tibble(x = ['a', 'a', 'b'], group_row_num = [1, 2, 1])
+    assert actual.frame_equal(expected), "group row_number failed"
+
 def test_round():
     """Can round values"""
     df = tp.Tibble(x = [1.11, 2.22, 3.33])

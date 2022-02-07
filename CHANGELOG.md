@@ -5,6 +5,7 @@
 #### New functions
 
 * `n()`
+* `row_number()`
 
 ## v0.2.9 (2022/1/6)
 

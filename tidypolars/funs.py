@@ -12,6 +12,7 @@ __all__ = [
     "read_csv", "read_parquet",
     "replace_null",
     "round",
+    "row_number",
     "sqrt",
 
     # Agg stats
@@ -611,6 +612,16 @@ def round(x, decimals = 0):
     """
     x = _col_expr(x)
     return x.round(decimals)
+
+def row_number():
+    """
+    Return row number
+
+    Examples
+    --------
+    >>> df.mutate(row_num = tp.row_number())
+    """
+    return pl.arange(0, pl.count()) + 1
 
 def sd(x):
     """

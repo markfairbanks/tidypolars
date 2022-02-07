@@ -372,6 +372,11 @@ class Tibble(pl.DataFrame):
         ...           a_plus_b = col('a') + col('b'))
         """
         exprs = _args_as_list(args) + _kwargs_as_exprs(kwargs)
+        # if not _no_by(by):
+        #     exprs = [expr.over(by) for expr in exprs]
+
+        # out = super(Tibble, self).with_columns(exprs)
+
         if _no_by(by):
             out = super(Tibble, self).with_columns(exprs)
         else:
