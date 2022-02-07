@@ -5,6 +5,7 @@ from .utils import _args_as_list, _col_expr
 __all__ = [
     "paste",
     "paste0",
+    "str_c",
     "str_detect", 
     "str_extract",
     "str_length",
@@ -12,6 +13,8 @@ __all__ = [
     "str_remove", 
     "str_replace_all", 
     "str_replace", 
+    "str_ends",
+    "str_starts",
     "str_sub",
     "str_to_lower", 
     "str_to_upper",
@@ -54,6 +57,22 @@ def paste0(*args):
     """
     return paste(*args, sep = '')
 
+def str_c(*args, sep = ''):
+    """
+    Concatenate strings together
+
+    Parameters
+    ----------
+    args : Expr, str
+        Columns and/or strings to concatenate
+
+    Examples
+    --------
+    >>> df = tp.Tibble(x = ['a', 'b', 'c'])
+    >>> df.mutate(x_end = str_c(col('x'), 'end', sep = '_'))
+    """
+    return paste(*args, sep = sep)
+
 def str_detect(string, pattern, negate = False):
     """
     Detect the presence or absence of a pattern in a string
@@ -84,6 +103,27 @@ def str_detect(string, pattern, negate = False):
         exprs = exprs.is_not()
     
     return exprs
+
+def str_ends(string, pattern, negate = False):
+    """
+    Detect the presence or absence of a pattern at the end of a string.
+
+    Parameters
+    ----------
+    string : Expr
+        Column to operate on
+    pattern : str
+        Pattern to look for
+    negate : bool
+        If True, return non-matching elements
+
+    Examples
+    --------
+    >>> df = tp.Tibble(words = ['apple', 'bear', 'amazing'])
+    >>> df.filter(tp.str_ends(col('words'), 'ing'))
+    """
+    pattern = pattern + "$"
+    return str_detect(string, pattern, negate)
 
 def str_extract(string, pattern):
     """
@@ -120,6 +160,27 @@ def str_length(string):
     """
     string = _col_expr(string)
     return string.str.lengths()
+
+def str_starts(string, pattern, negate = False):
+    """
+    Detect the presence or absence of a pattern at the beginning of a string.
+
+    Parameters
+    ----------
+    string : Expr
+        Column to operate on
+    pattern : str
+        Pattern to look for
+    negate : bool
+        If True, return non-matching elements
+
+    Examples
+    --------
+    >>> df = tp.Tibble(words = ['apple', 'bear', 'amazing'])
+    >>> df.filter(tp.str_starts(col('words'), 'a'))
+    """
+    pattern = "^" + pattern
+    return str_detect(string, pattern, negate)
 
 def str_sub(string, start = 0, end = None):
     """
