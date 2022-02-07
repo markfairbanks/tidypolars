@@ -10,6 +10,9 @@
 
 * `n()`
 * `row_number()`
+* `str_c()`
+* `str_ends()`
+* `str_starts()`
 
 ## v0.2.9 (2022/1/6)
 

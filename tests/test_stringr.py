@@ -15,6 +15,13 @@ def test_paste0():
     expected = tp.Tibble(x = ['a', 'b', 'c'], x_end = ['a_end', 'b_end', 'c_end'])
     assert actual.frame_equal(expected), "paste0 failed"
 
+def test_str_c():
+    """Can use str_c"""
+    df = tp.Tibble(x = ['a', 'b', 'c'])
+    actual = df.mutate(x_end = tp.str_c(col('x'), 'end', sep = '_'))
+    expected = tp.Tibble(x = ['a', 'b', 'c'], x_end = ['a_end', 'b_end', 'c_end'])
+    assert actual.frame_equal(expected), "str_c failed"
+
 def test_str_detect_single():
     """Can str_detect find a single string"""
     df = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'])
@@ -34,6 +41,13 @@ def test_str_detect_multiple():
                          x = [True, False, True, True], 
                          y = [False, True, False, False])
     assert actual.frame_equal(expected), "str_detect multiple failed"
+
+def test_str_ends():
+    """Can use str_end"""
+    df = tp.Tibble(words = ['apple', 'bear', 'amazing'])
+    actual = df.filter(tp.str_ends(col('words'), 'ing'))
+    expected = tp.Tibble(words = ['amazing'])
+    assert actual.frame_equal(expected), "str_ends failed"
 
 def test_str_extract():
     """Can str_extract extract strings"""
@@ -86,6 +100,13 @@ def test_str_replace():
     actual = df.mutate(new_name = tp.str_replace(tp.col('name'), 'a', 'A'))
     expected = tp.Tibble(name = ['apple', 'banana', 'pear', 'grape'], new_name = ['Apple', 'bAnana', 'peAr', 'grApe'])
     assert actual.frame_equal(expected), "str_replace failed"
+
+def test_str_starts():
+    """Can use str_starts"""
+    df = tp.Tibble(words = ['apple', 'bear', 'amazing'])
+    actual = df.filter(tp.str_starts(col('words'), 'a'))
+    expected = tp.Tibble(words = ['apple', 'amazing'])
+    assert actual.frame_equal(expected), "str_starts failed"
 
 def test_str_to_lower():
     """Can str_to_lower lowercase a string"""
