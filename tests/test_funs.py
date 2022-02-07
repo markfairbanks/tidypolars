@@ -150,7 +150,10 @@ def test_row_number():
 def test_row_number_group():
     """Can get row number by group"""
     df = tp.Tibble(x = ['a', 'a', 'b'])
-    actual = df.mutate(group_row_num = tp.row_number(), by = 'x')
+    actual = (
+        df.mutate(group_row_num = tp.row_number(), by = 'x')
+        .arrange('x', 'group_row_num')
+    )
     expected = tp.Tibble(x = ['a', 'a', 'b'], group_row_num = [1, 2, 1])
     assert actual.frame_equal(expected), "group row_number failed"
 
