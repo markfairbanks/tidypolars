@@ -34,6 +34,7 @@
 * [`.pivot_longer()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.Tibble.pivot_longer)
 * [`.pivot_wider()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.Tibble.pivot_wider)
 * [`.replace_null()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.Tibble.replace_null)
+* [`.separate()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.Tibble.separate)
 
 #### Tibble attributes
 

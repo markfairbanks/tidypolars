@@ -2,6 +2,10 @@
 
 ## v0.2.10 (in development)
 
+#### New Tibble methods
+
+* `.separate()`
+
 #### New functions
 
 * `n()`
@@ -9,17 +13,20 @@
 
 ## v0.2.9 (2022/1/6)
 
-### Bug fixes
+#### Bug fixes
+
 * Update `.distinct()` to work with polars >= 0.12.20
 
 ## v0.2.8 (2021/12/8)
 
 #### Bug fixes
+
 * Can use `fmt` arg in `as_date()` and `as_datetime()` (#155)
 
 ## v0.2.7 (2021/11/19)
 
 #### New Tibble methods
+
 * `.to_dict()`
 
 ## v0.2.6 (2021/11/18)
