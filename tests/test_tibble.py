@@ -61,15 +61,15 @@ def test_bind_rows_multiple():
 
 def test_count_no_args():
     """Can count rows (no args)"""
-    df = tp.Tibble({'x': ['a', 'a', 'b'], 'y': [2, 1, 1]})
+    df = tp.Tibble({'x': ['a', 'a', 'b'], 'y': [1, 1, 1]})
     actual = df.count()
     expected = tp.Tibble({'n': [3]})
     assert actual.frame_equal(expected), "count with no args failed"
 
 def test_count_one_arg():
     """Can count rows (one arg)"""
-    df = tp.Tibble({'x': ['a', 'a', 'b'], 'y': [2, 1, 1]})
-    actual = df.count('x', sort=True)
+    df = tp.Tibble({'x': ['a', 'a', 'b'], 'y': [1, 1, 1]})
+    actual = df.count('x', sort = True)
     expected = tp.Tibble({'x': ['a', 'b'], 'n': [2, 1]})
     assert actual.frame_equal(expected), "count with one arg failed"
 

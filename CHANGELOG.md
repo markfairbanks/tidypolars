@@ -2,6 +2,9 @@
 
 ## v0.2.11 (in development)
 
+#### Functionality improvements
+* Can pass an empty list to `by`
+
 ## v0.2.10 (2022/1/7)
 
 #### New Tibble methods
