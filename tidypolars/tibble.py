@@ -30,14 +30,25 @@ class Tibble(pl.DataFrame):
         super().__init__(data)
     
     def __repr__(self):
+        """Printing method"""
         df = self.to_polars()
         return df.__str__()
     
     def _repr_html_(self):
+        """
+        Printing method for jupyter
+
+        Output rows and columns can be modified by setting the following ENVIRONMENT variables:
+
+        * POLARS_FMT_MAX_COLS: set the number of columns
+
+        * POLARS_FMT_MAX_ROWS: set the number of rows
+        """
         df = self.to_polars()
         return df._repr_html_()
 
     def __str__(self):
+        """Printing method"""
         df = self.to_polars()
         return df.__str__()
 
@@ -47,16 +58,17 @@ class Tibble(pl.DataFrame):
         return pl.DataFrame.__getattribute__(self, attr)
 
     def __dir__(self):
-        methods = [
+        _tidypolars_methods = [
             'arrange', 'bind_cols', 'bind_rows', 'colnames', 'clone', 'count',
             'distinct', 'drop', 'drop_null', 'head', 'fill', 'filter',
             'inner_join', 'left_join', 'mutate', 'names', 'nrow', 'ncol',
             'full_join', 'pivot_longer', 'pivot_wider',
-            'pull', 'relocate', 'rename', 'replace_null', 'select', 'set_names',
+            'pull', 'relocate', 'rename', 'replace_null', 'select',
+            'separate', 'set_names',
             'slice', 'slice_head', 'slice_tail', 'summarize', 'tail',
             'to_pandas', 'to_polars', 'write_csv', 'write_parquet'
         ]
-        return methods
+        return _tidypolars_methods
 
     def arrange(self, *args):
         """
