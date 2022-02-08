@@ -46,6 +46,8 @@ The key difference from R is that column names must be wrapped in `col()` in the
 
 The general idea - when doing calculations on a column you need to wrap it in `col()`. When doing simple column selections (like in `.select()`) you can pass the column names as strings.
 
+A full list of functions can be found [here](https://tidypolars.readthedocs.io/en/latest/reference.html).
+
 ### Group by syntax
 
 Methods operate by group by calling the `by` arg.
