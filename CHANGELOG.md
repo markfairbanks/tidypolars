@@ -1,5 +1,7 @@
 # Changelog
 
+## v0.2.11 (in development)
+
 ## v0.2.10 (2022/1/7)
 
 #### New Tibble methods
