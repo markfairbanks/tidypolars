@@ -136,7 +136,7 @@ class Tibble(pl.DataFrame):
         sort : bool
             Should columns be ordered in descending order by count
         name : str
-            The name of the new column in the output. If omitted, it will default to N.
+            The name of the new column in the output. If omitted, it will default to "n".
 
         Examples
         --------
@@ -149,7 +149,7 @@ class Tibble(pl.DataFrame):
         if len(args) == 0:
             df = Tibble({name: [self.nrow]})
         else:
-            df = self.summarize(pl.count(args[0]).alias(name), by = args)
+            df = self.summarize(pl.count().alias(name), by = args)
 
         if sort == True:
             df = df.arrange(desc(name))
@@ -676,7 +676,7 @@ class Tibble(pl.DataFrame):
             .explode(['__split_names__', '__split_vals__'])
             .pipe(from_polars)
             .pivot_wider(names_from = '__split_names__',
-                        values_from = '__split_vals__')
+                         values_from = '__split_vals__')
         )
         if remove == True:
             out = out.drop(sep_col)
@@ -794,7 +794,7 @@ class Tibble(pl.DataFrame):
     def summarise(self, *args,
                   by = None,
                   **kwargs):
-        """Alias for .summarize()"""
+        """Alias for `.summarize()`"""
         return self.summarize(*args, by = by, **kwargs)
     
     def summarize(self, *args,
@@ -853,7 +853,7 @@ class Tibble(pl.DataFrame):
 
     def to_pandas(self):
         """
-        Convert to a polars DataFrame
+        Convert to a pandas DataFrame
 
         Examples
         --------
@@ -864,11 +864,6 @@ class Tibble(pl.DataFrame):
     def to_polars(self):
         """
         Convert to a polars DataFrame
-
-        Parameters
-        ----------
-        by_ref : bool
-            Whether a shallow copy should be made
 
         Examples
         --------
