@@ -1,4 +1,5 @@
 import polars as pl
+from operator import not_
 
 __all__ = []
 
@@ -16,11 +17,23 @@ def _args_as_list(x):
 def _kwargs_as_exprs(kwargs):
     return [expr.alias(key) for key, expr in kwargs.items()]
 
-def _no_by(gb):
-    if isinstance(gb, pl.Expr) | isinstance(gb, str) | isinstance(gb, list):
-        return False
+def _safe_len(x):
+    if x == None:
+        return 0
     else:
+        return len(x)
+
+def _uses_by(by):
+    if isinstance(by, pl.Expr) | isinstance(by, str):
         return True
+    elif isinstance(by, list):
+        # Allow passing an empty list to `by`
+        if _safe_len(by) == 0:
+            return False
+        else:
+            return True
+    else:
+        return False
 
 def _is_list_like(x):
     if isinstance(x, list) | isinstance(x, pl.Series):

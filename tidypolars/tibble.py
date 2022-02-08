@@ -3,7 +3,7 @@ import functools as ft
 from .utils import (
     _args_as_list,
     _kwargs_as_exprs,
-    _no_by,
+    _uses_by,
     _col_expr,
     _col_exprs
 )
@@ -158,15 +158,12 @@ class Tibble(pl.DataFrame):
         """
         args = _args_as_list(args)
         
-        if len(args) == 0:
-            df = Tibble({name: [self.nrow]})
-        else:
-            df = self.summarize(pl.count().alias(name), by = args)
+        out = self.summarize(pl.count().alias(name), by = args)
 
         if sort == True:
-            df = df.arrange(desc(name))
+            out = out.arrange(desc(name))
 
-        return df
+        return out
 
     def distinct(self, *args):
         """
@@ -295,10 +292,11 @@ class Tibble(pl.DataFrame):
         args = _args_as_list(args)
         exprs = ft.reduce(lambda a, b: a & b, args)
 
-        if _no_by(by):
-            out = super().filter(exprs)
-        else:
+        if _uses_by(by):
             out = super().groupby(by).apply(lambda x: x.filter(exprs))
+        else:
+            out = super().filter(exprs)
+            
         
         return out.pipe(from_polars)
     
@@ -385,10 +383,11 @@ class Tibble(pl.DataFrame):
         """
         exprs = _args_as_list(args) + _kwargs_as_exprs(kwargs)
 
-        if _no_by(by):
-            out = super(Tibble, self).with_columns(exprs)
-        else:
+        if _uses_by(by):
             out = super(Tibble, self).groupby(by).apply(lambda x: x.with_columns(exprs))
+        else:
+            out = super(Tibble, self).with_columns(exprs)
+            
         
         return out.pipe(from_polars)
 
@@ -749,10 +748,10 @@ class Tibble(pl.DataFrame):
         >>> df.slice(0, by = 'c')
         """
         rows = _args_as_list(args)
-        if _no_by(by):
-            df = super(Tibble, self).select(pl.all().take(rows))
-        else:
+        if _uses_by(by):
             df = super(Tibble, self).groupby(by).apply(lambda x: x.select(pl.all().take(rows)))
+        else:
+            df = super(Tibble, self).select(pl.all().take(rows))  
         return df.pipe(from_polars)
 
     def slice_head(self, n = 5, *, by = None):
@@ -773,10 +772,10 @@ class Tibble(pl.DataFrame):
         >>> df.slice_head(1, by = 'c')
         """
         col_order = self.names
-        if _no_by(by):
-            df = super(Tibble, self).head(n)
-        else:
+        if _uses_by(by):
             df = super(Tibble, self).groupby(by).head(n)
+        else:
+            df = super(Tibble, self).head(n)
         return df.pipe(from_polars).select(col_order)
 
     def slice_tail(self, n = 5, *, by = None):
@@ -797,10 +796,10 @@ class Tibble(pl.DataFrame):
         >>> df.slice_tail(1, by = 'c')
         """
         col_order = self.names
-        if _no_by(by):
-            df = super(Tibble, self).tail(n)
-        else:
+        if _uses_by(by):
             df = super(Tibble, self).groupby(by).tail(n)
+        else:
+            df = super(Tibble, self).tail(n)
         return df.pipe(from_polars).select(col_order)
     
     def summarise(self, *args,
@@ -835,10 +834,10 @@ class Tibble(pl.DataFrame):
         """
         exprs = _args_as_list(args) + _kwargs_as_exprs(kwargs)
 
-        if _no_by(by):
-            out = super(Tibble, self).select(exprs)
-        else:
+        if _uses_by(by):
             out = super(Tibble, self).groupby(by).agg(exprs)
+        else:
+            out = super(Tibble, self).select(exprs)
         
         return out.pipe(from_polars)
 
