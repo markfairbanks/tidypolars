@@ -383,12 +383,17 @@ class Tibble(pl.DataFrame):
         """
         exprs = _args_as_list(args) + _kwargs_as_exprs(kwargs)
 
+        out = self.to_polars()
+        def _mutate_cols(df, exprs):
+            for expr in exprs:
+                df = df.with_columns(expr)
+            return df
+
         if _uses_by(by):
-            out = super(Tibble, self).groupby(by).apply(lambda x: x.with_columns(exprs))
+            out = out.groupby(by).apply(lambda x: _mutate_cols(x, exprs))
         else:
-            out = super(Tibble, self).with_columns(exprs)
+            out = _mutate_cols(out, exprs)
             
-        
         return out.pipe(from_polars)
 
     @property

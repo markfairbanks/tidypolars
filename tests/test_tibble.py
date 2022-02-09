@@ -150,11 +150,13 @@ def test_mutate():
     """Can edit existing columns and can add columns"""
     df = tp.Tibble({'x': _repeat(1, 3), 'y': _repeat(2, 3)})
     actual = df.mutate(double_x = col('x') * 2,
-                       y = col('y') + 10)
+                       y = col('y') + 10,
+                       y_plus_3 = col('y') + 3)
     expected = tp.Tibble(
-        {'x': _repeat(1, 3),
-         'y': _repeat(12, 3),
-          'double_x': _repeat(2, 3)}
+        x =  _repeat(1, 3),
+        y =  _repeat(12, 3),
+        double_x = _repeat(2, 3),
+        y_plus_3 = _repeat(15, 3)
     )
     assert actual.frame_equal(expected), "mutate failed"
 
@@ -166,7 +168,7 @@ def test_mutate_across():
     expected = tp.Tibble(
         {'x': _repeat(2, 3),
          'y': _repeat(4, 3),
-         'x_plus_y': _repeat(3, 3)}
+         'x_plus_y': _repeat(6, 3)}
     )
     assert actual.frame_equal(expected), "mutate across failed"
 
