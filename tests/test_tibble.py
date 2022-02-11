@@ -163,8 +163,8 @@ def test_mutate():
                        y = col('y') + 10,
                        y_plus_3 = col('y') + 3)
     expected = tp.Tibble(
-        x =  _repeat(1, 3),
-        y =  _repeat(12, 3),
+        x = _repeat(1, 3),
+        y = _repeat(12, 3),
         double_x = _repeat(2, 3),
         y_plus_3 = _repeat(15, 3)
     )
@@ -181,6 +181,17 @@ def test_mutate_across():
          'x_plus_y': _repeat(6, 3)}
     )
     assert actual.frame_equal(expected), "mutate across failed"
+
+def test_mutate_constant():
+    """Can add a constant value without tp.lit"""
+    df = tp.Tibble({'x': _repeat(1, 3), 'y': _repeat(2, 3)})
+    actual = df.mutate(z = "z")
+    expected = tp.Tibble(
+        x = _repeat(1, 3),
+        y = _repeat(2, 3),
+        z = _repeat('z', 3)
+    )
+    assert actual.frame_equal(expected), "mutate failed"
 
 def test_names():
     """Can get column names"""

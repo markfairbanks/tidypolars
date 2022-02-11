@@ -2,10 +2,10 @@ import polars as pl
 import functools as ft
 from .utils import (
     _as_list,
-    _kwargs_as_exprs,
-    _uses_by,
     _col_expr,
-    _col_exprs
+    _col_exprs,
+    _kwargs_as_exprs,
+    _uses_by
 )
 import copy
 from .reexports import *
@@ -375,11 +375,10 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.Tibble({'a': range(3), 'b': range(3)})
+        >>> df = tp.Tibble({'a': range(3), 'b': range(3), c = ['a', 'a', 'b']})
         >>> df.mutate(double_a = col('a') * 2,
         ...           a_plus_b = col('a') + col('b'))
-        >>> df.mutate((col(['a', 'b']) * 2).prefix('double_'),
-        ...           a_plus_b = col('a') + col('b'))
+        >>> df.mutate(row_num = row_number(), by = 'c')
         """
         exprs = _as_list(args) + _kwargs_as_exprs(kwargs)
 

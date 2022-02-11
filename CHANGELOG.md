@@ -10,7 +10,10 @@
 #### Functionality improvements
 
 * Can pass an empty list to `by`
-* `.mutate()`: Column expressions are evaluated in order to match dplyr semantics
+* `.mutate()`
+
+  * Column expressions are evaluated in order to match dplyr semantics
+  * Can add a new column with a constant without `tp.lit()`
 
 ## v0.2.10 (2022/1/7)
 

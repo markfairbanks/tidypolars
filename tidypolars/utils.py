@@ -23,7 +23,7 @@ def _as_list(x):
 
 # Convert kwargs to col() expressions with alias
 def _kwargs_as_exprs(kwargs):
-    return [expr.alias(key) for key, expr in kwargs.items()]
+    return [_lit_expr(expr).alias(key) for key, expr in kwargs.items()]
 
 def _safe_len(x):
     if x == None:
@@ -60,6 +60,11 @@ def _is_type(x):
 
 def _is_tuple(x):
     return isinstance(x, tuple)
+
+def _lit_expr(x):
+    if not_(_is_expr(x)):
+        x = pl.lit(x)
+    return x
 
 #  Wrap all str inputs in col()  
 def _col_exprs(x):
