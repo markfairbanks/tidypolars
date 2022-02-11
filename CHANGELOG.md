@@ -1,5 +1,7 @@
 # Changelog
 
+## v0.2.12 (in development)
+
 ## v0.2.11 (2022/2/11)
 
 #### New functions
