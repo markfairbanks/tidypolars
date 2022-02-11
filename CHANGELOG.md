@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.2.11 (in development)
+## v0.2.11 (2022/2/11)
 
 #### New functions
 
@@ -12,10 +12,10 @@
 * Can pass an empty list to `by`
 * `.mutate()`
 
-  * Column expressions are evaluated in order to match dplyr semantics
+  * Column expressions are evaluated sequentially in order to match dplyr semantics
   * Can add a new column with a constant without `tp.lit()`
 
-## v0.2.10 (2022/1/7)
+## v0.2.10 (2022/2/7)
 
 #### New Tibble methods
 
@@ -30,7 +30,7 @@
 * `str_ends()`
 * `str_starts()`
 
-## v0.2.9 (2022/1/6)
+## v0.2.9 (2022/2/6)
 
 #### Bug fixes
 
