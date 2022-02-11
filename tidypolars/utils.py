@@ -85,3 +85,8 @@ def _repeat(x, times):
     if not_(_is_list(x)):
         x = [x]
     return x * times
+
+def _mutate_cols(df, exprs):
+    for expr in exprs:
+        df = df.with_columns(expr)
+    return df
