@@ -169,7 +169,7 @@ def between(x, left, right):
     >>> df.filter(tp.between(col('x'), 1, 3))
     """
     x = _col_expr(x)
-    return (x >= left) & (x <= right)
+    return x.is_between(left, right, include_bounds = True)
 
 def case_when(expr):
     """
