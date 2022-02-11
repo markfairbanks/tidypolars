@@ -1,7 +1,7 @@
 import polars as pl
 import functools as ft
 from .utils import (
-    _args_as_list,
+    _as_list,
     _kwargs_as_exprs,
     _uses_by,
     _col_expr,
@@ -22,7 +22,7 @@ class Tibble(pl.DataFrame):
     A data frame object that provides methods familiar to R tidyverse users.
     """
     def __init__(self, *args, **kwargs):
-        args = _args_as_list(args)
+        args = _as_list(args)
         if len(args) == 0:
             data = kwargs
         else:
@@ -88,7 +88,7 @@ class Tibble(pl.DataFrame):
         >>> # Arrange some columns descending
         >>> df.arrange(tp.desc('x'), 'y')
         """
-        exprs = _args_as_list(args)
+        exprs = _as_list(args)
         desc = [True if isinstance(expr, DescCol) else False for expr in exprs]
         return super().sort(exprs, reverse = desc).pipe(from_polars)
 
@@ -107,7 +107,7 @@ class Tibble(pl.DataFrame):
         >>> df2 = tp.Tibble({'a': ['c', 'c', 'c'], 'b': range(4, 7)})
         >>> df1.bind_cols(df2)
         """
-        frames = _args_as_list(args)
+        frames = _as_list(args)
         out = self
         for frame in frames:
             out = super(Tibble, out).hstack(frame).pipe(from_polars)
@@ -128,7 +128,7 @@ class Tibble(pl.DataFrame):
         >>> df2 = tp.Tibble({'x': ['c', 'c', 'c'], 'y': range(4, 7)})
         >>> df1.bind_rows(df2)
         """
-        frames = _args_as_list(args)
+        frames = _as_list(args)
         out = pl.concat([self, *frames], how = "diagonal")
         return out.pipe(from_polars)
 
@@ -156,7 +156,7 @@ class Tibble(pl.DataFrame):
         >>> df.count()
         >>> df.count('b')
         """
-        args = _args_as_list(args)
+        args = _as_list(args)
         
         out = self.summarize(pl.count().alias(name), by = args)
 
@@ -180,7 +180,7 @@ class Tibble(pl.DataFrame):
         >>> df.distinct()
         >>> df.distinct('b')
         """
-        args = _args_as_list(args)
+        args = _as_list(args)
 
         if len(args) == 0:
             df = super().distinct()
@@ -202,7 +202,7 @@ class Tibble(pl.DataFrame):
         --------
         >>> df.drop('x', 'y')
         """
-        args = _args_as_list(args)
+        args = _as_list(args)
         drop_cols = self.select(args).names
         return super().drop(drop_cols).pipe(from_polars)
 
@@ -221,7 +221,7 @@ class Tibble(pl.DataFrame):
         >>> df.drop_null()
         >>> df.drop_null('x', 'y')
         """
-        args = _args_as_list(args)
+        args = _as_list(args)
         if len(args) == 0:
             out = super().drop_nulls()
         else:
@@ -254,7 +254,7 @@ class Tibble(pl.DataFrame):
         >>> df.fill('a', 'b', by = 'groups')
         >>> df.fill('a', 'b', direction = 'downup')
         """
-        args = _args_as_list(args)
+        args = _as_list(args)
         if len(args) == 0: return self
         args = _col_exprs(args)
         options = {'down': 'forward', 'up': 'backward'}
@@ -289,7 +289,7 @@ class Tibble(pl.DataFrame):
         >>> df.filter((col('a') < 2) & (col('b') == 'a'))
         >>> df.filter(col('a') <= tp.mean(col('a')), by = 'b')
         """
-        args = _args_as_list(args)
+        args = _as_list(args)
         exprs = ft.reduce(lambda a, b: a & b, args)
 
         if _uses_by(by):
@@ -381,7 +381,7 @@ class Tibble(pl.DataFrame):
         >>> df.mutate((col(['a', 'b']) * 2).prefix('double_'),
         ...           a_plus_b = col('a') + col('b'))
         """
-        exprs = _args_as_list(args) + _kwargs_as_exprs(kwargs)
+        exprs = _as_list(args) + _kwargs_as_exprs(kwargs)
 
         out = self.to_polars()
         def _mutate_cols(df, exprs):
@@ -582,7 +582,7 @@ class Tibble(pl.DataFrame):
         >>> df.relocate('a', before = 'c')
         >>> df.relocate('b', after = 'c')
         """
-        move_cols = _args_as_list(args)
+        move_cols = _as_list(args)
         move_cols = self.select(move_cols).names
         push_length = len(move_cols)
         col_dict = {name:index for index, name in enumerate(self.names)}
@@ -623,7 +623,7 @@ class Tibble(pl.DataFrame):
         >>> df.rename(new_x = 'x') # dplyr interface
         >>> df.rename({'x': 'new_x'}) # pandas interface
         """
-        args = _args_as_list(args)
+        args = _as_list(args)
         if len(args) > 0:
             if isinstance(args[0], dict):
                 mapping = args[0]
@@ -681,7 +681,7 @@ class Tibble(pl.DataFrame):
         >>> df.separate('x', into = ['left', 'right'])
         """
         sep_col = _col_expr(sep_col)
-        into = _args_as_list(into)
+        into = _as_list(into)
         out = (
             self
             .mutate(
@@ -713,7 +713,7 @@ class Tibble(pl.DataFrame):
         >>> df.set_names(['a', 'b'])
         """
         if nm == None: nm = self.names
-        nm = _args_as_list(nm)
+        nm = _as_list(nm)
         rename_dict = {k:v for k, v in zip(self.names, nm)}
         return self.rename(rename_dict)
     
@@ -732,7 +732,8 @@ class Tibble(pl.DataFrame):
         >>> df.select('a', 'b')
         >>> df.select(col('a'), col('b'))
         """
-        args = _args_as_list(args)
+        args = _as_list(args)
+        args = _col_exprs(args)
         return super().select(args).pipe(from_polars)
 
     def slice(self, *args, by = None):
@@ -752,7 +753,7 @@ class Tibble(pl.DataFrame):
         >>> df.slice(0, 1)
         >>> df.slice(0, by = 'c')
         """
-        rows = _args_as_list(args)
+        rows = _as_list(args)
         if _uses_by(by):
             df = super(Tibble, self).groupby(by).apply(lambda x: x.select(pl.all().take(rows)))
         else:
@@ -837,7 +838,7 @@ class Tibble(pl.DataFrame):
         >>> df.summarize(avg_a = tp.mean(col('a')),
         ...              max_b = tp.max(col('b')))
         """
-        exprs = _args_as_list(args) + _kwargs_as_exprs(kwargs)
+        exprs = _as_list(args) + _kwargs_as_exprs(kwargs)
 
         if _uses_by(by):
             out = super(Tibble, self).groupby(by).agg(exprs)

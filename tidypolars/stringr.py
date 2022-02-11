@@ -1,6 +1,6 @@
 import polars as pl
 import functools as ft
-from .utils import _args_as_list, _col_expr
+from .utils import _as_list, _col_expr
 
 __all__ = [
     "paste",
@@ -35,7 +35,7 @@ def paste(*args, sep = ' '):
     >>> df = tp.Tibble(x = ['a', 'b', 'c'])
     >>> df.mutate(x_end = tp.paste(col('x'), 'end', sep = '_'))
     """
-    args = _args_as_list(args)
+    args = _as_list(args)
     args = [pl.lit(arg) if not isinstance(arg, pl.Expr) else arg for arg in args]
     curlies = ['{}'] * len(args)
     string_format = sep.join(curlies)

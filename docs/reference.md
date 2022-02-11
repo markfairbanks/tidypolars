@@ -47,6 +47,7 @@
 #### General functions
 
 * [`abs()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.abs)
+* [`across()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.across)
 * [`as_float()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.as_float)
 * [`as_integer()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.as_integer)
 * [`as_string()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.as_string)
