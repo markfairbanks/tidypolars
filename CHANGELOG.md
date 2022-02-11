@@ -2,14 +2,15 @@
 
 ## v0.2.11 (in development)
 
+#### New functions
+
+* `across()`
+* `as_boolean()`
+
 #### Functionality improvements
 
 * Can pass an empty list to `by`
 * `.mutate()`: Column expressions are evaluated in order to match dplyr semantics
-
-#### New functions
-
-* `across()`
 
 ## v0.2.10 (2022/1/7)
 
