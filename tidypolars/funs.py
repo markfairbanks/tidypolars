@@ -31,7 +31,8 @@ __all__ = [
     "is_nan", "is_not", "is_not_in", "is_not_null", "is_null",
 
     # Type conversion
-    "as_float", "as_integer", "as_string", "cast"
+    "as_boolean", "as_float", "as_integer", "as_string",
+    "cast"
 ]
 
 def across(cols, fn = lambda x: x, names_prefix = None):
@@ -60,6 +61,24 @@ def across(cols, fn = lambda x: x, names_prefix = None):
         exprs = [expr.prefix(names_prefix) for expr in exprs]
     return exprs
 
+def as_boolean(x, dtype = pl.Boolean):
+    """
+    Convert to a boolean
+
+    Parameters
+    ----------
+    x : Expr, Series
+        Column to operate on
+    dtype : DataType
+        Type to convert to
+
+    Examples
+    --------
+    >>> df.mutate(bool_x = tp.as_boolean(col('x')))
+    """
+    x = _col_expr(x)
+    return x.cast(dtype)
+
 def as_float(x, dtype = pl.Float64):
     """
     Convert to float. Defaults to Float64.
@@ -73,7 +92,7 @@ def as_float(x, dtype = pl.Float64):
 
     Examples
     --------
-    >>> df.mutate(abs_x = tp.as_float(col('x')))
+    >>> df.mutate(float_x = tp.as_float(col('x')))
     """
     x = _col_expr(x)
     return x.cast(dtype)
@@ -91,7 +110,7 @@ def as_integer(x, dtype = pl.Int64):
 
     Examples
     --------
-    >>> df.mutate(abs_x = tp.as_integer(col('x')))
+    >>> df.mutate(int_x = tp.as_integer(col('x')))
     """
     x = _col_expr(x)
     return x.cast(dtype)
@@ -109,7 +128,7 @@ def as_string(x, dtype = pl.Utf8):
 
     Examples
     --------
-    >>> df.mutate(abs_x = tp.as_string(col('x')))
+    >>> df.mutate(string_x = tp.as_string(col('x')))
     """
     x = _col_expr(x)
     return x.cast(dtype)
