@@ -5,6 +5,7 @@ from .utils import (
     _col_expr,
     _col_exprs,
     _kwargs_as_exprs,
+    _mutate_cols,
     _uses_by
 )
 import copy
@@ -383,10 +384,6 @@ class Tibble(pl.DataFrame):
         exprs = _as_list(args) + _kwargs_as_exprs(kwargs)
 
         out = self.to_polars()
-        def _mutate_cols(df, exprs):
-            for expr in exprs:
-                df = df.with_columns(expr)
-            return df
 
         if _uses_by(by):
             out = out.groupby(by).apply(lambda x: _mutate_cols(x, exprs))
