@@ -297,7 +297,6 @@ class Tibble(pl.DataFrame):
             out = super().groupby(by).apply(lambda x: x.filter(exprs))
         else:
             out = super().filter(exprs)
-            
         
         return out.pipe(from_polars)
     
