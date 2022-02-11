@@ -17,6 +17,16 @@ def test_arrange2():
     expected = tp.Tibble({'x': ['b', 'a', 'a'], 'y': [3, 1, 2]})
     assert actual.frame_equal(expected), "arrange descending failed"
 
+def test_arrange_across():
+    """Can arrange across"""
+    df = tp.Tibble({'x': ['a', 'a', 'b'], 'y': [1, 2, 3], 'z': [1, 2, 3]})
+    actual = df.arrange(
+        tp.across(['x']),
+        tp.across(['y', 'z'], tp.desc)
+    )
+    expected = tp.Tibble(x = ['a', 'a', 'b'], y = [2, 1, 3], z = [2, 1, 3])
+    assert actual.frame_equal(expected), "arrange across failed"
+
 def test_bind_cols_single():
     """Can bind_cols"""
     df1 = tp.Tibble({'x': ['a', 'a', 'b'], 'y': [1, 2, 3]})
@@ -163,7 +173,7 @@ def test_mutate():
 def test_mutate_across():
     """Can mutate multiple columns simultaneously"""
     df = tp.Tibble({'x': _repeat(1, 3), 'y': _repeat(2, 3)})
-    actual = df.mutate(col(['x', 'y']) * 2,
+    actual = df.mutate(tp.across(tp.Int64, lambda x: x * 2),
                        x_plus_y = col('x') + col('y'))
     expected = tp.Tibble(
         {'x': _repeat(2, 3),
@@ -365,7 +375,7 @@ def test_summarize_grouped():
 def test_summarize_across():
     """Can use summarize_across"""
     df = tp.Tibble(x = range(3), y = range(3), z = range(3))
-    actual = df.summarize(col(['x', 'y']).max().prefix('max_'),
+    actual = df.summarize(tp.across(['x', 'y'], tp.max, names_prefix = "max_"),
                           avg_x = col('x').mean())
     expected = tp.Tibble({'max_x': [2], 'max_y': [2], 'avg_x': [1]})
     assert actual.frame_equal(expected), "ungrouped summarize across failed"

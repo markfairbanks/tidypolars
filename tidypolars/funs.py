@@ -1,10 +1,15 @@
 import polars as pl
 from .tibble import from_polars
-from .utils import _args_as_list, _col_expr
+from .utils import (
+    _as_list,
+    _col_expr,
+    _col_exprs
+)
 
 __all__ = [
     # General functions
     "abs",
+    "across",
     "case_when",
     "coalesce",
     "floor",
@@ -28,6 +33,32 @@ __all__ = [
     # Type conversion
     "as_float", "as_integer", "as_string", "cast"
 ]
+
+def across(cols, fn = lambda x: x, names_prefix = None):
+    """
+    Apply a function across a selection of columns
+
+    Parameters
+    ----------
+    cols : list
+        Columns to operate on
+    fn : lambda
+        A function or lambda to apply to each column
+    names_prefix : Optional - str
+        Prefix to append to changed columns
+
+    Examples
+    --------
+    >>> df = tp.Tibble(x = ['a', 'a', 'b'], y = range(3), z = range(3))
+    >>> df.mutate(across(['y', 'z'], lambda x: x * 2))
+    >>> df.mutate(across(tp.Int64, lambda x: x * 2, names_prefix = "double_"))
+    >>> df.summarize(across(['y', 'z'], tp.mean), by = 'x')
+    """
+    _cols = _col_exprs(_as_list(cols))
+    exprs = [fn(_col) for _col in _cols]
+    if names_prefix != None:
+        exprs = [expr.prefix(names_prefix) for expr in exprs]
+    return exprs
 
 def as_float(x, dtype = pl.Float64):
     """
@@ -161,18 +192,18 @@ def cast(x, dtype):
 
 def coalesce(*args):
     """
-    General type conversion.
+    Coalesce missing values
 
     Parameters
     ----------
-    args : Columns to coalesce
-        Column to operate on
+    args : Expr
+        Columns to coalesce
 
     Examples
     --------
     >>> df.mutate(abs_x = tp.cast(col('x'), tp.Float64))
     """
-    args = _args_as_list(args)
+    args = _as_list(args)
     expr = if_else(args[0].is_null(), args[1], args[0])
     if len(args) > 2:
         locs = range(2, len(args))
