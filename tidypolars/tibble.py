@@ -109,10 +109,10 @@ class Tibble(pl.DataFrame):
         >>> df1.bind_cols(df2)
         """
         frames = _as_list(args)
-        out = self
+        out = self.to_polars()
         for frame in frames:
-            out = super(Tibble, out).hstack(frame).pipe(from_polars)
-        return out
+            out = out.hstack(frame)
+        return out.pipe(from_polars)
     
     def bind_rows(self, *args):
         """
