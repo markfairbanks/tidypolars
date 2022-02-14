@@ -11,6 +11,7 @@ from .utils import (
 import copy
 from .reexports import *
 from .tidyselect import everything
+from operator import not_
 
 __all__ = [
     "Tibble",
@@ -22,13 +23,12 @@ class Tibble(pl.DataFrame):
     """
     A data frame object that provides methods familiar to R tidyverse users.
     """
-    def __init__(self, *args, **kwargs):
-        args = _as_list(args)
-        if len(args) == 0:
-            data = kwargs
-        else:
-            data = args[0]
-        super().__init__(data)
+    def __init__(self, _data = None, **kwargs):
+        if len(kwargs) > 0:
+            _data = kwargs
+        elif not_(isinstance(_data, dict)):
+            raise ValueError("_data must be a dictionary or kwargs must be used")
+        super().__init__(_data)
     
     def __repr__(self):
         """Printing method"""
