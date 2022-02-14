@@ -10,16 +10,20 @@ def _list_flatten(l):
 
 def _as_list(x):
     if type(x) == type:
-        return [x]
+        out = [x]
     elif _safe_len(x) == 0:
-        return []
+        out = []
+    elif _is_series(x):
+        out = x.to_list()
     elif _is_tuple(x):
         # Helpful to convert args to a list
-        x = [val.to_list() if _is_series(val) else val for val in x]
-        x = _list_flatten(x)
-        return x
+        out = [val.to_list() if _is_series(val) else val for val in x]
+        out = _list_flatten(x)
+    elif _is_list(x):
+        out = _list_flatten(x)
     else:
-        return [*x]
+        out = [x]
+    return out
 
 # Convert kwargs to col() expressions with alias
 def _kwargs_as_exprs(kwargs):
