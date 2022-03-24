@@ -683,20 +683,19 @@ class Tibble(pl.DataFrame):
         >>> df = tp.Tibble(x = ['a_a', 'b_b', 'c_c'])
         >>> df.separate('x', into = ['left', 'right'])
         """
-        sep_col = _col_expr(sep_col)
-        into = _as_list(into)
-        out = (
+        into_len = len(into) - 1
+        sep_df = (
             self
-            .mutate(
-                __split_names__ = lit("_".join(into)).str.split("_"),
-                __split_vals__ = sep_col.str.split(sep)
-            )
             .to_polars()
-            .explode(['__split_names__', '__split_vals__'])
+            .select(col(sep_col)
+                    .str.split_exact(sep, into_len)
+                    .alias("_seps")
+                    .struct
+                    .rename_fields(into))
+            .unnest("_seps")
             .pipe(from_polars)
-            .pivot_wider(names_from = '__split_names__',
-                         values_from = '__split_vals__')
         )
+        out = self.bind_cols(sep_df)
         if remove == True:
             out = out.drop(sep_col)
         return out
@@ -1030,7 +1029,7 @@ _polars_methods = [
     'sort',
     'std',
     'sum',
-    #'to_arrow',
+    # 'to_arrow',
     # 'to_dict',
     'to_dicts',
     'to_dummies',
@@ -1040,6 +1039,7 @@ _polars_methods = [
     'to_pandas'
     'to_parquet',
     'transpose',
+    'unnest',
     'var',
     'width',
     'with_column',
