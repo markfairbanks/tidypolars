@@ -8,6 +8,7 @@ from .utils import (
     _mutate_cols,
     _uses_by
 )
+from .stringr import str_c
 import copy
 from .reexports import *
 from .tidyselect import everything
@@ -50,6 +51,7 @@ class Tibble(pl.DataFrame):
 
     def __copy__(self):
         # Shallow copy
+        # See: https://stackoverflow.com/a/51043609/13254470
         obj = type(self).__new__(self.__class__)
         obj.__dict__.update(self.__dict__)
         return obj
@@ -890,6 +892,37 @@ class Tibble(pl.DataFrame):
         self = copy.copy(self)
         self.__class__ = pl.DataFrame
         return self
+
+    def unite(self, col = "_united", unite_cols = [], sep = "_", remove = True):
+        """
+        Unite multiple columns by pasting strings together
+
+        Parameters
+        ----------
+        col : str
+            Name of the new column
+        unite_cols : list
+            List of columns to unite
+        sep : str
+            Separator to use between values
+        remove : bool
+            If True removes input columns from the data frame
+
+        Examples
+        --------
+        >>> df = tp.Tibble(a = ["a", "a", "a"], b = ["b", "b", "b"], c = range(3))
+        >>> df.unite("united_col", unite_cols = ["a", "b"])
+        """
+        if len(unite_cols) == 0:
+            unite_cols = self.names
+        else: 
+            unite_cols = _col_exprs(unite_cols)
+            unite_cols = self.select(unite_cols).names
+        out = self.mutate(str_c(*unite_cols, sep = sep).alias(col))
+        out = out.relocate(col, before = unite_cols[0])
+        if remove == True:
+            out = out.drop(unite_cols)
+        return out
     
     def write_csv(self,
                   file = None,

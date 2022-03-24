@@ -402,6 +402,13 @@ def test_to_polars():
     df = tp.Tibble({'x': range(3), 'y': range(3), 'z': range(3)})
     assert isinstance(df.to_polars(), pl.DataFrame), "to_polars failed"
 
+def test_unite():
+    """Can unite columns"""
+    df = tp.Tibble(a = ["a", "a", "a"], b = ["b", "b", "b"], c = range(3))
+    actual = df.unite("new_col", ["a", "b"])
+    expected = tp.Tibble(new_col = ["a_b"] * 3, c = range(3))
+    assert actual.frame_equal(expected), "unite failed"
+
 def test_funs_in_a_row():
     df = tp.Tibble(x = range(3), y = range(3), z = range(3))
     df.distinct()
