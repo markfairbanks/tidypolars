@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.13 (in development)
+
+#### Methods with notable speed improvements
+
+* `.separate()`
+
 ## v0.2.12 (2022/3/24)
 
 #### New Tibble methods
