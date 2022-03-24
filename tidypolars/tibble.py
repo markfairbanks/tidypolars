@@ -48,6 +48,12 @@ class Tibble(pl.DataFrame):
         df = self.to_polars()
         return df._repr_html_()
 
+    def __copy__(self):
+        # Shallow copy
+        obj = type(self).__new__(self.__class__)
+        obj.__dict__.update(self.__dict__)
+        return obj
+
     def __str__(self):
         """Printing method"""
         df = self.to_polars()
