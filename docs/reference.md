@@ -35,6 +35,7 @@
 * [`.pivot_wider()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.Tibble.pivot_wider)
 * [`.replace_null()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.Tibble.replace_null)
 * [`.separate()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.Tibble.separate)
+* [`.unite()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.Tibble.unite)
 
 #### Tibble attributes
 
@@ -48,7 +49,7 @@
 
 * [`abs()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.abs)
 * [`across()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.across)
-* [`as_float()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.as_boolean)
+* [`as_boolean()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.as_boolean)
 * [`as_float()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.as_float)
 * [`as_integer()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.as_integer)
 * [`as_string()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/funs/index.html#tidypolars.funs.as_string)
