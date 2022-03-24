@@ -1,6 +1,10 @@
 # Changelog
 
-## v0.2.12 (in development)
+## v0.2.12 (2022/3/24)
+
+#### New Tibble methods
+
+* `.unite()`
 
 ## v0.2.11 (2022/2/11)
 
