@@ -85,8 +85,6 @@ def as_float(x):
     ----------
     x : Expr, Series
         Column to operate on
-    dtype : DataType
-        Type to convert to
 
     Examples
     --------
