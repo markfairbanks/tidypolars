@@ -9,6 +9,7 @@ def test_arrange1():
     actual = df.arrange('y')
     expected = tp.Tibble(x = ['a', 'a', 'b'], y = [1, 2, 3])
     assert actual.frame_equal(expected), "arrange ascending failed"
+    assert type(actual) == tp.Tibble, "arrange didn't return a Tibble"
 
 def test_arrange2():
     """Can arrange descending"""
@@ -34,6 +35,7 @@ def test_bind_cols_single():
     actual = df1.bind_cols(df2)
     expected = tp.Tibble({'x': ['a', 'a', 'b'], 'y': [1, 2, 3], 'z':[4, 4, 4]})
     assert actual.frame_equal(expected), "bind_cols failed"
+    assert type(actual) == tp.Tibble, "bind_cols didn't return a Tibble"
 
 def test_bind_cols_multiple():
     """Can bind_cols multiple"""
@@ -51,6 +53,7 @@ def test_bind_rows_single():
     actual = df1.bind_rows(df2)
     expected = tp.Tibble({'x': ['a', 'a', 'b'], 'y': [2, 1, 3]})
     assert actual.frame_equal(expected), "bind_rows failed"
+    assert type(actual) == tp.Tibble, "bind_rows didn't return a Tibble"
 
 def test_bind_rows_auto_align():
     """Can bind rows"""
@@ -68,6 +71,11 @@ def test_bind_rows_multiple():
     actual = df1.bind_rows(df2, df3)
     expected = tp.Tibble({'x': ['a', 'a', 'b', 'b'], 'y': [2, 1, 3, 3]})
     assert actual.frame_equal(expected), "bind_rows multiple failed"
+
+def test_clone():
+    df = tp.Tibble(x = range(3), y = range(3))
+    actual = df.clone()
+    assert type(actual) == tp.Tibble, "clone didn't return a Tibble"
 
 def test_count_no_args():
     """Can count rows (no args)"""
@@ -89,6 +97,7 @@ def test_distinct_empty():
     actual = df.distinct()
     expected = tp.Tibble({'x': ['a', 'b'], 'y': ['a', 'b']})
     assert actual.frame_equal(expected), "empty distinct failed"
+    assert type(actual) == tp.Tibble, "distinct didn't return a Tibble"
 
 def test_distinct_select():
     """Can distinct columns"""
@@ -103,6 +112,7 @@ def test_drop():
     actual = df.drop('x')
     expected = tp.Tibble(y = range(3))
     assert actual.frame_equal(expected), "drop failed"
+    assert type(actual) == tp.Tibble, "drop didn't return a Tibble"
 
 def test_drop_null_empty():
     """Can drop nulls from all cols"""
@@ -110,6 +120,7 @@ def test_drop_null_empty():
     actual = df.drop_null()
     expected = tp.Tibble(x = [3], y = [3], z = [3])
     assert actual.frame_equal(expected), "empty drop_null failed"
+    assert type(actual) == tp.Tibble, "drop_null didn't return a Tibble"
 
 def test_drop_null_select():
     """Can drop nulls with selection"""
@@ -124,6 +135,7 @@ def test_fill():
     actual = df.fill('chr', 'int')
     expected = tp.Tibble({'chr': ['a', 'a'], 'int': [1, 1]})
     assert actual.frame_equal(expected), "fill failed"
+    assert type(actual) == tp.Tibble, "fill didn't return a Tibble"
 
 def test_filter():
     """Can filter multiple conditions"""
@@ -131,6 +143,14 @@ def test_filter():
     actual = df.filter(col('x') <= 3, col('y') < 2)
     expected = tp.Tibble({'x': range(2), 'y': range(2)})
     assert actual.frame_equal(expected), "filter failed"
+    assert type(actual) == tp.Tibble, "filter didn't return a Tibble"
+
+def test_filter_grouped():
+    df = tp.Tibble(x = range(3), y = ['a', 'a', 'b'])
+    actual = df.filter(col('x') <= col('x').mean(), by = 'y').arrange('y')
+    expected = tp.Tibble(x = [0, 2], y = ['a', 'b'])
+    assert actual.frame_equal(expected), "grouped filter failed"
+    assert type(actual) == tp.Tibble, "grouped filter didn't return a Tibble"
 
 def test_full_join():
     """Can perform a full join"""
@@ -139,6 +159,7 @@ def test_full_join():
     actual = df1.full_join(df2)
     expected = tp.Tibble(x = ['a', 'a', 'b'], y = [0, 1, 2], z = [0, 0, None])
     assert actual.frame_equal(expected, null_equal = True), "full_join failed"
+    assert type(actual) == tp.Tibble, "full_join didn't return a Tibble"
 
 def test_inner_join():
     """Can perform a inner join"""
@@ -147,6 +168,7 @@ def test_inner_join():
     actual = df1.inner_join(df2)
     expected = tp.Tibble(x = ['a', 'a'], y = [0, 1], z = [0, 0])
     assert actual.frame_equal(expected), "inner_join failed"
+    assert type(actual) == tp.Tibble, "inner_join didn't return a Tibble"
 
 def test_left_join():
     """Can perform a left join"""
@@ -155,6 +177,7 @@ def test_left_join():
     actual = df1.left_join(df2)
     expected = tp.Tibble(x = ['a', 'a', 'b'], y = range(3), z = [0, 0 ,1])
     assert actual.frame_equal(expected), "left_join failed"
+    assert type(actual) == tp.Tibble, "left_join didn't return a Tibble"
 
 def test_mutate():
     """Can edit existing columns and can add columns"""
@@ -169,6 +192,7 @@ def test_mutate():
         y_plus_3 = _repeat(15, 3)
     )
     assert actual.frame_equal(expected), "mutate failed"
+    assert type(actual) == tp.Tibble, "mutate didn't return a Tibble"
 
 def test_mutate_across():
     """Can mutate multiple columns simultaneously"""
@@ -214,6 +238,7 @@ def test_pivot_longer1():
     actual = df.pivot_longer()
     expected = tp.Tibble({'name': ['x', 'x', 'y', 'y'], 'value': range(1, 5)})
     assert actual.frame_equal(expected), "unspecified pivot_longer failed"
+    assert type(actual) == tp.Tibble, "pivot_longer didn't return a Tibble"
 
 def test_pivot_longer2():
     """Can pivot all (specified) cols to long"""
@@ -228,6 +253,7 @@ def test_pivot_wider1():
     actual = df.pivot_wider(names_from = 'label', values_from = 'val').select('x', 'y', 'z')
     expected = tp.Tibble({'x': [1], 'y': [2], 'z': [3]})
     assert actual.frame_equal(expected), "pivot_wider all cols failed"
+    assert type(actual) == tp.Tibble, "pivot_wider didn't return a Tibble"
 
 def test_pivot_wider2():
     """Can pivot cols to wide with id col"""
@@ -277,6 +303,7 @@ def test_relocate_before():
     actual = df.relocate('y', 'z', before = 'x')
     expected = df.select('y', 'z', 'x')
     assert actual.frame_equal(expected), "relocate before failed"
+    assert type(actual) == tp.Tibble, "relocate didn't return a Tibble"
 
 def test_relocate_after():
     """Can relocate after columns"""
@@ -298,6 +325,7 @@ def test_rename_dplyr_kwargs():
     actual = df.rename(new_x = 'x', new_y = 'y')
     expected = tp.Tibble({'new_x': range(3), 'new_y': range(3), 'z': range(3)})
     assert actual.frame_equal(expected), "dplyr rename failed"
+    assert type(actual) == tp.Tibble, "rename didn't return a Tibble"
 
 def test_rename_dplyr_strings():
     """Can rename - dplyr interface (strings)"""
@@ -319,6 +347,7 @@ def test_replace_null():
     actual = df.replace_null(dict(x = 1, y = 2))
     expected = tp.Tibble(x = [0, 1], y = [2, 2])
     assert actual.frame_equal(expected), "replace_null method failed"
+    assert type(actual) == tp.Tibble, "replace_null didn't return a Tibble"
 
 def test_set_names():
     """Can set_names"""
@@ -326,6 +355,7 @@ def test_set_names():
     actual = df.set_names(['a', 'b'])
     expected = tp.Tibble(a = range(3), b = range(3))
     assert actual.frame_equal(expected), "set_names failed"
+    assert type(actual) == tp.Tibble, "set_names didn't return a Tibble"
 
 def test_select():
     """Can select columns"""
@@ -333,6 +363,7 @@ def test_select():
     actual = df.select('x', 'z')
     expected = df[['x', 'z']]
     assert actual.frame_equal(expected), "select failed"
+    assert type(actual) == tp.Tibble, "select didn't return a Tibble"
 
 def test_separate():
     """Can separate"""
@@ -340,6 +371,7 @@ def test_separate():
     actual = df.separate('x', into = ['left', 'right']).arrange('left')
     expected = tp.Tibble(left = ['a', 'b', 'c'], right = ['a', 'b', 'c'])
     assert actual.frame_equal(expected), "separate failed"
+    assert type(actual) == tp.Tibble, "separate didn't return a Tibble"
 
 def test_slice():
     """Can slice"""
@@ -347,6 +379,7 @@ def test_slice():
     actual = df.slice(0, 2)
     expected = tp.Tibble({'x': [0, 2], 'y': ['a', 'b']})
     assert actual.frame_equal(expected), "slice failed"
+    assert type(actual) == tp.Tibble, "slice didn't return a Tibble"
 
 def test_slice_head():
     """Can slice_head"""
@@ -354,6 +387,7 @@ def test_slice_head():
     actual = df.slice_head(2)
     expected = tp.Tibble({'x': [0, 1], 'y': ['a', 'a']})
     assert actual.frame_equal(expected), "slice_head failed"
+    assert type(actual) == tp.Tibble, "slice_head didn't return a Tibble"
 
 def test_slice_tail():
     """Can slice_tail by group"""
@@ -361,6 +395,7 @@ def test_slice_tail():
     actual = df.slice_tail(2)
     expected = tp.Tibble({'x': [1, 2], 'y': ['a', 'b']})
     assert actual.frame_equal(expected), "slice_tail failed"
+    assert type(actual) == tp.Tibble, "slice_tail didn't return a Tibble"
 
 def test_summarise():
     """Can use summarise alias"""
@@ -375,6 +410,7 @@ def test_summarize():
     actual = df.summarize(avg_x = col('x').mean())
     expected = tp.Tibble({'avg_x': [1]})
     assert actual.frame_equal(expected), "ungrouped summarize failed"
+    assert type(actual) == tp.Tibble, "summarize didn't return a Tibble"
 
 def test_summarize_grouped():
     """Can use summarize by group"""
@@ -408,8 +444,10 @@ def test_unite():
     actual = df.unite("new_col", ["a", "b"])
     expected = tp.Tibble(new_col = ["a_b"] * 3, c = range(3))
     assert actual.frame_equal(expected), "unite failed"
+    assert type(actual) == tp.Tibble, "unite didn't return a Tibble"
 
 def test_funs_in_a_row():
+    """Tests if shallow copy is working properly"""
     df = tp.Tibble(x = range(3), y = range(3), z = range(3))
     df.distinct()
     df.drop('x')
