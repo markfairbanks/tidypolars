@@ -11,11 +11,13 @@ def test_abs():
 
 def test_agg_stats():
     """Can get aggregation statistics"""
-    df = tp.Tibble(x = range(3))
+    df = tp.Tibble(x = range(3), y = [2, 1, 0])
     actual = (
         df
         .summarize(
+            corr = tp.cor('x', 'y'),
             count_x = tp.count('x'), count_col_x = tp.count(col('x')),
+            cov = tp.cov('x', 'y'),
             first_x = tp.first('x'), first_col_x = tp.first(col('x')),
             last_x = tp.last('x'), last_col_x = tp.last(col('x')),
             max_x = tp.max('x'), max_col_x = tp.max(col('x')),
@@ -27,10 +29,13 @@ def test_agg_stats():
             quantile_x = tp.quantile('x', .25),
             sd_x = tp.sd('x'), sd_col_x = tp.sd(col('x')),
             sum_x = tp.sum('x'), sum_col_x = tp.sum(col('x')),
+            var_y = tp.var('y')
         )
     )
     expected = tp.Tibble(
+        corr = [-1],
         count_x = [3], count_col_x = [3],
+        cov = [-1],
         first_x = [0], first_col_x = [0],
         last_x = [2], last_col_x = [2],
         max_x = [2], max_col_x = [2],
@@ -42,6 +47,7 @@ def test_agg_stats():
         quantile_x = [0],
         sd_x = [1], sd_col_x = [1],
         sum_x = [3], sum_col_x = [3],
+        var_y = [1]
     )
     assert actual.frame_equal(expected), "aggregation stats failed"
 
@@ -111,6 +117,14 @@ def test_lead():
                           'lead_default': [1, 2, 1]})
     assert actual.frame_equal(expected, null_equal = True), "lead failed"
 
+def test_logs():
+    """Can get leading values with function"""
+    df = tp.Tibble({'x': range(1, 4)})
+    actual = df.mutate(log = tp.log(col('x')).round(2),
+                       log10 = tp.log10('x').round(2))
+    expected = df.mutate(log = col('x').log().round(2), log10 = col('x').log10().round(2))
+    assert actual.frame_equal(expected), "log failed"
+
 def test_if_else():
     """Can use if_else"""
     df = tp.Tibble(x = range(1, 4))
@@ -147,6 +161,14 @@ def test_is_predicates():
         is_null = [True, False, False]
     )
     assert actual.frame_equal(expected, null_equal = True), "is_predicates failed"
+
+def test_rep():
+    df = tp.Tibble(x = [0, 1], y = [0, 1])
+    assert tp.rep(df, 2).frame_equal(df.bind_rows(df)), "rep df failed"
+    assert tp.rep(1, 2).series_equal(tp.Series([1, 1])), "rep int failed"
+    assert tp.rep("a", 2).series_equal(tp.Series(["a", "a"])), "rep str failed"
+    assert tp.rep(True, 2).series_equal(tp.Series([True, True])), "rep bool failed"
+    assert tp.rep(tp.Series([0, 1]), 2).series_equal(tp.Series([0, 1, 0, 1])), "rep series failed"
 
 def test_replace_null():
     """Can replace nulls"""

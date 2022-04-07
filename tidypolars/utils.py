@@ -47,23 +47,38 @@ def _uses_by(by):
     else:
         return False
 
+def _is_boolean(x):
+    return isinstance(x, bool)
+
+def _is_constant(x):
+    return _is_boolean(x) | _is_float(x) | _is_integer(x) | _is_string(x)
+
+def _is_expr(x):
+    return isinstance(x, pl.Expr)
+
+def _is_float(x):
+    return isinstance(x, float)
+
+def _is_integer(x):
+    return isinstance(x, int)
+
+def _is_iterable(x):
+    return hasattr(x, '__iter__') & not_(_is_string(x))
+
 def _is_list(x):
     return isinstance(x, list)
 
 def _is_series(x):
     return isinstance(x, pl.Series)
 
-def _is_expr(x):
-    return isinstance(x, pl.Expr)
-
 def _is_string(x):
     return isinstance(x, str)
 
-def _is_type(x):
-    return type(x) == type
-
 def _is_tuple(x):
     return isinstance(x, tuple)
+
+def _is_type(x):
+    return type(x) == type
 
 def _lit_expr(x):
     if not_(_is_expr(x)):
