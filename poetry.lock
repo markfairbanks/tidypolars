@@ -505,24 +505,24 @@ testing = ["ipykernel", "coverage", "pytest (>=3.6,<4)", "pytest-cov", "pytest-r
 
 [[package]]
 name = "jupyter-client"
-version = "7.1.2"
+version = "7.2.0"
 description = "Jupyter protocol implementation and client libraries"
 category = "dev"
 optional = false
-python-versions = ">=3.6.1"
+python-versions = ">=3.7"
 
 [package.dependencies]
 entrypoints = "*"
-jupyter-core = ">=4.6.0"
-nest-asyncio = ">=1.5"
+jupyter-core = ">=4.9.2"
+nest-asyncio = ">=1.5.1"
 python-dateutil = ">=2.1"
-pyzmq = ">=13"
-tornado = ">=4.1"
+pyzmq = ">=17"
+tornado = ">=5.0"
 traitlets = "*"
 
 [package.extras]
-doc = ["myst-parser", "sphinx (>=1.3.6)", "sphinx-rtd-theme", "sphinxcontrib-github-alt"]
-test = ["codecov", "coverage", "ipykernel", "ipython", "mock", "mypy", "pre-commit", "pytest", "pytest-asyncio", "pytest-cov", "pytest-timeout", "jedi (<0.18)"]
+doc = ["ipykernel", "myst-parser", "sphinx (>=1.3.6)", "sphinx-rtd-theme", "sphinxcontrib-github-alt"]
+test = ["codecov", "coverage", "ipykernel (>=5.5.6)", "ipython", "mypy", "pre-commit", "pytest", "pytest-asyncio", "pytest-cov", "pytest-timeout", "jedi (<0.18)"]
 
 [[package]]
 name = "jupyter-core"
@@ -538,7 +538,7 @@ traitlets = "*"
 
 [[package]]
 name = "jupyter-server"
-version = "1.15.6"
+version = "1.16.0"
 description = "The backend—i.e. core services, APIs, and REST endpoints—to Jupyter web applications."
 category = "dev"
 optional = false
@@ -548,9 +548,9 @@ python-versions = ">=3.7"
 anyio = ">=3.1.0"
 argon2-cffi = "*"
 jinja2 = "*"
-jupyter-client = ">=6.1.1"
-jupyter-core = ">=4.6.0"
-nbconvert = "*"
+jupyter-client = ">=6.1.12"
+jupyter-core = ">=4.7.0"
+nbconvert = ">=6.4.4"
 nbformat = ">=5.2.0"
 packaging = "*"
 prometheus-client = "*"
@@ -559,11 +559,11 @@ pyzmq = ">=17"
 Send2Trash = "*"
 terminado = ">=0.8.3"
 tornado = ">=6.1.0"
-traitlets = ">=5"
+traitlets = ">=5.1.0"
 websocket-client = "*"
 
 [package.extras]
-test = ["coverage", "pytest (>=6.0)", "pytest-cov", "pytest-mock", "pytest-timeout", "requests", "pytest-tornasync", "pytest-console-scripts", "ipykernel"]
+test = ["coverage", "pytest (>=6.0)", "pytest-cov", "pytest-mock", "pytest-timeout", "requests", "pytest-tornasync", "pytest-console-scripts", "ipykernel", "pre-commit"]
 
 [[package]]
 name = "jupyter-server-mathjax"
@@ -629,7 +629,7 @@ pygments = ">=2.4.1,<3"
 
 [[package]]
 name = "jupyterlab-server"
-version = "2.11.2"
+version = "2.12.0"
 description = "A set of server components for JupyterLab and JupyterLab like applications ."
 category = "dev"
 optional = false
@@ -646,7 +646,8 @@ packaging = "*"
 requests = "*"
 
 [package.extras]
-test = ["codecov", "ipykernel", "pytest (>=5.3.2)", "pytest-cov", "jupyter-server", "openapi-core (>=0.14.2)", "pytest-console-scripts", "strict-rfc3339", "ruamel.yaml", "wheel", "openapi-spec-validator (<0.5)"]
+openapi = ["openapi-core (>=0.14.2)", "ruamel.yaml"]
+test = ["codecov", "ipykernel", "pytest (>=5.3.2)", "pytest-cov", "jupyter-server", "pytest-console-scripts", "strict-rfc3339", "wheel", "openapi-spec-validator (<0.5)", "openapi-core (>=0.14.2)", "ruamel.yaml"]
 
 [[package]]
 name = "jupyterlab-widgets"
@@ -1019,7 +1020,7 @@ testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "polars"
-version = "0.13.15"
+version = "0.13.16"
 description = "Blazingly fast DataFrame library"
 category = "main"
 optional = false
@@ -1030,9 +1031,9 @@ numpy = ">=1.16.0"
 typing_extensions = {version = ">=4.0.0", markers = "python_version < \"3.10\""}
 
 [package.extras]
+pandas = ["pyarrow (>=4.0)", "pandas"]
 fsspec = ["fsspec"]
 connectorx = ["connectorx"]
-pandas = ["pyarrow (>=4.0)", "pandas"]
 pyarrow = ["pyarrow (>=4.0)"]
 
 [[package]]
@@ -1605,11 +1606,11 @@ python-versions = "*"
 
 [[package]]
 name = "websocket-client"
-version = "1.3.1"
+version = "1.3.2"
 description = "WebSocket client for Python with low level API options"
 category = "dev"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.extras]
 docs = ["Sphinx (>=3.4)", "sphinx-rtd-theme (>=0.5)"]
@@ -1950,16 +1951,16 @@ jupyter-cache = [
     {file = "jupyter_cache-0.4.3-py3-none-any.whl", hash = "sha256:6d5d662d81f565d18009e8dcfd3a56fb876af47eafead2a19ef0045aba8ffe3b"},
 ]
 jupyter-client = [
-    {file = "jupyter_client-7.1.2-py3-none-any.whl", hash = "sha256:d56f1c57bef42ff31e61b1185d3348a5b2bcde7c9a05523ae4dbe5ee0871797c"},
-    {file = "jupyter_client-7.1.2.tar.gz", hash = "sha256:4ea61033726c8e579edb55626d8ee2e6bf0a83158ddf3751b8dd46b2c5cd1e96"},
+    {file = "jupyter_client-7.2.0-py3-none-any.whl", hash = "sha256:c5d9177edb74a0a0d060965dd33ec589b58cf7d1a16f9b60c465404852e0f992"},
+    {file = "jupyter_client-7.2.0.tar.gz", hash = "sha256:00e284dd1a5ac605ead8a42ada2a97041b642c1ef6cefb30c3c415b4eb94bead"},
 ]
 jupyter-core = [
     {file = "jupyter_core-4.9.2-py3-none-any.whl", hash = "sha256:f875e4d27e202590311d468fa55f90c575f201490bd0c18acabe4e318db4a46d"},
     {file = "jupyter_core-4.9.2.tar.gz", hash = "sha256:d69baeb9ffb128b8cd2657fcf2703f89c769d1673c851812119e3a2a0e93ad9a"},
 ]
 jupyter-server = [
-    {file = "jupyter_server-1.15.6-py3-none-any.whl", hash = "sha256:e393934c19fcc324a7fca77f811eacd91201440f04c6fbb15c959c463baaa9c5"},
-    {file = "jupyter_server-1.15.6.tar.gz", hash = "sha256:56bd6f580d1f46b62294990e8e78651025729f5d3fc798f10f2c03f0cdcbf28d"},
+    {file = "jupyter_server-1.16.0-py3-none-any.whl", hash = "sha256:72dd1ff5373d2def94e80632ba4397e504cc9200c5b5f44b5b0af2e062a73353"},
+    {file = "jupyter_server-1.16.0.tar.gz", hash = "sha256:c756f87ad64b84e2aa522ef482445e1a93f7fe4a5fc78358f4636e53c9a0463a"},
 ]
 jupyter-server-mathjax = [
     {file = "jupyter_server_mathjax-0.2.5-py3-none-any.whl", hash = "sha256:d165c9ff876a1c32ccf99d309b57463fae206d9b6f0f3a9fa34ed01b3b26605e"},
@@ -1978,8 +1979,8 @@ jupyterlab-pygments = [
     {file = "jupyterlab_pygments-0.1.2.tar.gz", hash = "sha256:cfcda0873626150932f438eccf0f8bf22bfa92345b814890ab360d666b254146"},
 ]
 jupyterlab-server = [
-    {file = "jupyterlab_server-2.11.2-py3-none-any.whl", hash = "sha256:45ec7dde24fb4476d2d55b1884068e285ab75ec6c21f1d77a8c12964910c2120"},
-    {file = "jupyterlab_server-2.11.2.tar.gz", hash = "sha256:5d8dc70f6803dc48efb69fb43e3cd2f8c6aad4ba011670318e5efd26c7487bb9"},
+    {file = "jupyterlab_server-2.12.0-py3-none-any.whl", hash = "sha256:db5d234955c5c2684f77a064345712f071acf7df31f0d8c31b420b33b09d6472"},
+    {file = "jupyterlab_server-2.12.0.tar.gz", hash = "sha256:00e0f4b4c399f55938323ea10cf92d915288fe12753e35d1069f6ca08b72abbf"},
 ]
 jupyterlab-widgets = [
     {file = "jupyterlab_widgets-1.1.0-py3-none-any.whl", hash = "sha256:c2a9bd3789f120f64d73268c066ed3b000c56bc1dda217be5cdc43e7b4ebad3f"},
@@ -2231,12 +2232,12 @@ pluggy = [
     {file = "pluggy-1.0.0.tar.gz", hash = "sha256:4224373bacce55f955a878bf9cfa763c1e360858e330072059e10bad68531159"},
 ]
 polars = [
-    {file = "polars-0.13.15-cp37-abi3-macosx_10_7_x86_64.whl", hash = "sha256:82818f8f410868f021b2fac6036be2878ec97be315f3e7b648581dd3fff7e1df"},
-    {file = "polars-0.13.15-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:38c7d493dd312421710725d17941ee59ab6be8b19bb3d5418bce8ee819751935"},
-    {file = "polars-0.13.15-cp37-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:230131600c67ddd91ec4ca0752350edc98168186dd8b58feab5c3cee3d0399df"},
-    {file = "polars-0.13.15-cp37-abi3-manylinux_2_24_aarch64.whl", hash = "sha256:8e5ab80020eafd780ce0a150dde73befb968bb3a2b7635b417a42b383a4e7197"},
-    {file = "polars-0.13.15-cp37-abi3-win_amd64.whl", hash = "sha256:123c07a6dd034d8d356c19151aa64ad2097b1cb3fe7bcaeb05b3b2260bd0645d"},
-    {file = "polars-0.13.15.tar.gz", hash = "sha256:e11e73393fe89138e1741e3199277849ce8380025c535d1eb2cfb12b64b19a02"},
+    {file = "polars-0.13.16-cp37-abi3-macosx_10_7_x86_64.whl", hash = "sha256:50377d2a9d91b627095b9652d21b3acd9e7ef56845a3805df0455180738b70f4"},
+    {file = "polars-0.13.16-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:ded09c09196fff0d9df7d6c84c5536765d69319e4a25489be9171bb88724b67b"},
+    {file = "polars-0.13.16-cp37-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:e13e6d90c1b4ac03551426e4dacf0311978c638eadcad5f48387b73464569db5"},
+    {file = "polars-0.13.16-cp37-abi3-manylinux_2_24_aarch64.whl", hash = "sha256:7e0e02e7e77fd0c35c1cfeac45d5ea03bd2229d3c63ac24a1094582247072af3"},
+    {file = "polars-0.13.16-cp37-abi3-win_amd64.whl", hash = "sha256:c5638218bb3aae0d107b8c75ee3f697df57752faadc2f4fd1583aabdf369cb4f"},
+    {file = "polars-0.13.16.tar.gz", hash = "sha256:5aad55a92d512630378c26f6b8d9232f1544a8002ceecbb7ab5bffc2981a470d"},
 ]
 prometheus-client = [
     {file = "prometheus_client-0.13.1-py3-none-any.whl", hash = "sha256:357a447fd2359b0a1d2e9b311a0c5778c330cfbe186d880ad5a6b39884652316"},
@@ -2631,8 +2632,8 @@ webencodings = [
     {file = "webencodings-0.5.1.tar.gz", hash = "sha256:b36a1c245f2d304965eb4e0a82848379241dc04b865afcc4aab16748587e1923"},
 ]
 websocket-client = [
-    {file = "websocket-client-1.3.1.tar.gz", hash = "sha256:6278a75065395418283f887de7c3beafb3aa68dada5cacbe4b214e8d26da499b"},
-    {file = "websocket_client-1.3.1-py3-none-any.whl", hash = "sha256:074e2ed575e7c822fc0940d31c3ac9bb2b1142c303eafcf3e304e6ce035522e8"},
+    {file = "websocket-client-1.3.2.tar.gz", hash = "sha256:50b21db0058f7a953d67cc0445be4b948d7fc196ecbeb8083d68d94628e4abf6"},
+    {file = "websocket_client-1.3.2-py3-none-any.whl", hash = "sha256:722b171be00f2b90e1d4fb2f2b53146a536ca38db1da8ff49c972a4e1365d0ef"},
 ]
 widgetsnbextension = [
     {file = "widgetsnbextension-3.6.0-py2.py3-none-any.whl", hash = "sha256:4fd321cad39fdcf8a8e248a657202d42917ada8e8ed5dd3f60f073e0d54ceabd"},

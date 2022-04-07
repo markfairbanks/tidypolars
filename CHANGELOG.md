@@ -2,6 +2,15 @@
 
 ## v0.2.13 (in development)
 
+#### New functions
+
+* `cor()`
+* `cov()`
+* `log()`
+* `log10()`
+* `rep()`
+* `var()`
+
 #### Methods with notable speed improvements
 
 * `.separate()`

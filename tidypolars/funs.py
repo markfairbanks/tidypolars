@@ -1,9 +1,13 @@
 import polars as pl
-from .tibble import from_polars
+from .tibble import from_polars, Tibble
 from .utils import (
     _as_list,
     _col_expr,
-    _col_exprs
+    _col_exprs,
+    _is_constant,
+    _is_list,
+    _is_iterable,
+    _is_series
 )
 
 __all__ = [
@@ -15,16 +19,18 @@ __all__ = [
     "floor",
     "if_else",
     "lag", "lead",
+    "log", "log10",
     "read_csv", "read_parquet",
+    "rep",
     "replace_null",
     "round",
     "row_number",
     "sqrt",
 
     # Agg stats
-    "count", "first", "last", "length",
+    "cor", "cov", "count", "first", "last", "length",
     "max", "mean", "median", "min", "n",
-    "n_distinct", "quantile", "sd", "sum",
+    "n_distinct", "quantile", "sd", "sum", "var",
 
     # Predicates
     "between", "is_finite", "is_in", "is_infinite",
@@ -221,6 +227,48 @@ def coalesce(*args):
         for i in locs:
             expr = if_else(expr.is_null(), args[i], expr)
     return expr
+
+def cor(x, y, method = 'pearson'):
+    """
+    Find the correlation of two columns
+
+    Parameters
+    ----------
+    x : Expr
+        A column
+    y : Expr
+        A column
+    method : str
+        Type of correlation to find. Either 'pearson' or 'spearman'.
+
+    Examples
+    --------
+    >>> df.summarize(cor = tp.cor(col('x'), col('y')))
+    """
+    if method == 'pearson':
+        out = pl.pearson_corr(x, y)
+    elif method == 'spearman':
+        out = pl.spearman_rank_corr(x, y)
+    else:
+        ValueError("`method` must be either 'pearson' or 'spearman'")
+    return out
+
+def cov(x, y):
+    """
+    Find the covariance of two columns
+
+    Parameters
+    ----------
+    x : Expr
+        A column
+    y : Expr
+        A column
+
+    Examples
+    --------
+    >>> df.summarize(cor = tp.cov(col('x'), col('y')))
+    """
+    return pl.cov(x, y)
 
 def count(x):
     """
@@ -516,6 +564,38 @@ def length(x):
     x = _col_expr(x)
     return x.count()
 
+def log(x):
+    """
+    Compute the natural logarithm of a column
+
+    Parameters
+    ----------
+    x : Expr
+        Column to operate on
+
+    Examples
+    --------
+    >>> df.mutate(log = tp.log('x'))
+    """
+    x = _col_expr(x)
+    return x.log()
+
+def log10(x):
+    """
+    Compute the base 10 logarithm of a column
+
+    Parameters
+    ----------
+    x : Expr
+        Column to operate on
+
+    Examples
+    --------
+    >>> df.mutate(log = tp.log10('x'))
+    """
+    x = _col_expr(x)
+    return x.log10()
+
 def max(x):
     """
     Get column max
@@ -642,6 +722,38 @@ def read_parquet(source: str,
     """Simple wrapper around polars.read_parquet"""
     return pl.read_parquet(source, *args, **kwargs).pipe(from_polars)
 
+def rep(x, times = 1):
+    """
+    Replicate the values in x
+
+    Parameters
+    ----------
+    x : const, Series
+        Value or Series to repeat
+    times : int
+        Number of times to repeat
+
+    Examples
+    --------
+    >>> tp.rep(1, 3)
+    >>> tp.rep(pl.Series(range(3)), 3)
+    """
+    if _is_constant(x):
+        out = [x]
+    elif _is_series(x):
+        out = x.to_list()
+    elif _is_list(x):
+        out = x
+    elif isinstance(x, Tibble):
+        out = pl.concat([x for i in range(times)]).pipe(from_polars)
+    elif _is_iterable(x):
+        out = list(x)
+    else:
+        ValueError("Incompatible type")
+    if _is_list(out):
+        out = pl.Series(out * times)
+    return out
+
 def replace_null(x, replace = None):
     """
     Replace null values
@@ -736,3 +848,20 @@ def sum(x):
     """
     x = _col_expr(x)
     return x.sum()
+
+def var(x):
+    """
+    Get column variance
+
+    Parameters
+    ----------
+    x : Expr
+        Column to operate on
+
+    Examples
+    --------
+    >>> df.summarize(sum_x = tp.var('x'))
+    >>> df.summarize(sum_x = tp.var(col('x')))
+    """
+    x = _col_expr(x)
+    return x.var()
