@@ -1,14 +1,14 @@
 [tool.poetry]
 name = "tidypolars"
-version = "0.2.13"
+version = "0.2.14"
 description = "Tidy interface to polars"
 authors = ["Mark Fairbanks", "Matt Carlson"]
 license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.11"
-polars = ">=0.13.14"
+python = ">=3.7,<3.11"
+polars = ">=0.13.23"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
