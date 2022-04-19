@@ -482,7 +482,7 @@ class Tibble(pl.DataFrame):
         df_cols = pl.Series(self.names)
         value_vars = pl.Series(self.select(cols).names)
         id_vars = df_cols[~df_cols.is_in(value_vars)]
-        out = super().melt(id_vars, value_vars).rename({'variable': names_to, 'value': values_to})
+        out = super().melt(id_vars, value_vars, names_to, values_to)
         return out
 
     def pivot_wider(self,
