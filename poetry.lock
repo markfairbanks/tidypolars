@@ -66,7 +66,7 @@ tests = ["pytest"]
 
 [[package]]
 name = "astroid"
-version = "2.11.2"
+version = "2.11.3"
 description = "An abstract syntax tree for Python with inference support."
 category = "dev"
 optional = false
@@ -102,11 +102,11 @@ tests_no_zope = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>
 
 [[package]]
 name = "babel"
-version = "2.9.1"
+version = "2.10.1"
 description = "Internationalization utilities"
 category = "dev"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+python-versions = ">=3.6"
 
 [package.dependencies]
 pytz = ">=2015.7"
@@ -626,7 +626,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "jupyterlab-server"
-version = "2.12.0"
+version = "2.13.0"
 description = "A set of server components for JupyterLab and JupyterLab like applications ."
 category = "dev"
 optional = false
@@ -634,17 +634,17 @@ python-versions = ">=3.7"
 
 [package.dependencies]
 babel = "*"
-entrypoints = ">=0.2.2"
+importlib-metadata = {version = ">=3.6", markers = "python_version < \"3.10\""}
 jinja2 = ">=3.0.3"
 json5 = "*"
 jsonschema = ">=3.0.1"
-jupyter-server = ">=1.8,<2.0"
+jupyter-server = ">=1.8,<2"
 packaging = "*"
 requests = "*"
 
 [package.extras]
 openapi = ["openapi-core (>=0.14.2)", "ruamel.yaml"]
-test = ["codecov", "ipykernel", "pytest (>=5.3.2)", "pytest-cov", "jupyter-server", "pytest-console-scripts", "strict-rfc3339", "wheel", "openapi-spec-validator (<0.5)", "openapi-core (>=0.14.2)", "ruamel.yaml"]
+test = ["openapi-core (>=0.14.2)", "ruamel.yaml", "codecov", "ipykernel", "jupyter-server", "openapi-spec-validator (<0.5)", "pytest-console-scripts", "pytest-cov", "pytest (>=5.3.2)", "strict-rfc3339", "wheel"]
 
 [[package]]
 name = "jupyterlab-widgets"
@@ -1022,7 +1022,7 @@ testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "polars"
-version = "0.13.23"
+version = "0.13.24"
 description = "Blazingly fast DataFrame library"
 category = "main"
 optional = false
@@ -1033,10 +1033,10 @@ numpy = ">=1.16.0"
 typing_extensions = {version = ">=4.0.0", markers = "python_version < \"3.10\""}
 
 [package.extras]
-pandas = ["pyarrow (>=4.0)", "pandas"]
-fsspec = ["fsspec"]
 connectorx = ["connectorx"]
+pandas = ["pyarrow (>=4.0)", "pandas"]
 pyarrow = ["pyarrow (>=4.0)"]
+fsspec = ["fsspec"]
 
 [[package]]
 name = "prometheus-client"
@@ -1640,7 +1640,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7,<3.11"
-content-hash = "11d15d1485747a3da8123adc25f9735bb376b6ca7b6d14f9cf096deb332eabcb"
+content-hash = "0f308b6053fbebb8dc18a043a058156356a028892d76595474501ba191ed7098"
 
 [metadata.files]
 alabaster = [
@@ -1683,8 +1683,8 @@ argon2-cffi-bindings = [
     {file = "argon2_cffi_bindings-21.2.0-pp38-pypy38_pp73-win_amd64.whl", hash = "sha256:5e00316dabdaea0b2dd82d141cc66889ced0cdcbfa599e8b471cf22c620c329a"},
 ]
 astroid = [
-    {file = "astroid-2.11.2-py3-none-any.whl", hash = "sha256:cc8cc0d2d916c42d0a7c476c57550a4557a083081976bf42a73414322a6411d9"},
-    {file = "astroid-2.11.2.tar.gz", hash = "sha256:8d0a30fe6481ce919f56690076eafbb2fb649142a89dc874f1ec0e7a011492d0"},
+    {file = "astroid-2.11.3-py3-none-any.whl", hash = "sha256:f1af57483cd17e963b2eddce8361e00fc593d1520fe19948488e94ff6476bd71"},
+    {file = "astroid-2.11.3.tar.gz", hash = "sha256:4e5ba10571e197785e312966ea5efb2f5783176d4c1a73fa922d474ae2be59f7"},
 ]
 atomicwrites = [
     {file = "atomicwrites-1.4.0-py2.py3-none-any.whl", hash = "sha256:6d1784dea7c0c8d4a5172b6c620f40b6e4cbfdf96d783691f2e1302a7b88e197"},
@@ -1695,8 +1695,8 @@ attrs = [
     {file = "attrs-21.4.0.tar.gz", hash = "sha256:626ba8234211db98e869df76230a137c4c40a12d72445c45d5f5b716f076e2fd"},
 ]
 babel = [
-    {file = "Babel-2.9.1-py2.py3-none-any.whl", hash = "sha256:ab49e12b91d937cd11f0b67cb259a57ab4ad2b59ac7a3b41d6c06c0ac5b0def9"},
-    {file = "Babel-2.9.1.tar.gz", hash = "sha256:bc0c176f9f6a994582230df350aa6e05ba2ebe4b3ac317eab29d9be5d2768da0"},
+    {file = "Babel-2.10.1-py3-none-any.whl", hash = "sha256:3f349e85ad3154559ac4930c3918247d319f21910d5ce4b25d439ed8693b98d2"},
+    {file = "Babel-2.10.1.tar.gz", hash = "sha256:98aeaca086133efb3e1e2aad0396987490c8425929ddbcfe0550184fdc54cd13"},
 ]
 backcall = [
     {file = "backcall-0.2.0-py2.py3-none-any.whl", hash = "sha256:fbbce6a29f263178a1f7915c1940bde0ec2b2a967566fe1c65c1dfb7422bd255"},
@@ -1964,8 +1964,8 @@ jupyterlab-pygments = [
     {file = "jupyterlab_pygments-0.2.2.tar.gz", hash = "sha256:7405d7fde60819d905a9fa8ce89e4cd830e318cdad22a0030f7a901da705585d"},
 ]
 jupyterlab-server = [
-    {file = "jupyterlab_server-2.12.0-py3-none-any.whl", hash = "sha256:db5d234955c5c2684f77a064345712f071acf7df31f0d8c31b420b33b09d6472"},
-    {file = "jupyterlab_server-2.12.0.tar.gz", hash = "sha256:00e0f4b4c399f55938323ea10cf92d915288fe12753e35d1069f6ca08b72abbf"},
+    {file = "jupyterlab_server-2.13.0-py3-none-any.whl", hash = "sha256:fc9e86d4e7c4b139de59b0a96b53071e670bee1ed106a3389daecd68f1221aeb"},
+    {file = "jupyterlab_server-2.13.0.tar.gz", hash = "sha256:2040298a133458aa22f287a877d6bb91ff973f6298d562264f9f7b75e92a5ace"},
 ]
 jupyterlab-widgets = [
     {file = "jupyterlab_widgets-1.1.0-py3-none-any.whl", hash = "sha256:c2a9bd3789f120f64d73268c066ed3b000c56bc1dda217be5cdc43e7b4ebad3f"},
@@ -2229,11 +2229,11 @@ pluggy = [
     {file = "pluggy-1.0.0.tar.gz", hash = "sha256:4224373bacce55f955a878bf9cfa763c1e360858e330072059e10bad68531159"},
 ]
 polars = [
-    {file = "polars-0.13.23-cp37-abi3-macosx_10_7_x86_64.whl", hash = "sha256:bb7dbc8d1438071a7b0f06b780e098bea35bcab7bccd933faf31e7c5e8e4dd5b"},
-    {file = "polars-0.13.23-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:5db389033a51cbfea6cc02fc274294642048e43f6ace355271588206236a4b0d"},
-    {file = "polars-0.13.23-cp37-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:672c265fe24df6279e0801d6cb24b7ffef2b385b8e43231c3ad833ed882f6093"},
-    {file = "polars-0.13.23-cp37-abi3-win_amd64.whl", hash = "sha256:9b7b9acde43d898a4f7de667b173ded4862edaccfda25cb03013751d3b788b09"},
-    {file = "polars-0.13.23.tar.gz", hash = "sha256:150138c4e08603c61dabb38519761bf3c17ed8dccec24ab3469479b5f3d9ea74"},
+    {file = "polars-0.13.24-cp37-abi3-macosx_10_7_x86_64.whl", hash = "sha256:2ab35458b8281921df45c550fb94601fa7f44d6b683d1f73c21c95d82bd30602"},
+    {file = "polars-0.13.24-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:3a2b1abab14fc365a043eefdd7f5157287aa9ea13fb220bd0744cfbb8fa32f1a"},
+    {file = "polars-0.13.24-cp37-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:09f635bfdfa16d06c168b8b1e4bdb4f074ca3e6709dc15c24d288d11841423f1"},
+    {file = "polars-0.13.24-cp37-abi3-win_amd64.whl", hash = "sha256:babf683b95b8e9df8ab68789b0d3146c6bca843ef4b3fa396f3ebbf942154d66"},
+    {file = "polars-0.13.24.tar.gz", hash = "sha256:2ecb9c1e37eb77b86d29b76d7f722e8c65b19486e2f57abff492335f2cb6b89f"},
 ]
 prometheus-client = [
     {file = "prometheus_client-0.14.1-py3-none-any.whl", hash = "sha256:522fded625282822a89e2773452f42df14b5a8e84a86433e3f8a189c1d54dc01"},

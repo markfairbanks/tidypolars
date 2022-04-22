@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2.14 (2022/4/22)
+
+* Added support for python 3.7
+
 ## v0.2.13 (2022/4/7)
 
 #### New functions
