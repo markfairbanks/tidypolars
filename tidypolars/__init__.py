@@ -1,6 +1,9 @@
 # read version from installed package
-from importlib.metadata import version
-__version__ = version("tidypolars")
+try:
+    from importlib.metadata import version
+    __version__ = version("tidypolars")
+except:
+    __version__ = ""
 
 from .funs import *
 from .lubridate import *
