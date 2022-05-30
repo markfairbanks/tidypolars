@@ -506,9 +506,10 @@ class Tibble(pl.DataFrame):
             `names_from` and `values_from`.
         values_fn : str
             Function for how multiple entries per group should be dealt with.
+            Any of 'first', 'count', 'sum', 'max', 'min', 'mean', 'median', 'last'
         values_fill : str
             If values are missing/null, what value should be filled in.
-            Can use: "backward", "forward", "mean", "min", "max", "zero", "one" or an expression
+            Can use: "backward", "forward", "mean", "min", "max", "zero", "one"
 
         Examples
         --------
@@ -525,17 +526,8 @@ class Tibble(pl.DataFrame):
         if no_id:
             id_cols = '_id'
             self = self.mutate(_id = pl.lit(1))
-        
-        fn_options = {
-            'first': pl.internals.frame.PivotOps.first,
-            'count': pl.internals.frame.PivotOps.count,
-            'mean': pl.internals.frame.PivotOps.mean,
-            'sum': pl.internals.frame.PivotOps.sum,
-        }
 
-        values_fn = fn_options[values_fn]
-
-        out = values_fn(super(Tibble, self).groupby(id_cols).pivot(names_from, values_from))
+        out = super().pivot(values_from, id_cols, names_from)
 
         if values_fill != None:
             new_cols = pl.Series(out.names)
