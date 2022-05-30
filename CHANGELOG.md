@@ -1,5 +1,7 @@
 # Changelog
 
+## v0.2.16 (in development)
+
 ## v0.2.15 (2022/4/22)
 
 * Minor update to `__version__` check
