@@ -527,7 +527,7 @@ class Tibble(pl.DataFrame):
             id_cols = '_id'
             self = self.mutate(_id = pl.lit(1))
 
-        out = super().pivot(values_from, id_cols, names_from)
+        out = super().pivot(values_from, id_cols, names_from, values_fn)
 
         if values_fill != None:
             new_cols = pl.Series(out.names)
