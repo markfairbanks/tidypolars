@@ -1,6 +1,8 @@
 # Changelog
 
-## v0.2.16 (in development)
+## v0.2.16 (2022/8/12)
+
+* Require polars <0.14.0
 
 ## v0.2.15 (2022/4/22)
 
