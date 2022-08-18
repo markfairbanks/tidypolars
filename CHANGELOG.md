@@ -1,5 +1,7 @@
 # Changelog
 
+## v0.2.18 (in development)
+
 ## v0.2.17 (2022/8/17)
 
 * tidypolars is now compatible with polars >=0.14.0

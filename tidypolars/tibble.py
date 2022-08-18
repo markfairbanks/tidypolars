@@ -586,29 +586,39 @@ class Tibble(pl.DataFrame):
         >>> df.relocate('a', before = 'c')
         >>> df.relocate('b', after = 'c')
         """
-        move_cols = _as_list(args)
-        move_cols = self.select(move_cols).names
-        push_length = len(move_cols)
-        col_dict = {name:index for index, name in enumerate(self.names)}
-        
-        if push_length == 0:
+        cols_all = pl.Series(self.names)
+        locs_all = pl.Series(range(len(cols_all)))
+        locs_df = pl.DataFrame(
+            [locs_all.to_list()], columns = cols_all, orient = "row"
+        )
+
+        cols_relocate = _as_list(args)
+        locs_relocate = pl.Series(locs_df.select(cols_relocate).row(0))
+
+        if (len(locs_relocate) == 0):
             return self
-        elif (before == None) & (after == None):
-            before = self.names[0]
-        elif (before != None) & (after != None):
+
+        uses_before = before != None
+        uses_after = after != None
+
+        if (uses_before & uses_after):
             raise ValueError("Cannot provide both before and after")
+        elif (not_(uses_before) & not_(uses_after)):
+            before = cols_all[0]
+            uses_before = True
 
-        if before != None:
-            anchor, push_cols = col_dict[before], (-1 - push_length)
-            [col_dict.update({key : push_cols + val}) for key, val in col_dict.items() if val < anchor]
-            [col_dict.update({key : anchor - (index + 1)}) for index, key in enumerate(reversed(move_cols))]
+        if uses_before:
+            before = locs_df.select(before).get_column(before)
+            locs_start = locs_all[locs_all < before]
         else:
-            anchor, push_cols = col_dict[after], (1 + push_length)
-            [col_dict.update({key : push_cols + val}) for key, val in col_dict.items() if val > anchor]
-            [col_dict.update({key : anchor + (index + 1)}) for index, key in enumerate(move_cols)]
+            after = locs_df.select(after).get_column(after)
+            locs_start = locs_all[locs_all <= after]
 
-        ordered_cols = dict(sorted(col_dict.items(), key = lambda x: x[1])).keys()
-        return self.select(list(ordered_cols))
+        locs_start = locs_start[~locs_start.is_in(locs_relocate)]
+        final_order = pl.concat([locs_start, locs_relocate, locs_all]).unique(True)
+        final_order = cols_all[final_order].to_list()
+
+        return self.select(final_order)
    
     def rename(self, *args, **kwargs):
         """
