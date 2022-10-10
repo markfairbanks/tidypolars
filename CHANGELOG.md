@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.2.19 (in development)
+## v0.2.19
 
 #### New functions
 * `make_date()`
