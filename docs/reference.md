@@ -98,6 +98,8 @@
 * [`as_datetime()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/lubridate/index.html#tidypolars.lubridate.as_datetime)
 * [`dt_round()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/lubridate/index.html#tidypolars.lubridate.dt_round)
 * [`hour()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/lubridate/index.html#tidypolars.lubridate.hour)
+* [`make_date()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/lubridate/index.html#tidypolars.lubridate.make_date)
+* [`make_datetime()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/lubridate/index.html#tidypolars.lubridate.make_datetime)
 * [`mday()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/lubridate/index.html#tidypolars.lubridate.mday)
 * [`minute()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/lubridate/index.html#tidypolars.lubridate.minute)
 * [`month()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/lubridate/index.html#tidypolars.lubridate.month)

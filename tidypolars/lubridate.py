@@ -5,6 +5,8 @@ __all__ = [
     "as_date",
     "as_datetime",
     "hour",
+    "make_date",
+    "make_datetime",
     "mday",
     "minute",
     "month",
@@ -86,6 +88,50 @@ def mday(x):
     """
     x = _col_expr(x)
     return x.dt.day()
+
+def make_date(year = 1970, month = 1, day = 1):
+    """
+    Create a date object
+
+    Parameters
+    ----------
+    year : Expr, str, int
+        Column or literal
+    month : Expr, str, int
+        Column or literal
+    day : Expr, str, int
+        Column or literal
+
+    Examples
+    --------
+    >>> df.mutate(date = tp.make_date(2000, 1, 1))
+    """
+    return pl.date(year, month, day)
+
+def make_datetime(year = 1970, month = 1, day = 1, hour = 0, minute = 0, second = 0):
+    """
+    Create a datetime object
+
+    Parameters
+    ----------
+    year : Expr, str, int
+        Column or literal
+    month : Expr, str, int
+        Column or literal
+    day : Expr, str, int
+        Column or literal
+    hour : Expr, str, int
+        Column or literal
+    minute : Expr, str, int
+        Column or literal
+    second : Expr, str, int
+        Column or literal
+
+    Examples
+    --------
+    >>> df.mutate(date = tp.make_datetime(2000, 1, 1))
+    """
+    return pl.datetime(year, month, day, hour, minute, second)
 
 def minute(x):
     """
