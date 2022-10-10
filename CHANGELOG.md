@@ -2,6 +2,10 @@
 
 ## v0.2.19 (in development)
 
+#### New functions
+* `make_date()`
+* `make_datetime()`
+
 ## v0.2.18
 
 * polars >=0.14.18 compatibility
