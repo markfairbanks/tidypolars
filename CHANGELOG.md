@@ -1,6 +1,8 @@
 # Changelog
 
-## v0.2.18 (in development)
+## v0.2.18
+
+* polars >=0.14.18 compatibility
 
 ## v0.2.17 (2022/8/17)
 
