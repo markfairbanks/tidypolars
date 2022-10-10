@@ -491,7 +491,7 @@ class Tibble(pl.DataFrame):
         """
         df_cols = pl.Series(self.names)
         value_vars = pl.Series(self.select(cols).names)
-        id_vars = df_cols[~df_cols.is_in(value_vars)]
+        id_vars = df_cols.filter(~df_cols.is_in(value_vars))
         out = super().melt(id_vars, value_vars, names_to, values_to)
         return out.pipe(from_polars)
 
@@ -529,7 +529,7 @@ class Tibble(pl.DataFrame):
         if id_cols == None:
             df_cols = pl.Series(self.names)
             from_cols = pl.Series(self.select(names_from, values_from).names)
-            id_cols = df_cols[~df_cols.is_in(from_cols)]
+            id_cols = df_cols.filter(~df_cols.is_in(from_cols))
 
         no_id = len(id_cols) == 0
 
@@ -544,7 +544,7 @@ class Tibble(pl.DataFrame):
 
         if values_fill != None:
             new_cols = pl.Series(out.names)
-            new_cols = new_cols[~new_cols.is_in(id_cols)]
+            new_cols = new_cols.filter(~new_cols.is_in(id_cols))
             fill_exprs = [col(new_col).fill_null(values_fill) for new_col in new_cols]
             out = out.mutate(*fill_exprs)
 
@@ -588,8 +588,9 @@ class Tibble(pl.DataFrame):
         """
         cols_all = pl.Series(self.names)
         locs_all = pl.Series(range(len(cols_all)))
+        print(locs_all)
         locs_df = pl.DataFrame(
-            [locs_all.to_list()], columns = cols_all, orient = "row"
+            [locs_all.to_list()], columns = cols_all.to_list(), orient = "row"
         )
 
         cols_relocate = _as_list(args)
@@ -609,12 +610,12 @@ class Tibble(pl.DataFrame):
 
         if uses_before:
             before = locs_df.select(before).get_column(before)
-            locs_start = locs_all[locs_all < before]
+            locs_start = locs_all.filter(locs_all < before)
         else:
             after = locs_df.select(after).get_column(after)
-            locs_start = locs_all[locs_all <= after]
+            locs_start = locs_all.filter(locs_all <= after)
 
-        locs_start = locs_start[~locs_start.is_in(locs_relocate)]
+        locs_start = locs_start.filter(~locs_start.is_in(locs_relocate))
         final_order = pl.concat([locs_start, locs_relocate, locs_all]).unique(True)
         final_order = cols_all[final_order].to_list()
 
@@ -647,8 +648,8 @@ class Tibble(pl.DataFrame):
                 if (len_args % 2) == 1:
                     raise ValueError("Need matching new_name/old_name pairs when using args")
                 even_bool = pl.Series([True, False] * int(len_args/2))
-                new_names = args[even_bool]
-                old_names = args[~even_bool]
+                new_names = args.filter(even_bool)
+                old_names = args.filter(~even_bool)
                 mapping = {key:value for key, value in zip(old_names, new_names)}
         else:
             mapping = {value:key for key, value in kwargs.items()}
