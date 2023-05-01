@@ -99,7 +99,7 @@ class Tibble(pl.DataFrame):
         """
         exprs = _as_list(args)
         desc = [True if isinstance(expr, DescCol) else False for expr in exprs]
-        return super().sort(exprs, reverse = desc).pipe(from_polars)
+        return super().sort(exprs, descending = desc).pipe(from_polars)
 
     def bind_cols(self, *args):
         """
