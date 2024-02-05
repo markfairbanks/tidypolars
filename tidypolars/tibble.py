@@ -345,7 +345,7 @@ class Tibble(pl.DataFrame):
         """
         if (left_on == None) & (right_on == None) & (on == None):
             on = list(set(self.names) & set(df.names))
-        return super().join(df, left_on, right_on, on, 'inner', suffix).pipe(from_polars)
+        return super().join(df, on, 'inner', left_on = left_on, right_on= right_on, suffix= suffix).pipe(from_polars)
 
     def left_join(self, df, left_on = None, right_on = None, on = None, suffix = '_right'):
         """
@@ -372,7 +372,7 @@ class Tibble(pl.DataFrame):
         """
         if (left_on == None) & (right_on == None) & (on == None):
             on = list(set(self.names) & set(df.names))
-        return super().join(df, left_on, right_on, on, 'left', suffix).pipe(from_polars)
+        return super().join(df, on, 'left',  left_on = left_on, right_on= right_on, suffix= suffix).pipe(from_polars)
 
     def mutate(self, *args,
                by = None,
@@ -465,7 +465,7 @@ class Tibble(pl.DataFrame):
         """
         if (left_on == None) & (right_on == None) & (on == None):
             on = list(set(self.names) & set(df.names))
-        return super().join(df, left_on, right_on, on, 'outer', suffix).pipe(from_polars)
+        return super().join(df, on, 'outer',  left_on = left_on, right_on= right_on, suffix= suffix).pipe(from_polars)
 
     def pivot_longer(self,
                      cols = everything(),
