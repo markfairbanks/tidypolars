@@ -940,7 +940,7 @@ class Tibble(pl.DataFrame):
                   has_headers = True,
                   sep = ','):
         """Write a data frame to a csv"""
-        return super().to_csv(file, has_headers, sep)
+        return super().write_csv(file, include_header = has_headers, separator = sep)
 
     def write_parquet(self,
                       file = str,
@@ -948,7 +948,7 @@ class Tibble(pl.DataFrame):
                       use_pyarrow = False,
                       **kwargs):
         """Write a data frame to a parquet"""
-        return super().write_parquet(file, compression, use_pyarrow, **kwargs)
+        return super().write_parquet(file, compression = compression, use_pyarrow = use_pyarrow, **kwargs)
 
 def desc(x):
     """Mark a column to order in descending"""
