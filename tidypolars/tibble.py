@@ -490,8 +490,8 @@ class Tibble(pl.DataFrame):
         >>> df.pivot_longer(cols = ['a', 'b'], names_to = 'stuff', values_to = 'things')
         """
         df_cols = pl.Series(self.names)
-        value_vars = pl.Series(self.select(cols).names)
-        id_vars = df_cols.filter(~df_cols.is_in(value_vars))
+        value_vars = self.select(cols).names
+        id_vars = df_cols.filter(df_cols.is_in(value_vars).not_()).to_list()
         out = super().melt(id_vars, value_vars, names_to, values_to)
         return out.pipe(from_polars)
 
