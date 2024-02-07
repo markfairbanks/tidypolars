@@ -662,7 +662,7 @@ def n():
     --------
     >>> df.summarize(count = tp.n())
     """
-    return pl.count()
+    return pl.len()
 
 def n_distinct(x):
     """
