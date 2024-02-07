@@ -27,7 +27,7 @@ def test_date():
                 year = col('date').dt.year()
                 )
     )
-    assert actual.frame_equal(expected), "date operations failed"
+    assert actual.equals(expected), "date operations failed"
 
 def test_as_date_fmt():
     """Can pass fmt to as_date"""

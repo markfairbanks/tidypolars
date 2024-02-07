@@ -7,7 +7,7 @@ def test_abs():
     df = tp.Tibble(x = range(-3, 0))
     actual = df.mutate(abs_x = tp.abs('x'), abs_col_x = tp.abs(col('x')))
     expected = tp.Tibble(x = range(-3, 0), abs_x = range(3, 0, -1), abs_col_x = range(3, 0, -1))
-    assert actual.frame_equal(expected), "abs failed"
+    assert actual.equals(expected), "abs failed"
 
 def test_agg_stats():
     """Can get aggregation statistics"""
@@ -49,7 +49,7 @@ def test_agg_stats():
         sum_x = [3], sum_col_x = [3],
         var_y = [1]
     )
-    assert actual.frame_equal(expected), "aggregation stats failed"
+    assert actual.equals(expected), "aggregation stats failed"
 
 def test_case_when():
     """Can use case_when"""
@@ -58,7 +58,7 @@ def test_case_when():
                                 .when(col('x') < 3).then(1)
                                 .otherwise(0))
     expected = tp.Tibble(x = range(1, 4), case_x = [0, 1, 0])
-    assert actual.frame_equal(expected), "case_when failed"
+    assert actual.equals(expected), "case_when failed"
 
 def test_casting():
     """Can do type casting"""
@@ -75,7 +75,7 @@ def test_casting():
                          int_cast = [1, 2, 3],
                          string_cast = ["0", "0", "1"],
                          bool_cast = [False, False, True])
-    assert actual.frame_equal(expected), "casting failed"
+    assert actual.equals(expected), "casting failed"
 
 def test_coalesce():
     """Can use coalesce"""
@@ -88,14 +88,14 @@ def test_coalesce():
         .select('coalesce_x')
     )
     expected = tp.Tibble(coalesce_x = [2, 3, 1])
-    assert actual.frame_equal(expected), "coalesce failed"
+    assert actual.equals(expected), "coalesce failed"
 
 def test_floor():
     """Can get the floor"""
     df = tp.Tibble(x = [1.1, 5.5])
     actual = df.mutate(floor_x = tp.floor('x')).select('floor_x')
     expected = tp.Tibble(floor_x = [1.0, 5.0])
-    assert actual.frame_equal(expected), "floor failed"
+    assert actual.equals(expected), "floor failed"
 
 def test_lag():
     """Can get lagging values with function"""
@@ -105,7 +105,7 @@ def test_lag():
     expected = tp.Tibble({'x': range(3),
                           'lag_null': [None, 0, 1],
                           'lag_default': [1, 0, 1]})
-    assert actual.frame_equal(expected, null_equal = True), "lag failed"
+    assert actual.equals(expected, null_equal = True), "lag failed"
 
 def test_lead():
     """Can get leading values with function"""
@@ -115,7 +115,7 @@ def test_lead():
     expected = tp.Tibble({'x': range(3),
                           'lead_null': [1, 2, None],
                           'lead_default': [1, 2, 1]})
-    assert actual.frame_equal(expected, null_equal = True), "lead failed"
+    assert actual.equals(expected, null_equal = True), "lead failed"
 
 def test_logs():
     """Can get leading values with function"""
@@ -123,14 +123,14 @@ def test_logs():
     actual = df.mutate(log = tp.log(col('x')).round(2),
                        log10 = tp.log10('x').round(2))
     expected = df.mutate(log = col('x').log().round(2), log10 = col('x').log10().round(2))
-    assert actual.frame_equal(expected), "log failed"
+    assert actual.equals(expected), "log failed"
 
 def test_if_else():
     """Can use if_else"""
     df = tp.Tibble(x = range(1, 4))
     actual = df.mutate(case_x = tp.if_else(col('x') < 2, 1, 0))
     expected = tp.Tibble(x = range(1, 4), case_x = [1, 0, 0])
-    assert actual.frame_equal(expected), "if_else failed"
+    assert actual.equals(expected), "if_else failed"
 
 def test_is_predicates():
     """Can use is predicates"""
@@ -160,29 +160,29 @@ def test_is_predicates():
         is_not_null = [False, True, True],
         is_null = [True, False, False]
     )
-    assert actual.frame_equal(expected, null_equal = True), "is_predicates failed"
+    assert actual.equals(expected, null_equal = True), "is_predicates failed"
 
 def test_rep():
     df = tp.Tibble(x = [0, 1], y = [0, 1])
-    assert tp.rep(df, 2).frame_equal(df.bind_rows(df)), "rep df failed"
-    assert tp.rep(1, 2).series_equal(tp.Series([1, 1])), "rep int failed"
-    assert tp.rep("a", 2).series_equal(tp.Series(["a", "a"])), "rep str failed"
-    assert tp.rep(True, 2).series_equal(tp.Series([True, True])), "rep bool failed"
-    assert tp.rep(tp.Series([0, 1]), 2).series_equal(tp.Series([0, 1, 0, 1])), "rep series failed"
+    assert tp.rep(df, 2).equals(df.bind_rows(df)), "rep df failed"
+    assert tp.rep(1, 2).equals(tp.Series([1, 1])), "rep int failed"
+    assert tp.rep("a", 2).equals(tp.Series(["a", "a"])), "rep str failed"
+    assert tp.rep(True, 2).equals(tp.Series([True, True])), "rep bool failed"
+    assert tp.rep(tp.Series([0, 1]), 2).equals(tp.Series([0, 1, 0, 1])), "rep series failed"
 
 def test_replace_null():
     """Can replace nulls"""
     df = tp.Tibble(x = [0, None], y = [None, None])
     actual = df.mutate(x = tp.replace_null(col('x'), 1))
     expected = tp.Tibble(x = [0, 1], y = [None, None])
-    assert actual.frame_equal(expected), "replace_null function failed"
+    assert actual.equals(expected), "replace_null function failed"
 
 def test_row_number():
     """Can get row number"""
     df = tp.Tibble(x = ['a', 'a', 'b'])
     actual = df.mutate(row_num = tp.row_number())
     expected = tp.Tibble(x = ['a', 'a', 'b'], row_num = [1, 2, 3])
-    assert actual.frame_equal(expected), "row_number failed"
+    assert actual.equals(expected), "row_number failed"
 
 def test_row_number_group():
     """Can get row number by group"""
@@ -192,18 +192,18 @@ def test_row_number_group():
         .arrange('x', 'group_row_num')
     )
     expected = tp.Tibble(x = ['a', 'a', 'b'], group_row_num = [1, 2, 1])
-    assert actual.frame_equal(expected), "group row_number failed"
+    assert actual.equals(expected), "group row_number failed"
 
 def test_round():
     """Can round values"""
     df = tp.Tibble(x = [1.11, 2.22, 3.33])
     actual = df.mutate(x = tp.round(col('x'), 1))
     expected = tp.Tibble(x = [1.1, 2.2, 3.3])
-    assert actual.frame_equal(expected), "round failed"
+    assert actual.equals(expected), "round failed"
 
 def test_sqrt():
     """Can get the square root"""
     df = tp.Tibble(x = [9, 25, 100])
     actual = df.mutate(x = tp.sqrt('x'))
     expected = tp.Tibble(x = [3, 5, 10])
-    assert actual.frame_equal(expected), "sqrt failed"
+    assert actual.equals(expected), "sqrt failed"

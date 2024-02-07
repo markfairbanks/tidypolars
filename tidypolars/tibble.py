@@ -235,6 +235,12 @@ class Tibble(pl.DataFrame):
             out = super().drop_nulls(args)
         return out.pipe(from_polars)
     
+    def equals(self, other, null_equal = True):
+        """Check if two Tibbles are equal"""
+        df = self.to_polars()
+        other = other.to_polars()
+        return df.equals(other, null_equal = null_equal)
+    
     def head(self, n = 5, *, by = None):
         """Alias for `.slice_head()`"""
         return self.slice_head(n, by = by)
@@ -313,12 +319,6 @@ class Tibble(pl.DataFrame):
             out = super().filter(exprs)
         
         return out.pipe(from_polars)
-    
-    def frame_equal(self, other, null_equal = True):
-        """Check if two Tibbles are equal"""
-        df = self.to_polars()
-        other = other.to_polars()
-        return df.frame_equal(other, null_equal = null_equal)
 
     def inner_join(self, df, left_on = None, right_on = None, on = None, suffix = '_right'):
         """
