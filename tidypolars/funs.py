@@ -64,7 +64,7 @@ def across(cols, fn = lambda x: x, names_prefix = None):
     _cols = _col_exprs(_as_list(cols))
     exprs = [fn(_col) for _col in _cols]
     if names_prefix != None:
-        exprs = [expr.prefix(names_prefix) for expr in exprs]
+        exprs = [expr.name.prefix(names_prefix) for expr in exprs]
     return exprs
 
 def as_boolean(x):
@@ -167,7 +167,7 @@ def between(x, left, right):
     >>> df.filter(tp.between(col('x'), 1, 3))
     """
     x = _col_expr(x)
-    return x.is_between(left, right, include_bounds = True)
+    return x.is_between(left, right)
 
 def case_when(expr):
     """
@@ -245,13 +245,9 @@ def cor(x, y, method = 'pearson'):
     --------
     >>> df.summarize(cor = tp.cor(col('x'), col('y')))
     """
-    if method == 'pearson':
-        out = pl.pearson_corr(x, y)
-    elif method == 'spearman':
-        out = pl.spearman_rank_corr(x, y)
-    else:
+    if pl.Series([method]).is_in(['pearson', 'spearman']).not_().item():
         ValueError("`method` must be either 'pearson' or 'spearman'")
-    return out
+    return pl.corr(x, y, method = method)
 
 def cov(x, y):
     """
@@ -404,10 +400,10 @@ def is_not(x):
     Examples
     --------
     >>> df = tp.Tibble(x = range(3))
-    >>> df.filter(tp.is_not(col('x') < 2))
+    >>> df.filter(tp.not_(col('x') < 2))
     """
     x = _col_expr(x)
-    return x.is_not()
+    return x.not_()
 
 def is_nan(x):
     """
@@ -443,7 +439,7 @@ def is_not_in(x, y):
     >>> df.filter(tp.is_not_in(col('x'), [1, 2]))
     """
     x = _col_expr(x)
-    return x.is_in(y).is_not()
+    return x.is_in(y).not_()
 
 def is_not_null(x):
     """
@@ -460,7 +456,7 @@ def is_not_null(x):
     >>> df.filter(tp.is_not_in(col('x'), [1, 2]))
     """
     x = _col_expr(x)
-    return x.is_null().is_not()
+    return x.is_null().not_()
 
 def is_null(x):
     """
@@ -478,12 +474,6 @@ def is_null(x):
     """
     x = _col_expr(x)
     return x.is_null()
-
-def _shift(x, n, default):
-    if default == None:
-        return x.shift(n)
-    else:
-        return x.shift_and_fill(n, default)
 
 def lag(x, n: int = 1, default = None):
     """
@@ -506,7 +496,7 @@ def lag(x, n: int = 1, default = None):
     >>> df.mutate(lag_x = tp.lag('x'))
     """
     x = _col_expr(x)
-    return _shift(x, n, default)
+    return x.shift(n, fill_value = default)
 
 def last(x):
     """
@@ -546,7 +536,7 @@ def lead(x, n: int = 1, default = None):
     >>> df.mutate(lead_x = col('x').lead())
     """
     x = _col_expr(x)
-    return _shift(x, -n, default)
+    return x.shift(-n, fill_value = default)
 
 def length(x):
     """
@@ -672,7 +662,7 @@ def n():
     --------
     >>> df.summarize(count = tp.n())
     """
-    return pl.count()
+    return pl.len()
 
 def n_distinct(x):
     """
@@ -797,7 +787,7 @@ def row_number():
     --------
     >>> df.mutate(row_num = tp.row_number())
     """
-    return pl.first().cumcount() + 1
+    return pl.int_range(0, pl.len()) + 1
 
 def sd(x):
     """

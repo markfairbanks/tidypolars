@@ -1,6 +1,8 @@
 # Changelog
 
-## v0.2.20 (in development)
+## v0.3.0 (in development)
+
+* Major refactor to work with `polars>=0.20.8`
 
 ## v0.2.19
 

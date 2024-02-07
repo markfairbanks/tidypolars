@@ -100,7 +100,7 @@ def str_detect(string, pattern, negate = False):
     exprs = (string.str.contains(p) for p in pattern)
     exprs = ft.reduce(lambda a, b : a & b, exprs)
     if negate:
-        exprs = exprs.is_not()
+        exprs = exprs.not_()
     
     return exprs
 
@@ -159,7 +159,7 @@ def str_length(string):
     >>> df.mutate(x = str_length(col('name')))
     """
     string = _col_expr(string)
-    return string.str.lengths()
+    return string.str.len_bytes()
 
 def str_starts(string, pattern, negate = False):
     """

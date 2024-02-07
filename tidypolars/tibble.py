@@ -167,7 +167,7 @@ class Tibble(pl.DataFrame):
         """
         args = _as_list(args)
         
-        out = self.summarize(pl.count().alias(name), by = args)
+        out = self.summarize(pl.len().alias(name), by = args)
 
         if sort == True:
             out = out.arrange(desc(name))
@@ -234,6 +234,12 @@ class Tibble(pl.DataFrame):
         else:
             out = super().drop_nulls(args)
         return out.pipe(from_polars)
+    
+    def equals(self, other, null_equal = True):
+        """Check if two Tibbles are equal"""
+        df = self.to_polars()
+        other = other.to_polars()
+        return df.equals(other, null_equal = null_equal)
     
     def head(self, n = 5, *, by = None):
         """Alias for `.slice_head()`"""
@@ -308,17 +314,11 @@ class Tibble(pl.DataFrame):
         exprs = ft.reduce(lambda a, b: a & b, args)
 
         if _uses_by(by):
-            out = super().groupby(by).apply(lambda x: x.filter(exprs))
+            out = super().group_by(by).map_groups(lambda x: x.filter(exprs))
         else:
             out = super().filter(exprs)
         
         return out.pipe(from_polars)
-    
-    def frame_equal(self, other, null_equal = True):
-        """Check if two Tibbles are equal"""
-        df = self.to_polars()
-        other = other.to_polars()
-        return df.frame_equal(other, null_equal = null_equal)
 
     def inner_join(self, df, left_on = None, right_on = None, on = None, suffix = '_right'):
         """
@@ -401,7 +401,7 @@ class Tibble(pl.DataFrame):
         out = self.to_polars()
 
         if _uses_by(by):
-            out = out.groupby(by).apply(lambda x: _mutate_cols(x, exprs))
+            out = out.group_by(by).map_groups(lambda x: _mutate_cols(x, exprs))
         else:
             out = _mutate_cols(out, exprs)
             
@@ -490,8 +490,8 @@ class Tibble(pl.DataFrame):
         >>> df.pivot_longer(cols = ['a', 'b'], names_to = 'stuff', values_to = 'things')
         """
         df_cols = pl.Series(self.names)
-        value_vars = pl.Series(self.select(cols).names)
-        id_vars = df_cols.filter(~df_cols.is_in(value_vars))
+        value_vars = self.select(cols).names
+        id_vars = df_cols.filter(df_cols.is_in(value_vars).not_()).to_list()
         out = super().melt(id_vars, value_vars, names_to, values_to)
         return out.pipe(from_polars)
 
@@ -529,7 +529,7 @@ class Tibble(pl.DataFrame):
         if id_cols == None:
             df_cols = pl.Series(self.names)
             from_cols = pl.Series(self.select(names_from, values_from).names)
-            id_cols = df_cols.filter(~df_cols.is_in(from_cols))
+            id_cols = df_cols.filter(df_cols.is_in(from_cols).not_()).to_list()
 
         no_id = len(id_cols) == 0
 
@@ -537,7 +537,8 @@ class Tibble(pl.DataFrame):
             id_cols = '_id'
             self = self.mutate(_id = pl.lit(1))
 
-        out = (super()
+        out = (
+            super()
             .pivot(values_from, id_cols, names_from, values_fn)
             .pipe(from_polars)
         )
@@ -588,10 +589,8 @@ class Tibble(pl.DataFrame):
         """
         cols_all = pl.Series(self.names)
         locs_all = pl.Series(range(len(cols_all)))
-        print(locs_all)
-        locs_df = pl.DataFrame(
-            [locs_all.to_list()], columns = cols_all.to_list(), orient = "row"
-        )
+        locs_dict = {k:v for k,v in zip(cols_all, locs_all)}
+        locs_df = pl.DataFrame(locs_dict, orient = "row")
 
         cols_relocate = _as_list(args)
         locs_relocate = pl.Series(locs_df.select(cols_relocate).row(0))
@@ -616,7 +615,7 @@ class Tibble(pl.DataFrame):
             locs_start = locs_all.filter(locs_all <= after)
 
         locs_start = locs_start.filter(~locs_start.is_in(locs_relocate))
-        final_order = pl.concat([locs_start, locs_relocate, locs_all]).unique(True)
+        final_order = pl.concat([locs_start, locs_relocate, locs_all]).unique(maintain_order = True)
         final_order = cols_all[final_order].to_list()
 
         return self.select(final_order)
@@ -672,7 +671,7 @@ class Tibble(pl.DataFrame):
         if replace == None: return self
         if type(replace) != dict:
             ValueError("replace must be a dictionary of column/replacement pairs")
-        replace_exprs = [col(key).fill_null(value).keep_name() for key, value in replace.items()]
+        replace_exprs = [col(key).fill_null(value) for key, value in replace.items()]
         return self.mutate(*replace_exprs)
 
     def separate(self, sep_col, into, sep = '_', remove = True):
@@ -769,9 +768,9 @@ class Tibble(pl.DataFrame):
         """
         rows = _as_list(args)
         if _uses_by(by):
-            df = super(Tibble, self).groupby(by).apply(lambda x: x.select(pl.all().take(rows)))
+            df = super(Tibble, self).group_by(by).map_groups(lambda x: x.select(pl.all().gather(rows)))
         else:
-            df = super(Tibble, self).select(pl.all().take(rows))  
+            df = super(Tibble, self).select(pl.all().gather(rows))
         return df.pipe(from_polars)
 
     def slice_head(self, n = 5, *, by = None):
@@ -793,7 +792,7 @@ class Tibble(pl.DataFrame):
         """
         col_order = self.names
         if _uses_by(by):
-            df = super(Tibble, self).groupby(by).head(n)
+            df = super(Tibble, self).group_by(by).head(n)
         else:
             df = super(Tibble, self).head(n)
         df = df.select(col_order)
@@ -818,7 +817,7 @@ class Tibble(pl.DataFrame):
         """
         col_order = self.names
         if _uses_by(by):
-            df = super(Tibble, self).groupby(by).tail(n)
+            df = super(Tibble, self).group_by(by).tail(n)
         else:
             df = super(Tibble, self).tail(n)
         df = df.select(col_order)
@@ -856,7 +855,7 @@ class Tibble(pl.DataFrame):
         """
         exprs = _as_list(args) + _kwargs_as_exprs(kwargs)
         if _uses_by(by):
-            out = super(Tibble, self).groupby(by).agg(exprs)
+            out = super(Tibble, self).group_by(by).agg(exprs)
         else:
             out = super(Tibble, self).select(exprs)
         return out.pipe(from_polars)
@@ -865,7 +864,7 @@ class Tibble(pl.DataFrame):
         """Alias for `.slice_tail()`"""
         return self.slice_tail(n, by = by)
 
-    def to_dict(self, as_series = True):
+    def to_dict(self, *, as_series = True):
         """
         Aggregate data with summary statistics
 
@@ -880,7 +879,7 @@ class Tibble(pl.DataFrame):
         >>> df.to_dict()
         >>> df.to_dict(as_series = False)
         """
-        return super().to_dict(as_series)
+        return super().to_dict(as_series = as_series)
 
     def to_pandas(self):
         """
