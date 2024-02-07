@@ -167,7 +167,7 @@ class Tibble(pl.DataFrame):
         """
         args = _as_list(args)
         
-        out = self.summarize(pl.count().alias(name), by = args)
+        out = self.summarize(pl.len().alias(name), by = args)
 
         if sort == True:
             out = out.arrange(desc(name))
@@ -768,9 +768,9 @@ class Tibble(pl.DataFrame):
         """
         rows = _as_list(args)
         if _uses_by(by):
-            df = super(Tibble, self).groupby(by).apply(lambda x: x.select(pl.all().take(rows)))
+            df = super(Tibble, self).groupby(by).apply(lambda x: x.select(pl.all().gather(rows)))
         else:
-            df = super(Tibble, self).select(pl.all().take(rows))  
+            df = super(Tibble, self).select(pl.all().gather(rows))
         return df.pipe(from_polars)
 
     def slice_head(self, n = 5, *, by = None):
