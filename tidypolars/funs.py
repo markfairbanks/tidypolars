@@ -787,7 +787,7 @@ def row_number():
     --------
     >>> df.mutate(row_num = tp.row_number())
     """
-    return pl.first().cumcount() + 1
+    return pl.int_range(0, pl.len())
 
 def sd(x):
     """
