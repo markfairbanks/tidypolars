@@ -100,7 +100,7 @@ def str_detect(string, pattern, negate = False):
     exprs = (string.str.contains(p) for p in pattern)
     exprs = ft.reduce(lambda a, b : a & b, exprs)
     if negate:
-        exprs = exprs.is_not()
+        exprs = exprs.not_()
     
     return exprs
 
