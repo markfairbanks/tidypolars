@@ -94,7 +94,7 @@ def test_count_one_arg():
 def test_distinct_empty():
     """Can distinct columns"""
     df = tp.Tibble({'x': ['a', 'a', 'b'], 'y': ['a', 'a', 'b']})
-    actual = df.distinct()
+    actual = df.distinct().arrange('x', 'y')
     expected = tp.Tibble({'x': ['a', 'b'], 'y': ['a', 'b']})
     assert actual.frame_equal(expected), "empty distinct failed"
     assert type(actual) == tp.Tibble, "distinct didn't return a Tibble"
@@ -102,7 +102,7 @@ def test_distinct_empty():
 def test_distinct_select():
     """Can distinct columns"""
     df = tp.Tibble({'x': ['a', 'a', 'b'], 'y': [2, 1, 3]})
-    actual = df.distinct('x')
+    actual = df.distinct('x').arrange('x')
     expected = tp.Tibble({'x': ['a', 'b']})
     assert actual.frame_equal(expected), "distinct with select failed"
 
