@@ -671,7 +671,7 @@ class Tibble(pl.DataFrame):
         if replace == None: return self
         if type(replace) != dict:
             ValueError("replace must be a dictionary of column/replacement pairs")
-        replace_exprs = [col(key).fill_null(value).keep_name() for key, value in replace.items()]
+        replace_exprs = [col(key).fill_null(value) for key, value in replace.items()]
         return self.mutate(*replace_exprs)
 
     def separate(self, sep_col, into, sep = '_', remove = True):
