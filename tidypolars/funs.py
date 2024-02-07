@@ -167,7 +167,7 @@ def between(x, left, right):
     >>> df.filter(tp.between(col('x'), 1, 3))
     """
     x = _col_expr(x)
-    return x.is_between(left, right, include_bounds = True)
+    return x.is_between(left, right)
 
 def case_when(expr):
     """
@@ -245,13 +245,9 @@ def cor(x, y, method = 'pearson'):
     --------
     >>> df.summarize(cor = tp.cor(col('x'), col('y')))
     """
-    if method == 'pearson':
-        out = pl.pearson_corr(x, y)
-    elif method == 'spearman':
-        out = pl.spearman_rank_corr(x, y)
-    else:
+    if pl.Series([method]).is_in(['pearson', 'spearman']).not_().item():
         ValueError("`method` must be either 'pearson' or 'spearman'")
-    return out
+    return pl.corr(x, y, method = method)
 
 def cov(x, y):
     """
