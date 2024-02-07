@@ -588,7 +588,6 @@ class Tibble(pl.DataFrame):
         """
         cols_all = pl.Series(self.names)
         locs_all = pl.Series(range(len(cols_all)))
-        print(locs_all)
         locs_df = pl.DataFrame(
             [locs_all.to_list()], columns = cols_all.to_list(), orient = "row"
         )
