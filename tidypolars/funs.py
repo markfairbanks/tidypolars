@@ -475,12 +475,6 @@ def is_null(x):
     x = _col_expr(x)
     return x.is_null()
 
-def _shift(x, n, default):
-    if default == None:
-        return x.shift(n)
-    else:
-        return x.shift_and_fill(n, default)
-
 def lag(x, n: int = 1, default = None):
     """
     Get lagging values
@@ -502,7 +496,7 @@ def lag(x, n: int = 1, default = None):
     >>> df.mutate(lag_x = tp.lag('x'))
     """
     x = _col_expr(x)
-    return _shift(x, n, default)
+    return x.shift(n, fill_value = default)
 
 def last(x):
     """
@@ -542,7 +536,7 @@ def lead(x, n: int = 1, default = None):
     >>> df.mutate(lead_x = col('x').lead())
     """
     x = _col_expr(x)
-    return _shift(x, -n, default)
+    return x.shift(-n, fill_value = default)
 
 def length(x):
     """
