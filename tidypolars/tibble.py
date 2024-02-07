@@ -314,7 +314,7 @@ class Tibble(pl.DataFrame):
         exprs = ft.reduce(lambda a, b: a & b, args)
 
         if _uses_by(by):
-            out = super().groupby(by).apply(lambda x: x.filter(exprs))
+            out = super().group_by(by).apply(lambda x: x.filter(exprs))
         else:
             out = super().filter(exprs)
         
@@ -401,7 +401,7 @@ class Tibble(pl.DataFrame):
         out = self.to_polars()
 
         if _uses_by(by):
-            out = out.groupby(by).apply(lambda x: _mutate_cols(x, exprs))
+            out = out.group_by(by).apply(lambda x: _mutate_cols(x, exprs))
         else:
             out = _mutate_cols(out, exprs)
             
@@ -768,7 +768,7 @@ class Tibble(pl.DataFrame):
         """
         rows = _as_list(args)
         if _uses_by(by):
-            df = super(Tibble, self).groupby(by).apply(lambda x: x.select(pl.all().gather(rows)))
+            df = super(Tibble, self).group_by(by).apply(lambda x: x.select(pl.all().gather(rows)))
         else:
             df = super(Tibble, self).select(pl.all().gather(rows))
         return df.pipe(from_polars)
@@ -792,7 +792,7 @@ class Tibble(pl.DataFrame):
         """
         col_order = self.names
         if _uses_by(by):
-            df = super(Tibble, self).groupby(by).head(n)
+            df = super(Tibble, self).group_by(by).head(n)
         else:
             df = super(Tibble, self).head(n)
         df = df.select(col_order)
@@ -817,7 +817,7 @@ class Tibble(pl.DataFrame):
         """
         col_order = self.names
         if _uses_by(by):
-            df = super(Tibble, self).groupby(by).tail(n)
+            df = super(Tibble, self).group_by(by).tail(n)
         else:
             df = super(Tibble, self).tail(n)
         df = df.select(col_order)
@@ -855,7 +855,7 @@ class Tibble(pl.DataFrame):
         """
         exprs = _as_list(args) + _kwargs_as_exprs(kwargs)
         if _uses_by(by):
-            out = super(Tibble, self).groupby(by).agg(exprs)
+            out = super(Tibble, self).group_by(by).agg(exprs)
         else:
             out = super(Tibble, self).select(exprs)
         return out.pipe(from_polars)
