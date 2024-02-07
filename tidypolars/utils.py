@@ -9,7 +9,7 @@ def _list_flatten(l):
     return list(chain.from_iterable(l))
 
 def _as_list(x):
-    if type(x) == type:
+    if type(x).__name__ == 'DataTypeClass':
         out = [x]
     elif _safe_len(x) == 0:
         out = []
