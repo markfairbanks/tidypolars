@@ -314,7 +314,7 @@ class Tibble(pl.DataFrame):
         exprs = ft.reduce(lambda a, b: a & b, args)
 
         if _uses_by(by):
-            out = super().group_by(by).apply(lambda x: x.filter(exprs))
+            out = super().group_by(by).map_groups(lambda x: x.filter(exprs))
         else:
             out = super().filter(exprs)
         
@@ -401,7 +401,7 @@ class Tibble(pl.DataFrame):
         out = self.to_polars()
 
         if _uses_by(by):
-            out = out.group_by(by).apply(lambda x: _mutate_cols(x, exprs))
+            out = out.group_by(by).map_groups(lambda x: _mutate_cols(x, exprs))
         else:
             out = _mutate_cols(out, exprs)
             
@@ -768,7 +768,7 @@ class Tibble(pl.DataFrame):
         """
         rows = _as_list(args)
         if _uses_by(by):
-            df = super(Tibble, self).group_by(by).apply(lambda x: x.select(pl.all().gather(rows)))
+            df = super(Tibble, self).group_by(by).map_groups(lambda x: x.select(pl.all().gather(rows)))
         else:
             df = super(Tibble, self).select(pl.all().gather(rows))
         return df.pipe(from_polars)
