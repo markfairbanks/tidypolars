@@ -864,7 +864,7 @@ class Tibble(pl.DataFrame):
         """Alias for `.slice_tail()`"""
         return self.slice_tail(n, by = by)
 
-    def to_dict(self, as_series = True):
+    def to_dict(self, *, as_series = True):
         """
         Aggregate data with summary statistics
 
@@ -879,7 +879,7 @@ class Tibble(pl.DataFrame):
         >>> df.to_dict()
         >>> df.to_dict(as_series = False)
         """
-        return super().to_dict(as_series)
+        return super().to_dict(as_series = as_series)
 
     def to_pandas(self):
         """
