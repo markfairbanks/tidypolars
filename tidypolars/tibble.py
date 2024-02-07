@@ -588,9 +588,8 @@ class Tibble(pl.DataFrame):
         """
         cols_all = pl.Series(self.names)
         locs_all = pl.Series(range(len(cols_all)))
-        locs_df = pl.DataFrame(
-            [locs_all.to_list()], columns = cols_all.to_list(), orient = "row"
-        )
+        locs_dict = {k:v for k,v in zip(cols_all, locs_all)}
+        locs_df = pl.DataFrame(locs_dict, orient = "row")
 
         cols_relocate = _as_list(args)
         locs_relocate = pl.Series(locs_df.select(cols_relocate).row(0))
@@ -615,7 +614,7 @@ class Tibble(pl.DataFrame):
             locs_start = locs_all.filter(locs_all <= after)
 
         locs_start = locs_start.filter(~locs_start.is_in(locs_relocate))
-        final_order = pl.concat([locs_start, locs_relocate, locs_all]).unique(True)
+        final_order = pl.concat([locs_start, locs_relocate, locs_all]).unique(maintain_order = True)
         final_order = cols_all[final_order].to_list()
 
         return self.select(final_order)
