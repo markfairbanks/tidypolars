@@ -529,7 +529,7 @@ class Tibble(pl.DataFrame):
         if id_cols == None:
             df_cols = pl.Series(self.names)
             from_cols = pl.Series(self.select(names_from, values_from).names)
-            id_cols = df_cols.filter(~df_cols.is_in(from_cols))
+            id_cols = df_cols.filter(df_cols.is_in(from_cols).not_()).to_list()
 
         no_id = len(id_cols) == 0
 
@@ -537,7 +537,8 @@ class Tibble(pl.DataFrame):
             id_cols = '_id'
             self = self.mutate(_id = pl.lit(1))
 
-        out = (super()
+        out = (
+            super()
             .pivot(values_from, id_cols, names_from, values_fn)
             .pipe(from_polars)
         )
