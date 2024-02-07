@@ -1,5 +1,6 @@
 import tidypolars as tp
 from tidypolars import col
+import polars.selectors as cs
 import math
 
 def test_abs():
@@ -31,6 +32,7 @@ def test_agg_stats():
             sum_x = tp.sum('x'), sum_col_x = tp.sum(col('x')),
             var_y = tp.var('y')
         )
+        .mutate(tp.as_integer(cs.numeric().as_expr()))
     )
     expected = tp.Tibble(
         corr = [-1],
@@ -44,7 +46,7 @@ def test_agg_stats():
         min_x = [0], min_col_x = [0],
         n = [3],
         n_distinct_x = [3], n_distinct_col_x = [3],
-        quantile_x = [0],
+        quantile_x = [1],
         sd_x = [1], sd_col_x = [1],
         sum_x = [3], sum_col_x = [3],
         var_y = [1]
