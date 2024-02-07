@@ -400,10 +400,10 @@ def is_not(x):
     Examples
     --------
     >>> df = tp.Tibble(x = range(3))
-    >>> df.filter(tp.is_not(col('x') < 2))
+    >>> df.filter(tp.not_(col('x') < 2))
     """
     x = _col_expr(x)
-    return x.is_not()
+    return x.not_()
 
 def is_nan(x):
     """
@@ -439,7 +439,7 @@ def is_not_in(x, y):
     >>> df.filter(tp.is_not_in(col('x'), [1, 2]))
     """
     x = _col_expr(x)
-    return x.is_in(y).is_not()
+    return x.is_in(y).not_()
 
 def is_not_null(x):
     """
@@ -456,7 +456,7 @@ def is_not_null(x):
     >>> df.filter(tp.is_not_in(col('x'), [1, 2]))
     """
     x = _col_expr(x)
-    return x.is_null().is_not()
+    return x.is_null().not_()
 
 def is_null(x):
     """
