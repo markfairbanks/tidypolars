@@ -56,7 +56,7 @@ def test_group_summarize_across():
     df = tp.Tibble({'x': range(3), 'y': range(3, 6), 'z': ['a', 'a', 'b']})
     actual = (
         df
-        .summarize(col(['x', 'y']).max().prefix('max_'),
+        .summarize(col(['x', 'y']).max().name.prefix('max_'),
                    avg_x = col('x').mean(),
                    by = [col('z')])
         .arrange('z')

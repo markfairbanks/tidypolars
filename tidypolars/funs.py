@@ -64,7 +64,7 @@ def across(cols, fn = lambda x: x, names_prefix = None):
     _cols = _col_exprs(_as_list(cols))
     exprs = [fn(_col) for _col in _cols]
     if names_prefix != None:
-        exprs = [expr.prefix(names_prefix) for expr in exprs]
+        exprs = [expr.name.prefix(names_prefix) for expr in exprs]
     return exprs
 
 def as_boolean(x):
