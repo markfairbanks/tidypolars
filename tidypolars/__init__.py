@@ -11,8 +11,10 @@ from .reexports import *
 from .stringr import *
 from .tibble import *
 from .tidyselect import *
+from .dplyr import *
 
 __all__ = (
+    dplyr.__all__ +
     funs.__all__ +
     lubridate.__all__ +
     reexports.__all__ +
