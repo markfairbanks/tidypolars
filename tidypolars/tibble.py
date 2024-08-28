@@ -13,6 +13,9 @@ import copy
 from .reexports import *
 from .tidyselect import everything
 from operator import not_
+# to supress polars' 'warning of dtype in the nested data operations
+import warnings
+warnings.filterwarnings("ignore", category=pl.exceptions.MapWithoutReturnDtypeWarning)
 
 __all__ = [
     "Tibble",
@@ -78,7 +81,7 @@ class Tibble(pl.DataFrame):
             'to_pandas', 'to_polars', 'write_csv', 'write_parquet'
         ]
         return _tidypolars_methods
-
+    
     def arrange(self, *args):
         """
         Arrange/sort rows
@@ -374,9 +377,7 @@ class Tibble(pl.DataFrame):
             on = list(set(self.names) & set(df.names))
         return super().join(df, on, 'left',  left_on = left_on, right_on= right_on, suffix= suffix).pipe(from_polars)
 
-    def mutate(self, *args,
-               by = None,
-               **kwargs):
+    def mutate(self, *args, by = None, **kwargs):
         """
         Add or modify columns
 
@@ -953,13 +954,73 @@ class Tibble(pl.DataFrame):
         res = TibbleGroupBy(self, group, maintain_order=True)
         return res
 
+    def nest(self, by, select='all', nested_name="data", *args, **kwargs):
+        """
+        Nest rows into a list-column of dataframes
+
+        Parameters
+        ----------
+        by : list, str
+            Columns to nest on
+        select : str, list
+            Columns to select for the nested dataframe. If 'all' (default)
+            all columns except those specified in 'by' will be selected.
+        nested_name : str
+            Name of the column to receive the nested dataframe
+
+        Examples
+        --------
+        """
+        if select=='all':
+            select = [col for col in self.names if col not in by]
+        # make sure all columns in 'by' are removed from the nested data
+        select = [col for col in select if col not in by]
+        out = (self
+               .group_by(by)
+               .agg(**{
+                   nested_name : pl.struct(select).map_elements(
+                       lambda cols: from_polars( pl.DataFrame(cols.to_list()) ) )
+                   })
+               )
+        return out.pipe(from_polars)
+    
+    def unnest(self, col, *args, **kwargs):
+        """
+        Unnest a nested data frame
+        Parameters
+        ----------
+        col : str
+            Columns to unnest
+
+        """
+        assert isinstance(col, str), "'col', must be a string"
+        out = (self
+               .mutate(**{
+                   col : pl.col(col).map_elements(lambda d: d.to_struct())
+               })
+               .to_polars()
+               .explode(col)
+               .unnest(col)
+               )
+        return out.pipe(from_polars)
+
+    def crossing(self, *args, **kwargs):
+        """
+        Expand the data set using a list of values. Each value in the
+        list
+        """
+        out = self.mutate(*args, **kwargs).to_polars()
+        for var,_ in kwargs.items():
+            out = out.explode(var)
+        return out.pipe(from_polars)
+            
 class TibbleGroupBy(pl.dataframe.group_by.GroupBy):
 
     def __init__(self, df, by, *args, **kwargs):
         assert isinstance(by, str) or isinstance(by, list), "Use list or string to group by."
         super().__init__(df, by, *args, **kwargs)
         self.df = df
-        self.by = by if isinstance(by, list) else list(by)
+        self.by = by if isinstance(by, list) else [by]
 
     @property
     def _constructor(self):
@@ -1070,7 +1131,7 @@ _polars_methods = [
     'to_pandas'
     'to_parquet',
     'transpose',
-    'unnest',
+    # 'unnest',
     'var',
     'width',
     'with_column',
