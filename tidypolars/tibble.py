@@ -949,6 +949,26 @@ class Tibble(pl.DataFrame):
         """Write a data frame to a parquet"""
         return super().write_parquet(file, compression = compression, use_pyarrow = use_pyarrow, **kwargs)
 
+    def group_by(self, group, *args, **kwargs):
+        res = TibbleGroupBy(self, group, maintain_order=True)
+        return res
+
+class TibbleGroupBy(pl.dataframe.group_by.GroupBy):
+
+    def __init__(self, df, by, *args, **kwargs):
+        assert isinstance(by, str) or isinstance(by, list), "Use list or string to group by."
+        super().__init__(df, by, *args, **kwargs)
+        self.df = df
+        self.by = by if isinstance(by, list) else list(by)
+
+    @property
+    def _constructor(self):
+        return TibbleGroupBy
+
+    def mutate(self, *args, **kwargs):
+        out = self.map_groups(lambda x: from_polars(x).mutate(*args, **kwargs))
+        return out
+
 def desc(x):
     """Mark a column to order in descending"""
     x = copy.copy(x)
