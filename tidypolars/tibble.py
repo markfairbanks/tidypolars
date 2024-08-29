@@ -177,7 +177,7 @@ class Tibble(pl.DataFrame):
 
         return out
 
-    def distinct(self, *args):
+    def distinct(self, *args, **kwargs):
         """
         Select distinct/unique rows
 
@@ -186,6 +186,11 @@ class Tibble(pl.DataFrame):
         *args : str, Expr
             Columns to find distinct/unique rows
 
+        **kwargs : dict
+            keep_all : boll
+              If True (default), keep all columns. Otherwise, return
+              only the ones used to select the distinct rows.
+
         Examples
         --------
         >>> df = tp.Tibble({'a': range(3), 'b': ['a', 'a', 'b']})
@@ -193,10 +198,14 @@ class Tibble(pl.DataFrame):
         >>> df.distinct('b')
         """
         args = _as_list(args)
+        keep_all = kwargs.get("keep_all", True)
+        # 
         if len(args) == 0:
             df = super().unique()
         else:
-            df = super().select(args).unique()
+            df = super().unique(args)
+        if not keep_all:
+            df = df.select(args)
         return df.pipe(from_polars)
 
     def drop(self, *args):
