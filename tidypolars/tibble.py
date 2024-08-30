@@ -64,23 +64,23 @@ class Tibble(pl.DataFrame):
         df = self.to_polars()
         return df.__str__()
 
-    def __getattribute__(self, attr):
-        if attr in _polars_methods:
-            raise AttributeError
-        return pl.DataFrame.__getattribute__(self, attr)
+    # def __getattribute__(self, attr):
+    #     if attr in _polars_methods:
+    #         raise AttributeError
+    #     return pl.DataFrame.__getattribute__(self, attr)
 
-    def __dir__(self):
-        _tidypolars_methods = [
-            'arrange', 'bind_cols', 'bind_rows', 'colnames', 'clone', 'count',
-            'distinct', 'drop', 'drop_null', 'head', 'fill', 'filter',
-            'inner_join', 'left_join', 'mutate', 'names', 'nrow', 'ncol',
-            'full_join', 'pivot_longer', 'pivot_wider',
-            'pull', 'relocate', 'rename', 'replace_null', 'select',
-            'separate', 'set_names',
-            'slice', 'slice_head', 'slice_tail', 'summarize', 'tail',
-            'to_pandas', 'to_polars', 'write_csv', 'write_parquet'
-        ]
-        return _tidypolars_methods
+    # def __dir__(self):
+    #     _tidypolars_methods = [
+    #         'arrange', 'bind_cols', 'bind_rows', 'colnames', 'clone', 'count',
+    #         'distinct', 'drop', 'drop_null', 'head', 'fill', 'filter',
+    #         'inner_join', 'left_join', 'mutate', 'names', 'nrow', 'ncol',
+    #         'full_join', 'pivot_longer', 'pivot_wider',
+    #         'pull', 'relocate', 'rename', 'replace_null', 'select',
+    #         'separate', 'set_names',
+    #         'slice', 'slice_head', 'slice_tail', 'summarize', 'tail',
+    #         'to_pandas', 'to_polars', 'write_csv', 'write_parquet'
+    #     ]
+    #     return _tidypolars_methods
     
     def arrange(self, *args):
         """
@@ -1022,7 +1022,27 @@ class Tibble(pl.DataFrame):
         for var,_ in kwargs.items():
             out = out.explode(var)
         return out.pipe(from_polars)
-            
+
+    # Not tidy functions, but useful from pandas/polars 
+    # -------------------------------------------------
+    def replace(self, *args, **kwargs):
+        """
+        Replace method from pandas
+        """
+        out = (self
+               .to_polars()
+               .to_pandas()
+               .replace(*args, **kwargs))
+        return out.pipe(from_pandas)
+        
+    def print(self, nrows=1000, str_lenght=1000):
+        """
+        Print the DataFrame
+        """
+        with pl.Config(set_tbl_rows=nrows,
+                       fmt_str_lengths=str_lenght):
+            print(self)
+        
 class TibbleGroupBy(pl.dataframe.group_by.GroupBy):
 
     def __init__(self, df, by, *args, **kwargs):
@@ -1037,6 +1057,10 @@ class TibbleGroupBy(pl.dataframe.group_by.GroupBy):
 
     def mutate(self, *args, **kwargs):
         out = self.map_groups(lambda x: from_polars(x).mutate(*args, **kwargs))
+        return out
+
+    def filter(self, *args, **kwargs):
+        out = self.map_groups(lambda x: from_polars(x).filter(*args, **kwargs))
         return out
 
 def desc(x):
@@ -1117,7 +1141,7 @@ _polars_methods = [
     'null_count',
     'quantile',
     'rechunk',
-    'replace',
+    # 'replace',
     'replace_at_idx',
     'row',
     'rows'
