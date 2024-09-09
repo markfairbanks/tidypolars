@@ -37,7 +37,7 @@ __all__ = [
     "is_nan", "is_not", "is_not_in", "is_not_null", "is_null",
 
     # Type conversion
-    "as_boolean", "as_float", "as_integer", "as_string",
+    "as_boolean", "as_float", "as_integer", "as_string", "as_factor",
     "cast"
 ]
 
@@ -130,6 +130,22 @@ def as_string(x):
     """
     x = _col_expr(x)
     return x.cast(pl.Utf8)
+
+def as_factor(x, levels):
+    """
+    Convert to factor. Defaults to Utf8.
+
+    Parameters
+    ----------
+    x : Str
+        Column to operate on
+
+    Examples
+    --------
+    >>> df.mutate(string_x = tp.as_factor('x'))
+    """
+    x = _col_expr(x)
+    return x.cast(pl.Enum(levels))
 
 def abs(x):
     """

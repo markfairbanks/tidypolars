@@ -549,7 +549,8 @@ class Tibble(pl.DataFrame):
 
         out = (
             super()
-            .pivot(values_from, id_cols, names_from, values_fn)
+            # .pivot(values_from, id_cols, names_from, values_fn)
+            .pivot(index=id_cols, on=names_from, values=values_from)
             .pipe(from_polars)
         )
 
