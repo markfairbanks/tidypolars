@@ -37,7 +37,9 @@ __all__ = [
     "is_nan", "is_not", "is_not_in", "is_not_null", "is_null",
 
     # Type conversion
-    "as_boolean", "as_float", "as_integer", "as_string", "as_factor",
+    "as_boolean", "as_logical", "as_float", "as_integer",
+    "as_string", "as_character",
+    "as_factor", "as_categorical",
     "cast"
 ]
 
@@ -69,16 +71,24 @@ def across(cols, fn = lambda x: x, names_prefix = None):
 
 def as_boolean(x):
     """
-    Convert to a boolean
+    Convert column to string. Alias to as_logical (R naming).
+    """
+    return as_logical(x)
+
+def as_logical(x):
+    """
+    Convert to a boolean (polars) or 'logical' (R naming)
 
     Parameters
     ----------
-    x : Expr
+    x : Str
         Column to operate on
 
     Examples
     --------
     >>> df.mutate(bool_x = tp.as_boolean(col('x')))
+    # or equivalently
+    >>> df.mutate(logical_x = tp.as_logical(col('x')))
     """
     x = _col_expr(x)
     return x.cast(pl.Boolean)
@@ -116,36 +126,61 @@ def as_integer(x):
     return x.cast(pl.Int64)
 
 def as_string(x):
+    '''
+    Convert column to string. Alias to as_character (R naming).
+    Equivalent to Utf8 type (polars)
+    '''
+    return as_character(x)
+
+def as_character(x):
     """
     Convert to string. Defaults to Utf8.
 
     Parameters
     ----------
-    x : Expr
+    x : Str 
         Column to operate on
 
     Examples
     --------
-    >>> df.mutate(string_x = tp.as_string(col('x')))
+    >>> df.mutate(string_x = tp.as_string('x'))
+    # or equivalently
+    >>> df.mutate(character_x = tp.as_character('x'))
     """
     x = _col_expr(x)
     return x.cast(pl.Utf8)
-
-def as_factor(x, levels):
+   
+def as_factor(x, levels = None):
     """
-    Convert to factor. Defaults to Utf8.
+    Convert to factor (R naming), equlivalent to Enum or
+    Categorical (polars), depending on whether 'levels' is provided. 
 
     Parameters
     ----------
     x : Str
         Column to operate on
 
+    level : list of str
+        Categories to use in the factor. The catogories will be ordered
+        as they appear in the list. If None (default), it will
+        create an unordered factor (polars Categorical).
+
     Examples
     --------
-    >>> df.mutate(string_x = tp.as_factor('x'))
+    >>> df.mutate(factor_x = tp.as_factor('x'))
+    # or equivalently
+    >>> df.mutate(categorical_x = tp.as_categorical('x'))
     """
     x = _col_expr(x)
-    return x.cast(pl.Enum(levels))
+    if levels is None:
+        x = x.cast(pl.Categorical)
+    else:
+        x = x.cast(pl.Enum(levels))
+    return x
+
+def as_categorical(*args, **kwargs):
+    "Convert to factor. Alias for as_factor"
+    return as_factor(*args, **kwargs)
 
 def abs(x):
     """

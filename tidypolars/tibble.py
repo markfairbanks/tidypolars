@@ -33,7 +33,7 @@ class Tibble(pl.DataFrame):
         elif not_(isinstance(_data, dict)):
             raise ValueError("_data must be a dictionary or kwargs must be used")
         super().__init__(_data)
-    
+
     def __repr__(self):
         """Printing method"""
         df = self.to_polars()
@@ -64,23 +64,28 @@ class Tibble(pl.DataFrame):
         df = self.to_polars()
         return df.__str__()
 
-    # def __getattribute__(self, attr):
-    #     if attr in _polars_methods:
-    #         raise AttributeError
-    #     return pl.DataFrame.__getattribute__(self, attr)
+    def __getattribute__(self, attr):
+        if attr in _polars_methods:
+            raise AttributeError
+        return pl.DataFrame.__getattribute__(self, attr)
 
-    # def __dir__(self):
-    #     _tidypolars_methods = [
-    #         'arrange', 'bind_cols', 'bind_rows', 'colnames', 'clone', 'count',
-    #         'distinct', 'drop', 'drop_null', 'head', 'fill', 'filter',
-    #         'inner_join', 'left_join', 'mutate', 'names', 'nrow', 'ncol',
-    #         'full_join', 'pivot_longer', 'pivot_wider',
-    #         'pull', 'relocate', 'rename', 'replace_null', 'select',
-    #         'separate', 'set_names',
-    #         'slice', 'slice_head', 'slice_tail', 'summarize', 'tail',
-    #         'to_pandas', 'to_polars', 'write_csv', 'write_parquet'
-    #     ]
-    #     return _tidypolars_methods
+    def __dir__(self):
+        _tidypolars_methods = [
+            'arrange', 'bind_cols', 'bind_rows', 'colnames', 'clone', 'count',
+            'crossing',
+            'distinct', 'drop', 'drop_null', 'head', 'fill', 'filter',
+            'group_by', 
+            'inner_join', 'left_join', 'mutate', 'names', 'nest',
+            'nrow', 'ncol',
+            'full_join', 'pivot_longer', 'pivot_wider', 'print',
+            'pull', 'relocate', 'rename',
+            'replace',
+            'replace_null', 'select',
+            'separate', 'set_names',
+            'slice', 'slice_head', 'slice_tail', 'summarize', 'tail',
+            'to_pandas', 'to_polars', 'unnest', 'write_csv', 'write_parquet'
+        ]
+        return _tidypolars_methods
     
     def arrange(self, *args):
         """
@@ -177,7 +182,7 @@ class Tibble(pl.DataFrame):
 
         return out
 
-    def distinct(self, *args, **kwargs):
+    def distinct(self, *args, keep_all = False):
         """
         Select distinct/unique rows
 
@@ -198,7 +203,6 @@ class Tibble(pl.DataFrame):
         >>> df.distinct('b')
         """
         args = _as_list(args)
-        keep_all = kwargs.get("keep_all", True)
         # 
         if len(args) == 0:
             df = super().unique()
@@ -963,8 +967,8 @@ class Tibble(pl.DataFrame):
     def group_by(self, group, *args, **kwargs):
         res = TibbleGroupBy(self, group, maintain_order=True)
         return res
-
-    def nest(self, by, select='all', nested_name="data", *args, **kwargs):
+    
+    def nest(self, by, *args, **kwargs):
         """
         Nest rows into a list-column of dataframes
 
@@ -972,29 +976,47 @@ class Tibble(pl.DataFrame):
         ----------
         by : list, str
             Columns to nest on
-        select : str, list
-            Columns to select for the nested dataframe. If 'all' (default)
-            all columns except those specified in 'by' will be selected.
-        nested_name : str
-            Name of the column to receive the nested dataframe
+
+        kwargs :
+            data : list of column names
+               columns to select to include in the nested data
+               If not provided, include all columns except the ones
+               used in 'by'
+
+             key : str
+               name of the resulting nested column. 
+
+             names_sep : str
+                If not provided (default), the names in the nested
+                data will come from the former names. If a string,
+                the new inner names in the nested dataframe will use
+                the outer names with names_sep automatically stripped.
+                This makes names_sep roughly
+                symmetric between nesting and unnesting.
 
         Examples
         --------
         """
-        if select=='all':
-            select = [col for col in self.names if col not in by]
-        # make sure all columns in 'by' are removed from the nested data
-        select = [col for col in select if col not in by]
+        key  = kwargs.get("key", 'data')
+        data = kwargs.get("data", [c for c in self.names if c not in by])
+        names_sep = kwargs.get("names_sep", None)
+
         out = (self
                .group_by(by)
                .agg(**{
-                   nested_name : pl.struct(select).map_elements(
+                   key : pl.struct(data).map_elements(
                        lambda cols: from_polars( pl.DataFrame(cols.to_list()) ) )
-                   })
+               })
+               .pipe(from_polars)
                )
-        return out.pipe(from_polars)
-    
-    def unnest(self, col, *args, **kwargs):
+
+        if names_sep is not None:
+            new_names = {col:f"{col}_{names_sep}" for col in data}
+            print(new_names)
+            out = out.mutate(**{key:col(key).map_elements(lambda row: row.rename(new_names))})
+        return out
+
+    def unnest(self, col):
         """
         Unnest a nested data frame
         Parameters
@@ -1036,14 +1058,14 @@ class Tibble(pl.DataFrame):
                .replace(*args, **kwargs))
         return out.pipe(from_pandas)
         
-    def print(self, nrows=1000, str_lenght=1000):
+    def print(self, n=1000, str_length=1000):
         """
         Print the DataFrame
         """
-        with pl.Config(set_tbl_rows=nrows,
-                       fmt_str_lengths=str_lenght):
+        with pl.Config(set_tbl_rows=n,
+                       fmt_str_lengths=str_length):
             print(self)
-        
+            
 class TibbleGroupBy(pl.dataframe.group_by.GroupBy):
 
     def __init__(self, df, by, *args, **kwargs):
