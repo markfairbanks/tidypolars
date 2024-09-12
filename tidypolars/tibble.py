@@ -1086,6 +1086,11 @@ class TibbleGroupBy(pl.dataframe.group_by.GroupBy):
         out = self.map_groups(lambda x: from_polars(x).filter(*args, **kwargs))
         return out
 
+    def summarize(self, *args, **kwargs):
+        out = self.map_groups(lambda x: from_polars(x).summarise(by=self.by, *args, **kwargs))
+        return out
+        
+
 def desc(x):
     """Mark a column to order in descending"""
     x = copy.copy(x)
