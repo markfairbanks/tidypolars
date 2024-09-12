@@ -13,6 +13,9 @@ import copy
 from .reexports import *
 from .tidyselect import everything
 from operator import not_
+# to supress polars' 'warning of dtype in the nested data operations
+import warnings
+warnings.filterwarnings("ignore", category=pl.exceptions.MapWithoutReturnDtypeWarning)
 
 __all__ = [
     "Tibble",
@@ -30,7 +33,7 @@ class Tibble(pl.DataFrame):
         elif not_(isinstance(_data, dict)):
             raise ValueError("_data must be a dictionary or kwargs must be used")
         super().__init__(_data)
-    
+
     def __repr__(self):
         """Printing method"""
         df = self.to_polars()
@@ -69,16 +72,21 @@ class Tibble(pl.DataFrame):
     def __dir__(self):
         _tidypolars_methods = [
             'arrange', 'bind_cols', 'bind_rows', 'colnames', 'clone', 'count',
+            'crossing',
             'distinct', 'drop', 'drop_null', 'head', 'fill', 'filter',
-            'inner_join', 'left_join', 'mutate', 'names', 'nrow', 'ncol',
-            'full_join', 'pivot_longer', 'pivot_wider',
-            'pull', 'relocate', 'rename', 'replace_null', 'select',
+            'group_by', 
+            'inner_join', 'left_join', 'mutate', 'names', 'nest',
+            'nrow', 'ncol',
+            'full_join', 'pivot_longer', 'pivot_wider', 'print',
+            'pull', 'relocate', 'rename',
+            'replace',
+            'replace_null', 'select',
             'separate', 'set_names',
             'slice', 'slice_head', 'slice_tail', 'summarize', 'tail',
-            'to_pandas', 'to_polars', 'write_csv', 'write_parquet'
+            'to_pandas', 'to_polars', 'unnest', 'write_csv', 'write_parquet'
         ]
         return _tidypolars_methods
-
+    
     def arrange(self, *args):
         """
         Arrange/sort rows
@@ -174,7 +182,7 @@ class Tibble(pl.DataFrame):
 
         return out
 
-    def distinct(self, *args):
+    def distinct(self, *args, keep_all = False):
         """
         Select distinct/unique rows
 
@@ -183,6 +191,11 @@ class Tibble(pl.DataFrame):
         *args : str, Expr
             Columns to find distinct/unique rows
 
+        **kwargs : dict
+            keep_all : boll
+              If True (default), keep all columns. Otherwise, return
+              only the ones used to select the distinct rows.
+
         Examples
         --------
         >>> df = tp.Tibble({'a': range(3), 'b': ['a', 'a', 'b']})
@@ -190,10 +203,13 @@ class Tibble(pl.DataFrame):
         >>> df.distinct('b')
         """
         args = _as_list(args)
+        # 
         if len(args) == 0:
             df = super().unique()
         else:
-            df = super().select(args).unique()
+            df = super().unique(args)
+        if not keep_all:
+            df = df.select(args)
         return df.pipe(from_polars)
 
     def drop(self, *args):
@@ -374,9 +390,7 @@ class Tibble(pl.DataFrame):
             on = list(set(self.names) & set(df.names))
         return super().join(df, on, 'left',  left_on = left_on, right_on= right_on, suffix= suffix).pipe(from_polars)
 
-    def mutate(self, *args,
-               by = None,
-               **kwargs):
+    def mutate(self, *args, by = None, **kwargs):
         """
         Add or modify columns
 
@@ -539,7 +553,8 @@ class Tibble(pl.DataFrame):
 
         out = (
             super()
-            .pivot(values_from, id_cols, names_from, values_fn)
+            # .pivot(values_from, id_cols, names_from, values_fn)
+            .pivot(index=id_cols, on=names_from, values=values_from)
             .pipe(from_polars)
         )
 
@@ -949,6 +964,133 @@ class Tibble(pl.DataFrame):
         """Write a data frame to a parquet"""
         return super().write_parquet(file, compression = compression, use_pyarrow = use_pyarrow, **kwargs)
 
+    def group_by(self, group, *args, **kwargs):
+        res = TibbleGroupBy(self, group, maintain_order=True)
+        return res
+    
+    def nest(self, by, *args, **kwargs):
+        """
+        Nest rows into a list-column of dataframes
+
+        Parameters
+        ----------
+        by : list, str
+            Columns to nest on
+
+        kwargs :
+            data : list of column names
+               columns to select to include in the nested data
+               If not provided, include all columns except the ones
+               used in 'by'
+
+             key : str
+               name of the resulting nested column. 
+
+             names_sep : str
+                If not provided (default), the names in the nested
+                data will come from the former names. If a string,
+                the new inner names in the nested dataframe will use
+                the outer names with names_sep automatically stripped.
+                This makes names_sep roughly
+                symmetric between nesting and unnesting.
+
+        Examples
+        --------
+        """
+        key  = kwargs.get("key", 'data')
+        data = kwargs.get("data", [c for c in self.names if c not in by])
+        names_sep = kwargs.get("names_sep", None)
+
+        out = (self
+               .group_by(by)
+               .agg(**{
+                   key : pl.struct(data).map_elements(
+                       lambda cols: from_polars( pl.DataFrame(cols.to_list()) ) )
+               })
+               .pipe(from_polars)
+               )
+
+        if names_sep is not None:
+            new_names = {col:f"{col}_{names_sep}" for col in data}
+            print(new_names)
+            out = out.mutate(**{key:col(key).map_elements(lambda row: row.rename(new_names))})
+        return out
+
+    def unnest(self, col):
+        """
+        Unnest a nested data frame
+        Parameters
+        ----------
+        col : str
+            Columns to unnest
+
+        """
+        assert isinstance(col, str), "'col', must be a string"
+        out = (self
+               .mutate(**{
+                   col : pl.col(col).map_elements(lambda d: d.to_struct())
+               })
+               .to_polars()
+               .explode(col)
+               .unnest(col)
+               )
+        return out.pipe(from_polars)
+
+    def crossing(self, *args, **kwargs):
+        """
+        Expand the data set using a list of values. Each value in the
+        list
+        """
+        out = self.mutate(*args, **kwargs).to_polars()
+        for var,_ in kwargs.items():
+            out = out.explode(var)
+        return out.pipe(from_polars)
+
+    # Not tidy functions, but useful from pandas/polars 
+    # -------------------------------------------------
+    def replace(self, *args, **kwargs):
+        """
+        Replace method from pandas
+        """
+        out = (self
+               .to_polars()
+               .to_pandas()
+               .replace(*args, **kwargs))
+        return out.pipe(from_pandas)
+        
+    def print(self, n=1000, str_length=1000):
+        """
+        Print the DataFrame
+        """
+        with pl.Config(set_tbl_rows=n,
+                       fmt_str_lengths=str_length):
+            print(self)
+            
+class TibbleGroupBy(pl.dataframe.group_by.GroupBy):
+
+    def __init__(self, df, by, *args, **kwargs):
+        assert isinstance(by, str) or isinstance(by, list), "Use list or string to group by."
+        super().__init__(df, by, *args, **kwargs)
+        self.df = df
+        self.by = by if isinstance(by, list) else [by]
+
+    @property
+    def _constructor(self):
+        return TibbleGroupBy
+
+    def mutate(self, *args, **kwargs):
+        out = self.map_groups(lambda x: from_polars(x).mutate(*args, **kwargs))
+        return out
+
+    def filter(self, *args, **kwargs):
+        out = self.map_groups(lambda x: from_polars(x).filter(*args, **kwargs))
+        return out
+
+    def summarize(self, *args, **kwargs):
+        out = self.map_groups(lambda x: from_polars(x).summarise(by=self.by, *args, **kwargs))
+        return out
+        
+
 def desc(x):
     """Mark a column to order in descending"""
     x = copy.copy(x)
@@ -1027,7 +1169,7 @@ _polars_methods = [
     'null_count',
     'quantile',
     'rechunk',
-    'replace',
+    # 'replace',
     'replace_at_idx',
     'row',
     'rows'
@@ -1050,7 +1192,7 @@ _polars_methods = [
     'to_pandas'
     'to_parquet',
     'transpose',
-    'unnest',
+    # 'unnest',
     'var',
     'width',
     'with_column',
