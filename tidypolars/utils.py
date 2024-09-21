@@ -78,7 +78,7 @@ def _is_tuple(x):
     return isinstance(x, tuple)
 
 def _is_type(x):
-    return type(x) == type
+    return type(x).__name__ == 'DataTypeClass'
 
 def _lit_expr(x):
     if not_(_is_expr(x)):
