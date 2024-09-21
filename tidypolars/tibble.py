@@ -493,7 +493,7 @@ class Tibble(pl.DataFrame):
         df_cols = pl.Series(self.names)
         value_vars = self.select(cols).names
         id_vars = df_cols.filter(df_cols.is_in(value_vars).not_()).to_list()
-        out = super().melt(id_vars, value_vars, names_to, values_to)
+        out = super().unpivot(index = id_vars, on = value_vars, variable_name = names_to, value_name = values_to)
         return out.pipe(from_polars)
 
     def pivot_wider(self,
@@ -540,7 +540,7 @@ class Tibble(pl.DataFrame):
 
         out = (
             super()
-            .pivot(values_from, id_cols, names_from, values_fn)
+            .pivot(values = values_from, index = id_cols, on = names_from, aggregate_function = values_fn)
             .pipe(from_polars)
         )
 
@@ -1022,7 +1022,6 @@ _polars_methods = [
     'max',
     'mean',
     'median',
-    'melt',
     'min',
     'n_chunks',
     'null_count',
@@ -1052,6 +1051,7 @@ _polars_methods = [
     'to_parquet',
     'transpose',
     'unnest',
+    'unpivot',
     'var',
     'width',
     'with_column',
