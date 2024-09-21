@@ -465,7 +465,8 @@ class Tibble(pl.DataFrame):
         """
         if (left_on == None) & (right_on == None) & (on == None):
             on = list(set(self.names) & set(df.names))
-        return super().join(df, on, 'outer',  left_on = left_on, right_on= right_on, suffix= suffix).pipe(from_polars)
+        out = super().join(df, on, "full", left_on = left_on, right_on = right_on, suffix = suffix, coalesce = True)
+        return out.pipe(from_polars)
 
     def pivot_longer(self,
                      cols = everything(),
