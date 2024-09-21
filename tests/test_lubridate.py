@@ -38,4 +38,4 @@ def test_as_date_format():
 def test_make_date():
     df = tp.Tibble(date = ['2021-12-1']).mutate(date = tp.as_date('date'))
     out = df.mutate(date = tp.make_date(2021, 12, 1))
-    assert df.pull('date').series_equal(out.pull('date')), "make_date failed"
+    assert df.pull('date').equals(out.pull('date')), "make_date failed"
