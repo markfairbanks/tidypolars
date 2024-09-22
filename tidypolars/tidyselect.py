@@ -1,4 +1,5 @@
 import polars as pl
+import polars.selectors as cs
 
 __all__ = ["contains", "ends_with", "everything", "starts_with"]
 
@@ -20,9 +21,9 @@ def contains(match, ignore_case = True):
     >>> df.select(contains('c'))
     """
     if ignore_case == True:
-        out = f"^*(?i){match}.*$"
+        out = cs.matches(f"^*(?i){match}.*$")
     else:
-        out = f"^*{match}.*$"
+        out = cs.contains(match)
     return out
 
 def ends_with(match, ignore_case = True):
@@ -43,9 +44,9 @@ def ends_with(match, ignore_case = True):
     >>> df.select(ends_with('code'))
     """
     if ignore_case == True:
-        out = f"^.*(?i){match}$"
+        out = cs.matches(f"^.*(?i){match}$")
     else:
-        out = f"^.*{match}$"
+        out = cs.ends_with(match)
     return out
 
 def everything():
@@ -57,7 +58,7 @@ def everything():
     >>> df = tp.Tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
     >>> df.select(everything())
     """
-    return "*"
+    return cs.all()
 
 def starts_with(match, ignore_case = True):
     """
@@ -76,7 +77,7 @@ def starts_with(match, ignore_case = True):
     >>> df.select(starts_with('a'))
     """
     if ignore_case == True:
-        out = f"^(?i){match}.*$"
+        out = cs.matches(f"^(?i){match}.*$")
     else:
-        out = f"^{match}.*$"
+        out = cs.starts_with(match)
     return out
