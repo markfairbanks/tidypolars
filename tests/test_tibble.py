@@ -147,7 +147,7 @@ def test_filter():
 
 def test_filter_grouped():
     df = tp.Tibble(x = range(3), y = ['a', 'a', 'b'])
-    actual = df.filter(col('x') <= col('x').mean(), by = 'y').arrange('y')
+    actual = df.filter(col('x') <= col('x').mean(), _by = 'y').arrange('y')
     expected = tp.Tibble(x = [0, 2], y = ['a', 'b'])
     assert actual.equals(expected), "grouped filter failed"
     assert type(actual) == tp.Tibble, "grouped filter didn't return a Tibble"
@@ -390,7 +390,7 @@ def test_slice_head():
     assert type(actual) == tp.Tibble, "slice_head didn't return a Tibble"
 
 def test_slice_tail():
-    """Can slice_tail by group"""
+    """Can slice_tail by"""
     df = tp.Tibble({'x': range(3), 'y': ['a', 'a', 'b']})
     actual = df.slice_tail(2)
     expected = tp.Tibble({'x': [1, 2], 'y': ['a', 'b']})
@@ -415,7 +415,7 @@ def test_summarize():
 def test_summarize_grouped():
     """Can use summarize by group"""
     df = tp.Tibble({'x': range(3), 'y': range(3), 'z': ['a', 'a', 'b']})
-    actual = df.summarize(avg_x = col('x').mean(), by = 'z').arrange('z')
+    actual = df.summarize(avg_x = col('x').mean(), _by = 'z').arrange('z')
     expected = tp.Tibble(z = ['a', 'b'], avg_x = [.5, 2])
     assert actual.equals(expected), "grouped summarize failed"
 
