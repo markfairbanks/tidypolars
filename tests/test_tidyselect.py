@@ -1,9 +1,4 @@
 import tidypolars as tp
-# ADD TP to all selects
-def _repeat(x, times):
-    if not isinstance(x, list):
-        x = [x]
-    return x * times
 
 def test_contains_ignore_case():
     """Can find columns that contain and ignores case"""
