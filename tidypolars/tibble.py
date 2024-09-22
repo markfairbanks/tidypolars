@@ -167,7 +167,7 @@ class Tibble(pl.DataFrame):
         """
         args = _as_list(args)
         
-        out = self.summarize(pl.len().alias(name), by = args)
+        out = self.summarize(pl.len().alias(name), _by = args)
 
         if sort == True:
             out = out.arrange(desc(name))
@@ -241,11 +241,11 @@ class Tibble(pl.DataFrame):
         other = other.to_polars()
         return df.equals(other, null_equal = null_equal)
     
-    def head(self, n = 5, *, by = None):
+    def head(self, n = 5, *, _by = None):
         """Alias for `.slice_head()`"""
-        return self.slice_head(n, by = by)
+        return self.slice_head(n, _by = _by)
 
-    def fill(self, *args, direction = 'down', by = None):
+    def fill(self, *args, direction = 'down', _by = None):
         """
         Fill in missing values with previous or next value
 
@@ -276,8 +276,7 @@ class Tibble(pl.DataFrame):
             exprs = [arg.fill_null(strategy = direction) for arg in args]
         elif direction == 'downup':
             exprs = [
-                arg.fill_null(strategy = 'forward')
-                .fill_null(strategy = 'backward')
+                arg.fill_null(strategy = 'forward').fill_null(strategy = 'backward')
                 for arg in args
             ]
         elif direction == 'updown':
@@ -289,10 +288,10 @@ class Tibble(pl.DataFrame):
         else:
             raise ValueError("direction must be one of down, up, downup, or updown")
 
-        return self.mutate(*exprs, by = by)
+        return self.mutate(*exprs, _by = _by)
 
     def filter(self, *args,
-               by = None):
+               _by = None):
         """
         Filter rows on one or more conditions
 
@@ -313,8 +312,8 @@ class Tibble(pl.DataFrame):
         args = _as_list(args)
         exprs = ft.reduce(lambda a, b: a & b, args)
 
-        if _uses_by(by):
-            out = super().group_by(by).map_groups(lambda x: x.filter(exprs))
+        if _uses_by(_by):
+            out = super().group_by(_by).map_groups(lambda x: x.filter(exprs))
         else:
             out = super().filter(exprs)
         
@@ -375,7 +374,7 @@ class Tibble(pl.DataFrame):
         return super().join(df, on, 'left',  left_on = left_on, right_on= right_on, suffix= suffix).pipe(from_polars)
 
     def mutate(self, *args,
-               by = None,
+               _by = None,
                **kwargs):
         """
         Add or modify columns
@@ -400,8 +399,8 @@ class Tibble(pl.DataFrame):
 
         out = self.to_polars()
 
-        if _uses_by(by):
-            out = out.group_by(by).map_groups(lambda x: _mutate_cols(x, exprs))
+        if _uses_by(_by):
+            out = out.group_by(_by).map_groups(lambda x: _mutate_cols(x, exprs))
         else:
             out = _mutate_cols(out, exprs)
             
@@ -750,7 +749,7 @@ class Tibble(pl.DataFrame):
         args = _col_exprs(args)
         return super().select(args).pipe(from_polars)
 
-    def slice(self, *args, by = None):
+    def slice(self, *args, _by = None):
         """
         Grab rows from a data frame
 
@@ -768,13 +767,13 @@ class Tibble(pl.DataFrame):
         >>> df.slice(0, by = 'c')
         """
         rows = _as_list(args)
-        if _uses_by(by):
-            df = super(Tibble, self).group_by(by).map_groups(lambda x: x.select(pl.all().gather(rows)))
+        if _uses_by(_by):
+            df = super(Tibble, self).group_by(_by).map_groups(lambda x: x.select(pl.all().gather(rows)))
         else:
             df = super(Tibble, self).select(pl.all().gather(rows))
         return df.pipe(from_polars)
 
-    def slice_head(self, n = 5, *, by = None):
+    def slice_head(self, n = 5, *, _by = None):
         """
         Grab top rows from a data frame
 
@@ -792,14 +791,14 @@ class Tibble(pl.DataFrame):
         >>> df.slice_head(1, by = 'c')
         """
         col_order = self.names
-        if _uses_by(by):
-            df = super(Tibble, self).group_by(by).head(n)
+        if _uses_by(_by):
+            df = super(Tibble, self).group_by(_by).head(n)
         else:
             df = super(Tibble, self).head(n)
         df = df.select(col_order)
         return df.pipe(from_polars)
 
-    def slice_tail(self, n = 5, *, by = None):
+    def slice_tail(self, n = 5, *, _by = None):
         """
         Grab bottom rows from a data frame
 
@@ -817,21 +816,21 @@ class Tibble(pl.DataFrame):
         >>> df.slice_tail(1, by = 'c')
         """
         col_order = self.names
-        if _uses_by(by):
-            df = super(Tibble, self).group_by(by).tail(n)
+        if _uses_by(_by):
+            df = super(Tibble, self).group_by(_by).tail(n)
         else:
             df = super(Tibble, self).tail(n)
         df = df.select(col_order)
         return df.pipe(from_polars)
     
     def summarise(self, *args,
-                  by = None,
+                  _by = None,
                   **kwargs):
         """Alias for `.summarize()`"""
-        return self.summarize(*args, by = by, **kwargs)
+        return self.summarize(*args, _by = _by, **kwargs)
     
     def summarize(self, *args,
-                  by = None,
+                  _by = None,
                   **kwargs):
         """
         Aggregate data with summary statistics
@@ -855,15 +854,15 @@ class Tibble(pl.DataFrame):
         ...              max_b = tp.max(col('b')))
         """
         exprs = _as_list(args) + _kwargs_as_exprs(kwargs)
-        if _uses_by(by):
-            out = super(Tibble, self).group_by(by).agg(exprs)
+        if _uses_by(_by):
+            out = super(Tibble, self).group_by(_by).agg(exprs)
         else:
             out = super(Tibble, self).select(exprs)
         return out.pipe(from_polars)
 
-    def tail(self, n = 5, *, by = None):
+    def tail(self, n = 5, *, _by = None):
         """Alias for `.slice_tail()`"""
-        return self.slice_tail(n, by = by)
+        return self.slice_tail(n, _by = _by)
 
     def to_dict(self, *, as_series = True):
         """
