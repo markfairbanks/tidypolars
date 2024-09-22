@@ -1,4 +1,5 @@
 import polars as pl
+import polars.selectors as cs
 from operator import not_
 from itertools import chain
 
@@ -93,7 +94,7 @@ def _col_exprs(x):
         return [_col_expr(x)]
 
 def _col_expr(x):
-    if _is_expr(x) | _is_series(x):
+    if _is_expr(x) | _is_series(x) | cs.is_selector(x):
         return x
     elif _is_string(x) | _is_type(x):
         return pl.col(x)
