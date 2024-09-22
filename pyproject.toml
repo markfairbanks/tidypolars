@@ -2,20 +2,22 @@
 name = "tidypolars"
 version = "0.3.0"
 description = "Tidy interface to polars"
-authors = ["Mark Fairbanks", "Matt Carlson"]
+authors = ["Mark Fairbanks"]
 license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.12"
+python = ">=3.10,<3.12"
 numpy = ">=1.16.0"
 polars = ">=0.20.7"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 pytest = "^6.2.5"
 jupyterlab = "^3.1.18"
-sphinx-autoapi = "^3.3.1"
+myst-nb = "^1.1.1"
+sphinx-autoapi = "^3.0.0"
 sphinx-material = "^0.0.35"
+sphinx = "8.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
