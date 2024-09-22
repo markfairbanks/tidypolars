@@ -1,7 +1,7 @@
 import polars as pl
 import polars.selectors as cs
 
-__all__ = ["contains", "ends_with", "everything", "starts_with"]
+__all__ = ["contains", "ends_with", "everything", "starts_with", "where"]
 
 def contains(match, ignore_case = True):
     """
@@ -80,4 +80,28 @@ def starts_with(match, ignore_case = True):
         out = cs.matches(f"^(?i){match}.*$")
     else:
         out = cs.starts_with(match)
+    return out
+
+_col_types = {
+    "date": cs.date(),
+    "datetime": cs.datetime(),
+    "float": cs.float(),
+    "integer": cs.integer(),
+    "numeric": cs.numeric(),
+    "string": cs.string()
+}
+
+def where(col_type):
+    """
+    Select columns by type using a string
+
+    Options:
+        date, datetime, float, integer,
+        numeric, string
+
+    Examples
+    --------
+    >>> df.select(tp.where("integer"))
+    """
+    out = _col_types[col_type]
     return out
