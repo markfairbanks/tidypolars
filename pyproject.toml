@@ -15,9 +15,9 @@ polars = ">=0.20.7"
 pytest = "^6.2.5"
 jupyterlab = "^3.1.18"
 myst-nb = "^1.1.1"
-sphinx-autoapi = "^3.0.0"
+sphinx-autoapi = "^3.3.0"
 sphinx-material = "^0.0.35"
-sphinx = "8.0.0"
+sphinx = "^8.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
