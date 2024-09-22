@@ -19,7 +19,7 @@ __all__ = [
     "year"
 ]
 
-def as_date(x, fmt = None):
+def as_date(x, format = None):
     """
     Convert a string to a Date
 
@@ -36,9 +36,9 @@ def as_date(x, fmt = None):
     >>> df.mutate(date_x = tp.as_date(col('x')))
     """
     x = _col_expr(x)
-    return x.str.strptime(pl.Date, fmt = fmt)
+    return x.str.strptime(pl.Date, format = format)
 
-def as_datetime(x, fmt = None):
+def as_datetime(x, format = None):
     """
     Convert a string to a Datetime
 
@@ -55,7 +55,7 @@ def as_datetime(x, fmt = None):
     >>> df.mutate(date_x = tp.as_datetime(col('x')))
     """
     x = _col_expr(x)
-    return x.str.strptime(pl.Datetime, fmt = fmt)
+    return x.str.strptime(pl.Datetime, format = format)
 
 def hour(x):
     """
