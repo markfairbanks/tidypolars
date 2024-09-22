@@ -1,9 +1,4 @@
 import tidypolars as tp
-# ADD TP to all selects
-def _repeat(x, times):
-    if not isinstance(x, list):
-        x = [x]
-    return x * times
 
 def test_contains_ignore_case():
     """Can find columns that contain and ignores case"""
@@ -53,3 +48,16 @@ def test_starts_with_include_case():
     actual = df.select(tp.starts_with('n', ignore_case=False))
     expected = tp.Tibble({'name': ['a', 'a', 'b']})
     assert actual.equals(expected), "starts_with include case failed"
+
+def test_where():
+    """Can use where"""
+    df = tp.Tibble({
+        "string_col": ["a"],
+        "numeric_col": [1]
+    })
+    actual = df.select(tp.where("string"))
+    expected = df.select("string_col")
+    assert actual.equals(expected), "where('numeric') failed"
+    actual = df.select(tp.where("numeric"))
+    expected = df.select("numeric_col")
+    assert actual.equals(expected), "where('numeric') failed"
