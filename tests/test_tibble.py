@@ -361,7 +361,7 @@ def test_select():
     """Can select columns"""
     df = tp.tibble({'x': range(3), 'y': range(3), 'z': range(3)})
     actual = df.select('x', 'z')
-    expected = df[['x', 'z']]
+    expected = tp.tibble({'x': range(3), 'z': range(3)})
     assert actual.equals(expected), "select failed"
     assert type(actual) == tp.tibble, "select didn't return a tibble"
 
