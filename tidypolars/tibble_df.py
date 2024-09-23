@@ -978,6 +978,8 @@ def as_tibble(x):
         out = from_polars(x)
     elif isinstance(x, dict):
         out = tibble(x)
+    elif is_tibble(x):
+        out = x
     else:
         out = pl.from_dataframe(x)
     return out
