@@ -2,7 +2,7 @@
 
 ## v0.3.0 (in development)
 
-* Major refactor to work with `polars>=0.20.8`
+* Major refactor to work with `polars>=1.0.0`
 
 ## v0.2.19
 
