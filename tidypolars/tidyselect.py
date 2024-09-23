@@ -17,7 +17,7 @@ def contains(match, ignore_case = True):
 
     Examples
     --------
-    >>> df = tp.Tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
+    >>> df = tp.tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
     >>> df.select(contains('c'))
     """
     if ignore_case == True:
@@ -40,7 +40,7 @@ def ends_with(match, ignore_case = True):
 
     Examples
     --------
-    >>> df = tp.Tibble({'a': range(3), 'b_code': range(3), 'c_code': ['a', 'a', 'b']})
+    >>> df = tp.tibble({'a': range(3), 'b_code': range(3), 'c_code': ['a', 'a', 'b']})
     >>> df.select(ends_with('code'))
     """
     if ignore_case == True:
@@ -55,7 +55,7 @@ def everything():
 
     Examples
     --------
-    >>> df = tp.Tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
+    >>> df = tp.tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
     >>> df.select(everything())
     """
     return cs.all()
@@ -73,7 +73,7 @@ def starts_with(match, ignore_case = True):
 
     Examples
     --------
-    >>> df = tp.Tibble({'a': range(3), 'add': range(3), 'sub': ['a', 'a', 'b']})
+    >>> df = tp.tibble({'a': range(3), 'add': range(3), 'sub': ['a', 'a', 'b']})
     >>> df.select(starts_with('a'))
     """
     if ignore_case == True:

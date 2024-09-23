@@ -1,5 +1,5 @@
 import polars as pl
-from .tibble import from_polars, Tibble
+from .tibble_df import from_polars, tibble
 from .utils import (
     _as_list,
     _col_expr,
@@ -56,7 +56,7 @@ def across(cols, fn = lambda x: x, names_prefix = None):
 
     Examples
     --------
-    >>> df = tp.Tibble(x = ['a', 'a', 'b'], y = range(3), z = range(3))
+    >>> df = tp.tibble(x = ['a', 'a', 'b'], y = range(3), z = range(3))
     >>> df.mutate(across(['y', 'z'], lambda x: x * 2))
     >>> df.mutate(across(tp.Int64, lambda x: x * 2, names_prefix = "double_"))
     >>> df.summarize(across(['y', 'z'], tp.mean), by = 'x')
@@ -163,7 +163,7 @@ def between(x, left, right):
 
     Examples
     --------
-    >>> df = tp.Tibble(x = range(4))
+    >>> df = tp.tibble(x = range(4))
     >>> df.filter(tp.between(col('x'), 1, 3))
     """
     x = _col_expr(x)
@@ -180,7 +180,7 @@ def case_when(expr):
 
     Examples
     --------
-    >>> df = tp.Tibble(x = range(1, 4))
+    >>> df = tp.tibble(x = range(1, 4))
     >>> df.mutate(
     >>>    case_x = tp.case_when(col('x') < 2).then(1)
     >>>             .when(col('x') < 3).then(2)
@@ -330,7 +330,7 @@ def if_else(condition, true, false):
 
     Examples
     --------
-    >>> df = tp.Tibble(x = range(1, 4))
+    >>> df = tp.tibble(x = range(1, 4))
     >>> df.mutate(if_x = tp.if_else(col('x') < 2, 1, 2))
     """
     return pl.when(condition).then(true).otherwise(false)
@@ -346,7 +346,7 @@ def is_finite(x):
 
     Examples
     --------
-    >>> df = tp.Tibble(x = [1.0, float('inf')])
+    >>> df = tp.tibble(x = [1.0, float('inf')])
     >>> df.filter(tp.is_finite(col('x')))
     """
     x = _col_expr(x)
@@ -365,7 +365,7 @@ def is_in(x, y):
 
     Examples
     --------
-    >>> df = tp.Tibble(x = range(3))
+    >>> df = tp.tibble(x = range(3))
     >>> df.filter(tp.is_in(col('x'), [1, 2]))
     """
     x = _col_expr(x)
@@ -382,7 +382,7 @@ def is_infinite(x):
 
     Examples
     --------
-    >>> df = tp.Tibble(x = [1.0, float('inf')])
+    >>> df = tp.tibble(x = [1.0, float('inf')])
     >>> df.filter(tp.is_infinite(col('x')))
     """
     x = _col_expr(x)
@@ -399,7 +399,7 @@ def is_not(x):
 
     Examples
     --------
-    >>> df = tp.Tibble(x = range(3))
+    >>> df = tp.tibble(x = range(3))
     >>> df.filter(tp.not_(col('x') < 2))
     """
     x = _col_expr(x)
@@ -416,7 +416,7 @@ def is_nan(x):
 
     Examples
     --------
-    >>> df = tp.Tibble(x = range(3))
+    >>> df = tp.tibble(x = range(3))
     >>> df.filter(tp.is_nan(col('x')))
     """
     x = _col_expr(x)
@@ -435,7 +435,7 @@ def is_not_in(x, y):
 
     Examples
     --------
-    >>> df = tp.Tibble(x = range(3))
+    >>> df = tp.tibble(x = range(3))
     >>> df.filter(tp.is_not_in(col('x'), [1, 2]))
     """
     x = _col_expr(x)
@@ -452,7 +452,7 @@ def is_not_null(x):
 
     Examples
     --------
-    >>> df = tp.Tibble(x = range(3))
+    >>> df = tp.tibble(x = range(3))
     >>> df.filter(tp.is_not_in(col('x'), [1, 2]))
     """
     x = _col_expr(x)
@@ -469,7 +469,7 @@ def is_null(x):
 
     Examples
     --------
-    >>> df = tp.Tibble(x = range(3))
+    >>> df = tp.tibble(x = range(3))
     >>> df.filter(tp.is_not_in(col('x'), [1, 2]))
     """
     x = _col_expr(x)
@@ -734,7 +734,7 @@ def rep(x, times = 1):
         out = x.to_list()
     elif _is_list(x):
         out = x
-    elif isinstance(x, Tibble):
+    elif isinstance(x, tibble):
         out = pl.concat([x for i in range(times)]).pipe(from_polars)
     elif _is_iterable(x):
         out = list(x)
@@ -755,7 +755,7 @@ def replace_null(x, replace = None):
 
     Examples
     --------
-    >>> df = tp.Tibble(x = [0, None], y = [None, None])
+    >>> df = tp.tibble(x = [0, None], y = [None, None])
     >>> df.mutate(x = tp.replace_null(col('x'), 1))
     """
     if replace == None: return x

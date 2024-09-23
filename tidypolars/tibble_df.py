@@ -15,12 +15,12 @@ from .tidyselect import everything
 from operator import not_
 
 __all__ = [
-    "Tibble",
+    "tibble",
     "desc",
     "from_pandas", "from_polars"
 ]
 
-class Tibble(pl.DataFrame):
+class tibble(pl.DataFrame):
     """
     A data frame object that provides methods familiar to R tidyverse users.
     """
@@ -90,7 +90,7 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.Tibble({'x': ['a', 'a', 'b'], 'y': range(3)})
+        >>> df = tp.tibble({'x': ['a', 'a', 'b'], 'y': range(3)})
         >>> # Arrange in ascending order
         >>> df.arrange('x', 'y')
         ...
@@ -107,13 +107,13 @@ class Tibble(pl.DataFrame):
 
         Parameters
         ----------
-        df : Tibble
+        df : tibble
             Data frame to bind
 
         Examples
         --------
-        >>> df1 = tp.Tibble({'x': ['a', 'a', 'b'], 'y': range(3)})
-        >>> df2 = tp.Tibble({'a': ['c', 'c', 'c'], 'b': range(4, 7)})
+        >>> df1 = tp.tibble({'x': ['a', 'a', 'b'], 'y': range(3)})
+        >>> df2 = tp.tibble({'a': ['c', 'c', 'c'], 'b': range(4, 7)})
         >>> df1.bind_cols(df2)
         """
         frames = _as_list(args)
@@ -128,13 +128,13 @@ class Tibble(pl.DataFrame):
 
         Parameters
         ----------
-        *args : Tibble, list
+        *args : tibble, list
             Data frames to bind by row
 
         Examples
         --------
-        >>> df1 = tp.Tibble({'x': ['a', 'a', 'b'], 'y': range(3)})
-        >>> df2 = tp.Tibble({'x': ['c', 'c', 'c'], 'y': range(4, 7)})
+        >>> df1 = tp.tibble({'x': ['a', 'a', 'b'], 'y': range(3)})
+        >>> df2 = tp.tibble({'x': ['c', 'c', 'c'], 'y': range(4, 7)})
         >>> df1.bind_rows(df2)
         """
         frames = _as_list(args)
@@ -161,7 +161,7 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.Tibble({'a': range(3), 'b': ['a', 'a', 'b']})
+        >>> df = tp.tibble({'a': range(3), 'b': ['a', 'a', 'b']})
         >>> df.count()
         >>> df.count('b')
         """
@@ -185,7 +185,7 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.Tibble({'a': range(3), 'b': ['a', 'a', 'b']})
+        >>> df = tp.tibble({'a': range(3), 'b': ['a', 'a', 'b']})
         >>> df.distinct()
         >>> df.distinct('b')
         """
@@ -224,7 +224,7 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.Tibble(x = [1, None, 3], y = [None, 'b', 'c'], z = range(3)}
+        >>> df = tp.tibble(x = [1, None, 3], y = [None, 'b', 'c'], z = range(3)}
         >>> df.drop_null()
         >>> df.drop_null('x', 'y')
         """
@@ -236,7 +236,7 @@ class Tibble(pl.DataFrame):
         return out.pipe(from_polars)
     
     def equals(self, other, null_equal = True):
-        """Check if two Tibbles are equal"""
+        """Check if two tibbles are equal"""
         df = self.to_polars()
         other = other.to_polars()
         return df.equals(other, null_equal = null_equal)
@@ -260,7 +260,7 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.Tibble({'a': [1, None, 3, 4, 5],
+        >>> df = tp.tibble({'a': [1, None, 3, 4, 5],
         ...                 'b': [None, 2, None, None, 5],
         ...                 'groups': ['a', 'a', 'a', 'b', 'b']})
         >>> df.fill('a', 'b')
@@ -304,7 +304,7 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.Tibble({'a': range(3), 'b': ['a', 'a', 'b']})
+        >>> df = tp.tibble({'a': range(3), 'b': ['a', 'a', 'b']})
         >>> df.filter(col('a') < 2, col('b') == 'a')
         >>> df.filter((col('a') < 2) & (col('b') == 'a'))
         >>> df.filter(col('a') <= tp.mean(col('a')), by = 'b')
@@ -325,7 +325,7 @@ class Tibble(pl.DataFrame):
 
         Parameters
         ----------
-        df : Tibble
+        df : tibble
             Lazy DataFrame to join with.
         left_on : str, list
             Join column(s) of the left DataFrame.
@@ -352,7 +352,7 @@ class Tibble(pl.DataFrame):
 
         Parameters
         ----------
-        df : Tibble
+        df : tibble
             Lazy DataFrame to join with.
         left_on : str, list
             Join column(s) of the left DataFrame.
@@ -390,7 +390,7 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.Tibble({'a': range(3), 'b': range(3), c = ['a', 'a', 'b']})
+        >>> df = tp.tibble({'a': range(3), 'b': range(3), c = ['a', 'a', 'b']})
         >>> df.mutate(double_a = col('a') * 2,
         ...           a_plus_b = col('a') + col('b'))
         >>> df.mutate(row_num = row_number(), by = 'c')
@@ -445,7 +445,7 @@ class Tibble(pl.DataFrame):
 
         Parameters
         ----------
-        df : Tibble
+        df : tibble
             Lazy DataFrame to join with.
         left_on : str, list
             Join column(s) of the left DataFrame.
@@ -485,7 +485,7 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.Tibble({'id': ['id1', 'id2'], 'a': [1, 2], 'b': [1, 2]})
+        >>> df = tp.tibble({'id': ['id1', 'id2'], 'a': [1, 2], 'b': [1, 2]})
         >>> df.pivot_longer(cols = ['a', 'b'])
         >>> df.pivot_longer(cols = ['a', 'b'], names_to = 'stuff', values_to = 'things')
         """
@@ -523,7 +523,7 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.Tibble({'id': [1, 1], 'variable': ['a', 'b'], 'value': [1, 2]})
+        >>> df = tp.tibble({'id': [1, 1], 'variable': ['a', 'b'], 'value': [1, 2]})
         >>> df.pivot_wider(names_from = 'variable', values_from = 'value')
         """
         if id_cols == None:
@@ -564,7 +564,7 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.Tibble({'a': range(3), 'b': range(3))
+        >>> df = tp.tibble({'a': range(3), 'b': range(3))
         >>> df.pull('a')
         """
         if var == None:
@@ -583,7 +583,7 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.Tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
+        >>> df = tp.tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
         >>> df.relocate('a', before = 'c')
         >>> df.relocate('b', after = 'c')
         """
@@ -633,7 +633,7 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.Tibble({'x': range(3), 't': range(3), 'z': ['a', 'a', 'b']})
+        >>> df = tp.tibble({'x': range(3), 't': range(3), 'z': ['a', 'a', 'b']})
         >>> df.rename(new_x = 'x') # dplyr interface
         >>> df.rename({'x': 'new_x'}) # pandas interface
         """
@@ -665,7 +665,7 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.Tibble(x = [0, None], y = [None, None])
+        >>> df = tp.tibble(x = [0, None], y = [None, None])
         >>> df.replace_null(dict(x = 1, y = 2))
         """
         if replace == None: return self
@@ -691,7 +691,7 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.Tibble(x = ['a_a', 'b_b', 'c_c'])
+        >>> df = tp.tibble(x = ['a_a', 'b_b', 'c_c'])
         >>> df.separate('x', into = ['left', 'right'])
         """
         into_len = len(into) - 1
@@ -722,7 +722,7 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.Tibble(x = range(3), y = range(3))
+        >>> df = tp.tibble(x = range(3), y = range(3))
         >>> df.set_names(['a', 'b'])
         """
         if nm == None: nm = self.names
@@ -741,7 +741,7 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.Tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
+        >>> df = tp.tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
         >>> df.select('a', 'b')
         >>> df.select(col('a'), col('b'))
         """
@@ -762,15 +762,15 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.Tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
+        >>> df = tp.tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
         >>> df.slice(0, 1)
         >>> df.slice(0, by = 'c')
         """
         rows = _as_list(args)
         if _uses_by(_by):
-            df = super(Tibble, self).group_by(_by).map_groups(lambda x: x.select(pl.all().gather(rows)))
+            df = super(tibble, self).group_by(_by).map_groups(lambda x: x.select(pl.all().gather(rows)))
         else:
-            df = super(Tibble, self).select(pl.all().gather(rows))
+            df = super(tibble, self).select(pl.all().gather(rows))
         return df.pipe(from_polars)
 
     def slice_head(self, n = 5, *, _by = None):
@@ -786,15 +786,15 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.Tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
+        >>> df = tp.tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
         >>> df.slice_head(2)
         >>> df.slice_head(1, by = 'c')
         """
         col_order = self.names
         if _uses_by(_by):
-            df = super(Tibble, self).group_by(_by).head(n)
+            df = super(tibble, self).group_by(_by).head(n)
         else:
-            df = super(Tibble, self).head(n)
+            df = super(tibble, self).head(n)
         df = df.select(col_order)
         return df.pipe(from_polars)
 
@@ -811,15 +811,15 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.Tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
+        >>> df = tp.tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
         >>> df.slice_tail(2)
         >>> df.slice_tail(1, by = 'c')
         """
         col_order = self.names
         if _uses_by(_by):
-            df = super(Tibble, self).group_by(_by).tail(n)
+            df = super(tibble, self).group_by(_by).tail(n)
         else:
-            df = super(Tibble, self).tail(n)
+            df = super(tibble, self).tail(n)
         df = df.select(col_order)
         return df.pipe(from_polars)
     
@@ -846,7 +846,7 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.Tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
+        >>> df = tp.tibble({'a': range(3), 'b': range(3), 'c': ['a', 'a', 'b']})
         >>> df.summarize(avg_a = tp.mean(col('a')))
         >>> df.summarize(avg_a = tp.mean(col('a')),
         ...              by = 'c')
@@ -855,9 +855,9 @@ class Tibble(pl.DataFrame):
         """
         exprs = _as_list(args) + _kwargs_as_exprs(kwargs)
         if _uses_by(_by):
-            out = super(Tibble, self).group_by(_by).agg(exprs)
+            out = super(tibble, self).group_by(_by).agg(exprs)
         else:
-            out = super(Tibble, self).select(exprs)
+            out = super(tibble, self).select(exprs)
         return out.pipe(from_polars)
 
     def tail(self, n = 5, *, _by = None):
@@ -920,7 +920,7 @@ class Tibble(pl.DataFrame):
 
         Examples
         --------
-        >>> df = tp.Tibble(a = ["a", "a", "a"], b = ["b", "b", "b"], c = range(3))
+        >>> df = tp.tibble(a = ["a", "a", "a"], b = ["b", "b", "b"], c = range(3))
         >>> df.unite("united_col", unite_cols = ["a", "b"])
         """
         if len(unite_cols) == 0:
@@ -961,29 +961,29 @@ class DescCol(pl.Expr):
 
 def from_polars(df):
     """
-    Convert from polars DataFrame to Tibble
+    Convert from polars DataFrame to tibble
 
     Parameters
     ----------
     df : DataFrame
-        pl.DataFrame to convert to a Tibble
+        pl.DataFrame to convert to a tibble
 
     Examples
     --------
     >>> tp.from_polars(df)
     """
     df = copy.copy(df)
-    df.__class__ = Tibble
+    df.__class__ = tibble
     return df
 
 def from_pandas(df):
     """
-    Convert from pandas DataFrame to Tibble
+    Convert from pandas DataFrame to tibble
 
     Parameters
     ----------
     df : DataFrame
-        pd.DataFrame to convert to a Tibble
+        pd.DataFrame to convert to a tibble
 
     Examples
     --------

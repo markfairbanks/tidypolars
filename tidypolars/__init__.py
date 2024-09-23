@@ -9,7 +9,7 @@ from .funs import *
 from .lubridate import *
 from .reexports import *
 from .stringr import *
-from .tibble import *
+from .tibble_df import *
 from .tidyselect import *
 
 __all__ = (
@@ -17,6 +17,6 @@ __all__ = (
     lubridate.__all__ +
     reexports.__all__ +
     stringr.__all__ +
-    tibble.__all__ +
+    tibble_df.__all__ +
     tidyselect.__all__ 
 )
