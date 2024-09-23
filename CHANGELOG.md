@@ -8,6 +8,7 @@
 
 * Convert `by` arg `_by` to allow naming columns `by` in `.mutate()`/`.summarize()`
 * Convert `.to_pandas()`/`.to_polars()` to `.as_pandas()`/`.as_polars()`
+* Can extract a column using `df["x"]`
 
 #### New functions
 
