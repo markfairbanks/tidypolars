@@ -7,9 +7,11 @@
 #### Functionality improvements
 
 * Convert `by` arg `_by` to allow naming columns `by` in `.mutate()`/`.summarize()`
+* Convert `.to_pandas()`/`.to_polars()` to `.as_pandas()`/`.as_polars()`
 
 #### New functions
 
+* `as_tibble()`
 * `where()`
 
 ## v0.2.19
