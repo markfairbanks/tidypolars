@@ -81,9 +81,8 @@ class tibble(pl.DataFrame):
             raise AttributeError
         return pl.DataFrame.__getattribute__(self, attr)
     
-    def __getitem__(self, arg):
-        return str(arg)*3
-
+    def __getitem__(self, col):
+        return self.pull(col)
 
     def arrange(self, *args):
         """
