@@ -4,6 +4,14 @@
 
 * Major refactor to work with `polars>=1.0.0`
 
+#### Functionality improvements
+
+* Convert `by` arg `_by` to allow naming columns `by` in `.mutate()`/`.summarize()`
+
+#### New functions
+
+* `where()`
+
 ## v0.2.19
 
 #### New functions
