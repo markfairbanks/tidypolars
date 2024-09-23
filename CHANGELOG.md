@@ -12,6 +12,7 @@
 #### New functions
 
 * `as_tibble()`
+* `is_tibble()`
 * `where()`
 
 ## v0.2.19
