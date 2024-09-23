@@ -32,7 +32,7 @@ def as_date(x, format = None):
 
     Examples
     --------
-    >>> df = tp.Tibble(x = ['2021-01-01', '2021-10-01'])
+    >>> df = tp.tibble(x = ['2021-01-01', '2021-10-01'])
     >>> df.mutate(date_x = tp.as_date(col('x')))
     """
     x = _col_expr(x)
@@ -51,7 +51,7 @@ def as_datetime(x, format = None):
 
     Examples
     --------
-    >>> df = tp.Tibble(x = ['2021-01-01', '2021-10-01'])
+    >>> df = tp.tibble(x = ['2021-01-01', '2021-10-01'])
     >>> df.mutate(date_x = tp.as_datetime(col('x')))
     """
     x = _col_expr(x)
