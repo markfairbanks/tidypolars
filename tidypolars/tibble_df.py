@@ -15,6 +15,8 @@ from .tidyselect import everything
 from operator import not_
 
 __all__ = [
+    "as_tibble",
+    "is_tibble",
     "tibble",
     "desc",
     "from_pandas", "from_polars"
@@ -958,6 +960,43 @@ def desc(x):
 
 class DescCol(pl.Expr):
     pass
+
+def as_tibble(x):
+    """
+    Convert an object to a tibble
+
+    Parameters
+    ----------
+    x : [pl.DataFrame, pd.DataFrame, dict]
+        Object to convert to a tibble
+
+    Examples
+    --------
+    >>> tp.as_tibble(polars_df)
+    """
+    if isinstance(x, pl.DataFrame):
+        out = from_polars(x)
+    elif isinstance(x, dict):
+        out = tibble(x)
+    elif is_tibble(x):
+        out = x
+    else:
+        out = pl.from_dataframe(x)
+    return out
+
+def is_tibble(x):
+    """
+    Is an object to a tibble
+
+    Parameters
+    ----------
+    x : object
+
+    Examples
+    --------
+    >>> tp.is_tibble(df)
+    """
+    return isinstance(x, tibble)
 
 def from_polars(df):
     """
