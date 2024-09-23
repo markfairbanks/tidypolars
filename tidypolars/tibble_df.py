@@ -33,7 +33,7 @@ class tibble(pl.DataFrame):
     
     def __repr__(self):
         """Printing method"""
-        df = self.to_polars()
+        df = self.as_polars()
         return df.__str__()
     
     def _repr_html_(self):
@@ -46,7 +46,7 @@ class tibble(pl.DataFrame):
 
         * POLARS_FMT_MAX_ROWS: set the number of rows
         """
-        df = self.to_polars()
+        df = self.as_polars()
         return df._repr_html_()
 
     def __copy__(self):
@@ -58,7 +58,7 @@ class tibble(pl.DataFrame):
 
     def __str__(self):
         """Printing method"""
-        df = self.to_polars()
+        df = self.as_polars()
         return df.__str__()
 
     def __getattribute__(self, attr):
@@ -75,7 +75,7 @@ class tibble(pl.DataFrame):
             'pull', 'relocate', 'rename', 'replace_null', 'select',
             'separate', 'set_names',
             'slice', 'slice_head', 'slice_tail', 'summarize', 'tail',
-            'to_pandas', 'to_polars', 'write_csv', 'write_parquet'
+            'to_pandas', 'as_polars', 'write_csv', 'write_parquet'
         ]
         return _tidypolars_methods
 
@@ -117,7 +117,7 @@ class tibble(pl.DataFrame):
         >>> df1.bind_cols(df2)
         """
         frames = _as_list(args)
-        out = self.to_polars()
+        out = self.as_polars()
         for frame in frames:
             out = out.hstack(frame)
         return out.pipe(from_polars)
@@ -237,8 +237,8 @@ class tibble(pl.DataFrame):
     
     def equals(self, other, null_equal = True):
         """Check if two tibbles are equal"""
-        df = self.to_polars()
-        other = other.to_polars()
+        df = self.as_polars()
+        other = other.as_polars()
         return df.equals(other, null_equal = null_equal)
     
     def head(self, n = 5, *, _by = None):
@@ -397,7 +397,7 @@ class tibble(pl.DataFrame):
         """
         exprs = _as_list(args) + _kwargs_as_exprs(kwargs)
 
-        out = self.to_polars()
+        out = self.as_polars()
 
         if _uses_by(_by):
             out = out.group_by(_by).map_groups(lambda x: _mutate_cols(x, exprs))
@@ -697,7 +697,7 @@ class tibble(pl.DataFrame):
         into_len = len(into) - 1
         sep_df = (
             self
-            .to_polars()
+            .as_polars()
             .select(col(sep_col)
                     .str.split_exact(sep, into_len)
                     .alias("_seps")
@@ -891,13 +891,13 @@ class tibble(pl.DataFrame):
         """
         return super().to_pandas()
 
-    def to_polars(self):
+    def as_polars(self):
         """
         Convert to a polars DataFrame
 
         Examples
         --------
-        >>> df.to_polars()
+        >>> df.as_polars()
         """
         self = copy.copy(self)
         self.__class__ = pl.DataFrame

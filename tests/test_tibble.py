@@ -294,7 +294,7 @@ def test_pull():
     """Can use pull"""
     df = tp.tibble({'x': _repeat(1, 3), 'y': _repeat(2, 3)})
     actual = df.pull('x')
-    expected = df.to_polars().get_column('x')
+    expected = df.as_polars().get_column('x')
     assert actual.equals(expected), "pull failed"
 
 def test_relocate_before():
@@ -432,10 +432,10 @@ def test_to_dict():
     df = tp.tibble({'x': range(3), 'y': range(3)})
     assert type(df.to_dict()) == dict
 
-def test_to_polars():
+def test_as_polars():
     """Can convert to a polars DataFrame"""
     df = tp.tibble({'x': range(3), 'y': range(3), 'z': range(3)})
-    assert isinstance(df.to_polars(), pl.DataFrame), "to_polars failed"
+    assert isinstance(df.as_polars(), pl.DataFrame), "as_polars failed"
 
 def test_unite():
     """Can unite columns"""
