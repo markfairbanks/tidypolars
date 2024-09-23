@@ -32,6 +32,19 @@ class tibble(pl.DataFrame):
         elif not_(isinstance(_data, dict)):
             raise ValueError("_data must be a dictionary or kwargs must be used")
         super().__init__(_data)
+
+    def __dir__(self):
+        _tidypolars_methods = [
+            'arrange', 'bind_cols', 'bind_rows', 'colnames', 'clone', 'count',
+            'distinct', 'drop', 'drop_null', 'head', 'fill', 'filter',
+            'inner_join', 'left_join', 'mutate', 'names', 'nrow', 'ncol',
+            'full_join', 'pivot_longer', 'pivot_wider',
+            'pull', 'relocate', 'rename', 'replace_null', 'select',
+            'separate', 'set_names',
+            'slice', 'slice_head', 'slice_tail', 'summarize', 'tail',
+            'as_pandas', 'as_polars', 'write_csv', 'write_parquet'
+        ]
+        return _tidypolars_methods
     
     def __repr__(self):
         """Printing method"""
@@ -67,19 +80,9 @@ class tibble(pl.DataFrame):
         if attr in _polars_methods:
             raise AttributeError
         return pl.DataFrame.__getattribute__(self, attr)
-
-    def __dir__(self):
-        _tidypolars_methods = [
-            'arrange', 'bind_cols', 'bind_rows', 'colnames', 'clone', 'count',
-            'distinct', 'drop', 'drop_null', 'head', 'fill', 'filter',
-            'inner_join', 'left_join', 'mutate', 'names', 'nrow', 'ncol',
-            'full_join', 'pivot_longer', 'pivot_wider',
-            'pull', 'relocate', 'rename', 'replace_null', 'select',
-            'separate', 'set_names',
-            'slice', 'slice_head', 'slice_tail', 'summarize', 'tail',
-            'to_pandas', 'as_polars', 'write_csv', 'write_parquet'
-        ]
-        return _tidypolars_methods
+    
+    def __getitem__(self, col):
+        return self.pull(col)
 
     def arrange(self, *args):
         """
@@ -883,13 +886,13 @@ class tibble(pl.DataFrame):
         """
         return super().to_dict(as_series = as_series)
 
-    def to_pandas(self):
+    def as_pandas(self):
         """
         Convert to a pandas DataFrame
 
         Examples
         --------
-        >>> df.to_pandas()
+        >>> df.as_pandas()
         """
         return super().to_pandas()
 
