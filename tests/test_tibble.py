@@ -463,3 +463,12 @@ def test_funs_in_a_row():
     df.tail()
     df.arrange('x', 'y')
     assert True, "Functions in a row failed"
+
+def test_conversion():
+    """Can convert"""
+    df = tp.tibble(a = ["a", "a", "a"], b = ["b", "b", "b"], c = range(3))
+    actual = df.as_polars()
+    expected = pl.DataFrame(dict(a = ["a", "a", "a"], b = ["b", "b", "b"], c = range(3)))
+    assert actual.equals(expected), "as_polars failed"
+    assert tp.is_tibble(df) == True, "is_tibble failed"
+    assert tp.as_tibble(actual).equals(df), "as_tibble failed"
