@@ -296,6 +296,8 @@ def test_pull():
     actual = df.pull('x')
     expected = df.as_polars().get_column('x')
     assert actual.equals(expected), "pull failed"
+    actual = df['x']
+    assert actual.equals(expected), "__getitem__ failed"
 
 def test_relocate_before():
     """Can relocate before columns"""
