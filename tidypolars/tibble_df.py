@@ -4,6 +4,8 @@ from .utils import (
     _as_list,
     _col_expr,
     _col_exprs,
+    _is_expr,
+    _is_string,
     _kwargs_as_exprs,
     _mutate_cols,
     _uses_by
@@ -577,7 +579,7 @@ class tibble(pl.DataFrame):
         
         return super().get_column(var)
     
-    def relocate(self, *args, before = None, after = None):
+    def relocate(self, *args, _before = None, _after = None):
         """
         Move a column or columns to a new position
 
@@ -603,21 +605,21 @@ class tibble(pl.DataFrame):
         if (len(locs_relocate) == 0):
             return self
 
-        uses_before = before != None
-        uses_after = after != None
+        uses_before = _is_expr(_before) | _is_string(_before)
+        uses_after = _is_expr(_after) | _is_string(_after)
 
         if (uses_before & uses_after):
             raise ValueError("Cannot provide both before and after")
         elif (not_(uses_before) & not_(uses_after)):
-            before = cols_all[0]
+            _before = cols_all[0]
             uses_before = True
 
         if uses_before:
-            before = locs_df.select(before).get_column(before)
-            locs_start = locs_all.filter(locs_all < before)
+            _before = locs_df.select(_before).get_column(_before)
+            locs_start = locs_all.filter(locs_all < _before)
         else:
-            after = locs_df.select(after).get_column(after)
-            locs_start = locs_all.filter(locs_all <= after)
+            _after = locs_df.select(_after).get_column(_after)
+            locs_start = locs_all.filter(locs_all <= _after)
 
         locs_start = locs_start.filter(~locs_start.is_in(locs_relocate))
         final_order = pl.concat([locs_start, locs_relocate, locs_all]).unique(maintain_order = True)
@@ -930,11 +932,12 @@ class tibble(pl.DataFrame):
         """
         if len(unite_cols) == 0:
             unite_cols = self.names
-        else: 
-            unite_cols = _col_exprs(unite_cols)
+        else:
             unite_cols = self.select(unite_cols).names
+        _before = unite_cols[0]
+        unite_cols = _col_exprs(unite_cols)
         out = self.mutate(str_c(*unite_cols, sep = sep).alias(col))
-        out = out.relocate(col, before = unite_cols[0])
+        out = out.relocate(col, _before = _before)
         if remove == True:
             out = out.drop(unite_cols)
         return out
