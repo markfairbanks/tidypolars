@@ -302,7 +302,7 @@ def test_pull():
 def test_relocate_before():
     """Can relocate before columns"""
     df = tp.tibble({'x': range(3), 'y': range(3), 'z': range(3)})
-    actual = df.relocate('y', 'z', before = 'x')
+    actual = df.relocate('y', 'z', _before = 'x')
     expected = df.select('y', 'z', 'x')
     assert actual.equals(expected), "relocate before failed"
     assert type(actual) == tp.tibble, "relocate didn't return a tibble"
@@ -310,7 +310,7 @@ def test_relocate_before():
 def test_relocate_after():
     """Can relocate after columns"""
     df = tp.tibble({'x': range(3), 'y': range(3), 'z': range(3)})
-    actual = df.relocate('z', 'y', after = 'x')
+    actual = df.relocate('z', 'y', _after = 'x')
     expected = df.select('x', 'z', 'y')
     assert actual.equals(expected), "relocate after failed"
 
@@ -456,7 +456,7 @@ def test_funs_in_a_row():
     df.filter(col('x') < 7)
     df.head()
     df.mutate(col('x') * 2)
-    df.relocate('y', before = 'x')
+    df.relocate('y', _before = 'x')
     df.rename({'x': 'new_x'})
     df.select('x', 'y')
     df.slice(1)
