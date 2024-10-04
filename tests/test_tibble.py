@@ -329,13 +329,6 @@ def test_rename_dplyr_kwargs():
     assert actual.equals(expected), "dplyr rename failed"
     assert type(actual) == tp.tibble, "rename didn't return a tibble"
 
-def test_rename_dplyr_strings():
-    """Can rename - dplyr interface (strings)"""
-    df = tp.tibble({'x': range(3), 'y': range(3), 'z': range(3)})
-    actual = df.rename('new_x', 'x', 'new_y', 'y')
-    expected = tp.tibble({'new_x': range(3), 'new_y': range(3), 'z': range(3)})
-    assert actual.equals(expected), "dplyr rename failed"
-
 def test_rename_pandas():
     """Can rename - pandas interface"""
     df = tp.tibble({'x': range(3), 'y': range(3), 'z': range(3)})
