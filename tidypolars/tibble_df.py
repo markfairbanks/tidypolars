@@ -627,13 +627,13 @@ class tibble(pl.DataFrame):
 
         return self.select(final_order)
    
-    def rename(self, *args, **kwargs):
+    def rename(self, mapping = None, **kwargs):
         """
         Rename columns
 
         Parameters
         ----------
-        *args : dict
+        mapping : dict
             Dictionary mapping of new names
         **kwargs : str
             key-value pair of new name from old name
@@ -644,21 +644,8 @@ class tibble(pl.DataFrame):
         >>> df.rename(new_x = 'x') # dplyr interface
         >>> df.rename({'x': 'new_x'}) # pandas interface
         """
-        args = _as_list(args)
-        if len(args) > 0:
-            if isinstance(args[0], dict):
-                mapping = args[0]
-            else:
-                args = pl.Series(args)
-                len_args = len(args)
-                if (len_args % 2) == 1:
-                    raise ValueError("Need matching new_name/old_name pairs when using args")
-                even_bool = pl.Series([True, False] * int(len_args/2))
-                new_names = args.filter(even_bool)
-                old_names = args.filter(~even_bool)
-                mapping = {key:value for key, value in zip(old_names, new_names)}
-        else:
-            mapping = {value:key for key, value in kwargs.items()}
+        if type(mapping).__name__ == "NoneType":
+            mapping = {value:key for key, value in kwargs.items()} 
         return super().rename(mapping).pipe(from_polars)
 
     def replace_null(self, replace = None):
