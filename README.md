@@ -8,7 +8,7 @@ tidypolars is a data frame library built on top of the blazingly fast [polars](h
 You can install tidypolars with `pip`:
 
 ```bash
-$ pip3 install tidypolars
+$ pip install tidypolars
 ```
 
 Or through `conda`:
@@ -24,7 +24,7 @@ tidypolars methods are designed to work like tidyverse functions:
 import tidypolars as tp
 from tidypolars import col, desc
 
-df = tp.Tibble(x = range(3), y = range(3, 6), z = ['a', 'a', 'b'])
+df = tp.tibble(x = range(3), y = range(3, 6), z = ['a', 'a', 'b'])
 
 (
     df
@@ -60,14 +60,14 @@ A full list of functions can be found [here](https://tidypolars.readthedocs.io/e
 
 Methods operate by group by calling the `by` arg.
 
-* A single column can be passed with `by = 'z'`
-* Multiple columns can be passed with `by = ['y', 'z']`
+* A single column can be passed with `_by = 'z'`
+* Multiple columns can be passed with `_by = ['y', 'z']`
 
 ```python
 (
     df
     .summarize(avg_x = tp.mean(col('x')),
-               by = 'z')
+               _by = 'z')
 )
 ┌─────┬───────┐
 │ z   ┆ avg_x │
@@ -85,7 +85,7 @@ Methods operate by group by calling the `by` arg.
 tidyselect functions can be mixed with normal selection when selecting columns:
 
 ```python
-df = tp.Tibble(x1 = range(3), x2 = range(3), y = range(3), z = range(3))
+df = tp.tibble(x1 = range(3), x2 = range(3), y = range(3), z = range(3))
 
 df.select(tp.starts_with('x'), 'z')
 ┌─────┬─────┬─────┐
@@ -126,19 +126,19 @@ a pandas `DataFrame`.
 To do this you'll first need to install pyarrow:
 
 ```bash
-pip3 install pyarrow
+pip install pyarrow
 ```
 
 To convert to a pandas `DataFrame`:
 
 ```python
-df = df.to_pandas()
+df = df.as_pandas()
 ```
 
-To convert from a pandas `DataFrame` to a tidypolars `Tibble`:
+To convert from a pandas `DataFrame` to a tidypolars `tibble`:
 
 ```python
-df = tp.from_pandas(df)
+df = tp.as_tibble(df)
 ```
 
 ## Speed Comparisons
