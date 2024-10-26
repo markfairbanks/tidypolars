@@ -2,6 +2,10 @@
 
 ## v0.3.2 (in development)
 
+#### Functionality improvements
+
+* `pl.Null` is rexported as `tp.Null`
+
 ## v0.3.1
 
 #### Functionality improvements

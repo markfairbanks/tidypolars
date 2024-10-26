@@ -33,3 +33,4 @@ List = pl.List
 Date = pl.Date
 Datetime = pl.Datetime
 Object = pl.Object
+Null = pl.Null
