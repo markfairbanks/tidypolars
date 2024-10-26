@@ -2,6 +2,11 @@
 
 ## v0.3.1 (in development)
 
+#### Functionality improvements
+
+* `if_else()` treats string inputs in `true` and `false` as strings and not as columns
+* `case_when()` no has syntax closer to `dplyr::case_when()`
+
 ## v0.3.0
 
 * Major refactor to work with `polars>=1.0.0`
