@@ -671,13 +671,13 @@ class tibble(pl.DataFrame):
 
         return self.select(final_order)
    
-    def rename(self, mapping = None, **kwargs):
+    def rename(self, _mapping = None, **kwargs):
         """
         Rename columns
 
         Parameters
         ----------
-        mapping : dict
+        _mapping : dict
             Dictionary mapping of new names
         **kwargs : str
             key-value pair of new name from old name
@@ -688,9 +688,9 @@ class tibble(pl.DataFrame):
         >>> df.rename(new_x = 'x') # dplyr interface
         >>> df.rename({'x': 'new_x'}) # pandas interface
         """
-        if type(mapping).__name__ == "NoneType":
-            mapping = {value:key for key, value in kwargs.items()} 
-        return super().rename(mapping).pipe(from_polars)
+        if _mapping == None:
+            _mapping = {value:key for key, value in kwargs.items()} 
+        return super().rename(_mapping).pipe(from_polars)
 
     def replace_null(self, replace = None):
         """
