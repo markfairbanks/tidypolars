@@ -5,6 +5,8 @@
 #### Functionality improvements
 
 * `pl.Null` is rexported as `tp.Null`
+* `.rename()` `mapping` renamed to `_mapping` to avoid naming conflicts in
+    dplyr interface using kwargs
 
 ## v0.3.1
 
