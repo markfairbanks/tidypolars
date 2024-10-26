@@ -883,7 +883,7 @@ class tibble(pl.DataFrame):
         --------
         >>> df.as_pandas()
         """
-        return super().to_pandas()
+        return self.as_polars().to_pandas()
 
     def as_polars(self):
         """
