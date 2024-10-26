@@ -37,14 +37,16 @@ class tibble(pl.DataFrame):
 
     def __dir__(self):
         _tidypolars_methods = [
-            'arrange', 'bind_cols', 'bind_rows', 'colnames', 'clone', 'count',
+            'arrange', 'as_dict', 'as_pandas', 'as_polars',
+            'bind_cols', 'bind_rows', 'colnames', 'clone', 'count',
             'distinct', 'drop', 'drop_null', 'head', 'fill', 'filter',
             'inner_join', 'left_join', 'mutate', 'names', 'nrow', 'ncol',
             'full_join', 'pivot_longer', 'pivot_wider',
+            'print',
             'pull', 'relocate', 'rename', 'replace_null', 'select',
             'separate', 'set_names',
             'slice', 'slice_head', 'slice_tail', 'summarize', 'tail',
-            'as_pandas', 'as_polars', 'write_csv', 'write_parquet'
+            'write_csv', 'write_parquet'
         ]
         return _tidypolars_methods
     
@@ -107,6 +109,45 @@ class tibble(pl.DataFrame):
         exprs = _as_list(args)
         desc = [True if isinstance(expr, DescCol) else False for expr in exprs]
         return super().sort(exprs, descending = desc).pipe(from_polars)
+    
+    def as_dict(self, *, as_series = True):
+        """
+        Aggregate data with summary statistics
+
+        Parameters
+        ----------
+        as_series : bool
+            If True - returns the dict values as Series
+            If False - returns the dict values as lists
+
+        Examples
+        --------
+        >>> df.to_dict()
+        >>> df.to_dict(as_series = False)
+        """
+        return super().to_dict(as_series = as_series)
+
+    def as_pandas(self):
+        """
+        Convert to a pandas DataFrame
+
+        Examples
+        --------
+        >>> df.as_pandas()
+        """
+        return self.as_polars().to_pandas()
+
+    def as_polars(self):
+        """
+        Convert to a polars DataFrame
+
+        Examples
+        --------
+        >>> df.as_polars()
+        """
+        self = copy.copy(self)
+        self.__class__ = pl.DataFrame
+        return self
 
     def bind_cols(self, *args):
         """
@@ -559,6 +600,9 @@ class tibble(pl.DataFrame):
         if no_id: out = out.drop('_id')
 
         return out
+    
+    def print(self):
+        self.pipe(print)
 
     def pull(self, var = None):
         """
@@ -857,45 +901,6 @@ class tibble(pl.DataFrame):
     def tail(self, n = 5, *, _by = None):
         """Alias for `.slice_tail()`"""
         return self.slice_tail(n, _by = _by)
-
-    def as_dict(self, *, as_series = True):
-        """
-        Aggregate data with summary statistics
-
-        Parameters
-        ----------
-        as_series : bool
-            If True - returns the dict values as Series
-            If False - returns the dict values as lists
-
-        Examples
-        --------
-        >>> df.to_dict()
-        >>> df.to_dict(as_series = False)
-        """
-        return super().to_dict(as_series = as_series)
-
-    def as_pandas(self):
-        """
-        Convert to a pandas DataFrame
-
-        Examples
-        --------
-        >>> df.as_pandas()
-        """
-        return self.as_polars().to_pandas()
-
-    def as_polars(self):
-        """
-        Convert to a polars DataFrame
-
-        Examples
-        --------
-        >>> df.as_polars()
-        """
-        self = copy.copy(self)
-        self.__class__ = pl.DataFrame
-        return self
 
     def unite(self, col = "_united", unite_cols = [], sep = "_", remove = True):
         """
