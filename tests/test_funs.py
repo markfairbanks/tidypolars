@@ -56,9 +56,9 @@ def test_agg_stats():
 def test_case_when():
     """Can use case_when"""
     df = tp.tibble(x = range(1, 4))
-    actual = df.mutate(case_x = tp.case_when(col('x') < 2).then(0)
-                                .when(col('x') < 3).then(1)
-                                .otherwise(0))
+    actual = df.mutate(case_x = tp.case_when(col('x') < 2, 0,
+                                             col('x') < 3, 1,
+                                             _default = 0))
     expected = tp.tibble(x = range(1, 4), case_x = [0, 1, 0])
     assert actual.equals(expected), "case_when failed"
 

@@ -7,7 +7,9 @@ from .utils import (
     _is_constant,
     _is_list,
     _is_iterable,
-    _is_series
+    _is_series,
+    _is_string,
+    _str_to_lit
 )
 
 __all__ = [
@@ -169,7 +171,7 @@ def between(x, left, right):
     x = _col_expr(x)
     return x.is_between(left, right)
 
-def case_when(expr):
+def case_when(*args, _default = pl.Null):
     """
     Case when
 
@@ -182,12 +184,22 @@ def case_when(expr):
     --------
     >>> df = tp.tibble(x = range(1, 4))
     >>> df.mutate(
-    >>>    case_x = tp.case_when(col('x') < 2).then(1)
-    >>>             .when(col('x') < 3).then(2)
-    >>>             .otherwise(0)
+    >>>    case_x = tp.case_when(col('x') < 2, 1,
+    >>>                          col('x') < 3, 2,
+    >>>                          _default = 0)
     >>> )
     """
-    return pl.when(expr)
+    conditions = [args[i] for i in range(0, len(args), 2)]
+    values = [args[i] for i in range(1, len(args), 2)]
+    values = [_str_to_lit(value) for value in values]
+    for i in range(len(conditions)):
+        if i == 0:
+            expr = pl.when(conditions[i]).then(values[i])
+        else:
+            expr = expr.when(conditions[i]).then(values[i])
+    _default = _str_to_lit(_default)
+    expr = expr.otherwise(_default)
+    return expr
 
 def cast(x, dtype):
     """
@@ -333,7 +345,7 @@ def if_else(condition, true, false):
     >>> df = tp.tibble(x = range(1, 4))
     >>> df.mutate(if_x = tp.if_else(col('x') < 2, 1, 2))
     """
-    return pl.when(condition).then(true).otherwise(false)
+    return case_when(condition, true, _default = false)
 
 def is_finite(x):
     """

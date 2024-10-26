@@ -110,3 +110,8 @@ def _mutate_cols(df, exprs):
     for expr in exprs:
         df = df.with_columns(expr)
     return df
+
+def _str_to_lit(x):
+    if _is_string(x):
+        x = pl.lit(x)
+    return x
