@@ -1,11 +1,11 @@
 # Changelog
 
-## v0.3.1 (in development)
+## v0.3.1
 
 #### Functionality improvements
 
 * `if_else()` treats string inputs in `true` and `false` as strings and not as columns
-* `case_when()` no has syntax closer to `dplyr::case_when()`
+* `case_when()` now has syntax closer to `dplyr::case_when()`
 
 #### New tibble methods
 
