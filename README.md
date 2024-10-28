@@ -141,49 +141,6 @@ To convert from a pandas `DataFrame` to a tidypolars `tibble`:
 df = tp.as_tibble(df)
 ```
 
-## Speed Comparisons
-
-A few notes:
-
-* Comparing times from separate functions typically isn't very useful. For example - the `.summarize()` tests
-  were performed on a different dataset from `.pivot_wider()`.
-* All tests are run 5 times. The times shown are the median of those 5 runs.
-* All timings are in milliseconds.
-* All tests can be found in the source code 
-  [here](https://github.com/markfairbanks/tidypolars/blob/main/benchmarks/benchmarks.ipynb).
-* FAQ - Why are some `tidypolars` functions faster than their `polars` counterpart?
-  + Short answer - they're not! After all they're just using `polars` in the background.
-  + Long answer - All python functions have some slight natural variation in their execution time. 
-  By chance the `tidypolars` runs were slightly shorter on those specific functions on this
-  iteration of the tests. However one goal of these tests is to show that the "time cost" of
-  translating syntax to `polars` is very negligible to the
-  user (especially on medium-to-large datasets).
-* Lastly I'd like to mention that these tests were not rigorously created to cover all angles equally. They are just meant to be used as general insight into the performance of these packages.
-
-```python
-┌─────────────┬────────────┬─────────┬──────────┐
-│ func_tested ┆ tidypolars ┆ polars  ┆ pandas   │
-│ ---         ┆ ---        ┆ ---     ┆ ---      │
-│ str         ┆ f64        ┆ f64     ┆ f64      │
-╞═════════════╪════════════╪═════════╪══════════╡
-│ arrange     ┆ 752.298    ┆ 750.386 ┆ 768.677  │
-├╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌┤
-│ case_when   ┆ 134.716    ┆ 135.721 ┆ 84.105   │
-├╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌┤
-│ distinct    ┆ 40.683     ┆ 42.03   ┆ 270.724  │
-├╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌┤
-│ filter      ┆ 30.346     ┆ 30.163  ┆ 216.383  │
-├╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌┤
-│ left_join   ┆ 889.414    ┆ 900.966 ┆ 2723.635 │
-├╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌┤
-│ mutate      ┆ 15.976     ┆ 8.513   ┆ 78.746   │
-├╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌┤
-│ pivot_wider ┆ 40.915     ┆ 42.768  ┆ 144.66   │
-├╌╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌┼╌╌╌╌╌╌╌╌╌╌┤
-│ summarize   ┆ 78.795     ┆ 68.275  ┆ 300.896  │
-└─────────────┴────────────┴─────────┴──────────┘
-```
-
 ## Contributing
 
 Interested in contributing? Check out the contributing guidelines. Please note that this project is released with a Code of Conduct. By contributing to this project, you agree to abide by its terms.
