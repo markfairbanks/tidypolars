@@ -132,7 +132,7 @@ df.drop(tp.starts_with('x'), 'z')
 
 ### Converting to/from pandas data frames
 
-If you need to use a package that requires pandas data frames, you can convert from a tidypolars `Tibble` to
+If you need to use a package that requires pandas data frames, you can convert from a tidypolars `tibble` to
 a pandas `DataFrame`.
 
 To do this you'll first need to install pyarrow:
