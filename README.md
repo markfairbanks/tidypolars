@@ -34,6 +34,9 @@ df = tp.tibble(x = range(3), y = range(3, 6), z = ['a', 'a', 'b'])
     .mutate(double_x = col('x') * 2,
             x_plus_y = col('x') + col('y'))
 )
+```
+
+```
 ┌─────┬─────┬─────┬──────────┬──────────┐
 │ x   ┆ y   ┆ z   ┆ double_x ┆ x_plus_y │
 │ --- ┆ --- ┆ --- ┆ ---      ┆ ---      │
@@ -69,6 +72,9 @@ Methods operate by group by calling the `by` arg.
     .summarize(avg_x = tp.mean(col('x')),
                _by = 'z')
 )
+```
+
+```
 ┌─────┬───────┐
 │ z   ┆ avg_x │
 │ --- ┆ ---   │
@@ -88,6 +94,9 @@ tidyselect functions can be mixed with normal selection when selecting columns:
 df = tp.tibble(x1 = range(3), x2 = range(3), y = range(3), z = range(3))
 
 df.select(tp.starts_with('x'), 'z')
+```
+
+```
 ┌─────┬─────┬─────┐
 │ x1  ┆ x2  ┆ z   │
 │ --- ┆ --- ┆ --- │
@@ -105,6 +114,9 @@ To drop columns use the `.drop()` method:
 
 ```python
 df.drop(tp.starts_with('x'), 'z')
+```
+
+```
 ┌─────┐
 │ y   │
 │ --- │
