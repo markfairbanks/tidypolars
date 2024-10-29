@@ -366,6 +366,34 @@ class tibble(pl.DataFrame):
             out = super().filter(exprs)
         
         return out.pipe(from_polars)
+    
+    def full_join(self, df, left_on = None, right_on = None, on = None, suffix: str = '_right'):
+        """
+        Perform an full join
+
+        Parameters
+        ----------
+        df : tibble
+            Lazy DataFrame to join with.
+        left_on : str, list
+            Join column(s) of the left DataFrame.
+        right_on : str, list
+            Join column(s) of the right DataFrame.
+        on: str, list
+            Join column(s) of both DataFrames. If set, `left_on` and `right_on` should be None.
+        suffix : str
+            Suffix to append to columns with a duplicate name.
+
+        Examples
+        --------
+        >>> df1.full_join(df2)
+        >>> df1.full_join(df2, on = 'x')
+        >>> df1.full_join(df2, left_on = 'left_x', right_on = 'x')
+        """
+        if (left_on == None) & (right_on == None) & (on == None):
+            on = list(set(self.names) & set(df.names))
+        out = super().join(df, on, "full", left_on = left_on, right_on = right_on, suffix = suffix, coalesce = True)
+        return out.pipe(from_polars)
 
     def inner_join(self, df, left_on = None, right_on = None, on = None, suffix = '_right'):
         """
@@ -452,67 +480,6 @@ class tibble(pl.DataFrame):
         else:
             out = _mutate_cols(out, exprs)
             
-        return out.pipe(from_polars)
-
-    @property
-    def names(self):
-        """
-        Get column names
-        
-        Examples
-        --------
-        >>> df.names
-        """
-        return super().columns
-
-    @property
-    def ncol(self):
-        """
-        Get number of columns
-        
-        Examples
-        --------
-        >>> df.ncol
-        """
-        return super().shape[1]
-
-    @property
-    def nrow(self):
-        """
-        Get number of rows
-        
-        Examples
-        --------
-        >>> df.nrow
-        """
-        return super().shape[0]
-
-    def full_join(self, df, left_on = None, right_on = None, on = None, suffix: str = '_right'):
-        """
-        Perform an full join
-
-        Parameters
-        ----------
-        df : tibble
-            Lazy DataFrame to join with.
-        left_on : str, list
-            Join column(s) of the left DataFrame.
-        right_on : str, list
-            Join column(s) of the right DataFrame.
-        on: str, list
-            Join column(s) of both DataFrames. If set, `left_on` and `right_on` should be None.
-        suffix : str
-            Suffix to append to columns with a duplicate name.
-
-        Examples
-        --------
-        >>> df1.full_join(df2)
-        >>> df1.full_join(df2, on = 'x')
-        >>> df1.full_join(df2, left_on = 'left_x', right_on = 'x')
-        """
-        if (left_on == None) & (right_on == None) & (on == None):
-            on = list(set(self.names) & set(df.names))
-        out = super().join(df, on, "full", left_on = left_on, right_on = right_on, suffix = suffix, coalesce = True)
         return out.pipe(from_polars)
 
     def pivot_longer(self,
@@ -948,6 +915,50 @@ class tibble(pl.DataFrame):
                       **kwargs):
         """Write a data frame to a parquet"""
         return super().write_parquet(file, compression = compression, use_pyarrow = use_pyarrow, **kwargs)
+    
+    @property
+    def names(self):
+        """
+        Get column names
+        
+        Examples
+        --------
+        >>> df.names
+        """
+        return super().columns
+
+    @property
+    def ncol(self):
+        """
+        Get number of columns
+        
+        Examples
+        --------
+        >>> df.ncol
+        """
+        return super().shape[1]
+
+    @property
+    def nrow(self):
+        """
+        Get number of rows
+        
+        Examples
+        --------
+        >>> df.nrow
+        """
+        return super().shape[0]
+    
+    @property
+    def plot(self):
+        """
+        Access to polars plotting
+        
+        Examples
+        --------
+        >>> df.plot
+        """
+        return super().plot
 
 def desc(x):
     """Mark a column to order in descending"""
