@@ -297,7 +297,7 @@ class tibble(pl.DataFrame):
         The formatting shows one line per column so that wide dataframes display cleanly. 
         Each line shows the column name, the data type, and the first few values.
         """
-        return super().glimpse()
+        return self.as_polars().glimpse()
 
     def fill(self, *args, direction = 'down', _by = None):
         """
