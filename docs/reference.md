@@ -12,6 +12,7 @@
 * [`.drop()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.drop)
 * [`.head()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.head)
 * [`.filter()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.filter)
+* [`.glimpse()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.glimpse)
 * Joins
   * [`.full_join()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.full_join)
   * [`.inner_join()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.inner_join)

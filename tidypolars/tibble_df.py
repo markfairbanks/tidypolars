@@ -40,6 +40,7 @@ class tibble(pl.DataFrame):
             'arrange', 'as_dict', 'as_pandas', 'as_polars',
             'bind_cols', 'bind_rows', 'colnames', 'clone', 'count',
             'distinct', 'drop', 'drop_null', 'head', 'fill', 'filter',
+            'glimpse',
             'inner_join', 'left_join', 'mutate', 'names', 'nrow', 'ncol',
             'full_join', 'pivot_longer', 'pivot_wider',
             'print',
@@ -289,9 +290,14 @@ class tibble(pl.DataFrame):
         other = other.as_polars()
         return df.equals(other, null_equal = null_equal)
     
-    def head(self, n = 5, *, _by = None):
-        """Alias for `.slice_head()`"""
-        return self.slice_head(n, _by = _by)
+    def glimpse(self):
+        """
+        Return a dense preview of the DataFrame.
+        
+        The formatting shows one line per column so that wide dataframes display cleanly. 
+        Each line shows the column name, the data type, and the first few values.
+        """
+        return super().glimpse()
 
     def fill(self, *args, direction = 'down', _by = None):
         """
@@ -394,6 +400,10 @@ class tibble(pl.DataFrame):
             on = list(set(self.names) & set(df.names))
         out = super().join(df, on, "full", left_on = left_on, right_on = right_on, suffix = suffix, coalesce = True)
         return out.pipe(from_polars)
+    
+    def head(self, n = 5, *, _by = None):
+        """Alias for `.slice_head()`"""
+        return self.slice_head(n, _by = _by)
 
     def inner_join(self, df, left_on = None, right_on = None, on = None, suffix = '_right'):
         """
