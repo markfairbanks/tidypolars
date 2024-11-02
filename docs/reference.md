@@ -3,46 +3,45 @@
 ## Tibble methods
 
 #### dplyr
-
-* [`.arrange()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.arrange)
-* [`.bind_cols()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.bind_cols)
-* [`.bind_rows()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.bind_rows)
-* [`.count()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.count)
-* [`.distinct()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.distinct)
-* [`.drop()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.drop)
-* [`.head()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.head)
-* [`.filter()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.filter)
-* [`.glimpse()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.glimpse)
+* [`.arrange()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.arrange)
+* [`.bind_cols()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.bind_cols)
+* [`.bind_rows()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.bind_rows)
+* [`.count()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.count)
+* [`.distinct()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.distinct)
+* [`.drop()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.drop)
+* [`.head()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.head)
+* [`.filter()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.filter)
+* [`.glimpse()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.glimpse)
 * Joins
-  * [`.full_join()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.full_join)
-  * [`.inner_join()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.inner_join)
-  * [`.left_join()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.left_join)
-* [`.pull()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.pull)
-* [`.relocate()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.relocate)
-* [`.rename()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.rename)
-* [`.select()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.select)
-* [`.set_names()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.set_names)
-* [`.slice()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.slice)
-* [`.slice_head()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.slice_head)
-* [`.slice_tail()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.slice_tail)
-* [`.summarize()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.summarize)
-* [`.tail()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.tail)
+  * [`.full_join()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.full_join)
+  * [`.inner_join()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.inner_join)
+  * [`.left_join()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.left_join)
+* [`.pull()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.pull)
+* [`.relocate()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.relocate)
+* [`.rename()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.rename)
+* [`.select()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.select)
+* [`.set_names()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.set_names)
+* [`.slice()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.slice)
+* [`.slice_head()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.slice_head)
+* [`.slice_tail()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.slice_tail)
+* [`.summarize()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.summarize)
+* [`.tail()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.tail)
 
 #### tidyr
 
-* [`.drop_null()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.drop_null)
-* [`.fill()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.fill)
-* [`.pivot_longer()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.pivot_longer)
-* [`.pivot_wider()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.pivot_wider)
-* [`.replace_null()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.replace_null)
-* [`.separate()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.separate)
-* [`.unite()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.unite)
+* [`.drop_null()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.drop_null)
+* [`.fill()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.fill)
+* [`.pivot_longer()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.pivot_longer)
+* [`.pivot_wider()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.pivot_wider)
+* [`.replace_null()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.replace_null)
+* [`.separate()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.separate)
+* [`.unite()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.unite)
 
 #### Tibble attributes
 
-* [`.names`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.names)
-* [`.ncol`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.ncol)
-* [`.nrow`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.nrow)
+* [`.names`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.names)
+* [`.ncol`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.ncol)
+* [`.nrow`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.nrow)
 
 ## Functions
 
@@ -140,22 +139,22 @@
 
 #### Converting to/from a pandas DataFrame or polars DataFrames
 
-* [`.as_tibble()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.as_tibble)
-* [`from_pandas()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.from_pandas)
-* [`.as_pandas()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.to_pandas)
-* [`from_pandas()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble.from_polars)
-* [`.as_pandas()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.to_polars)
+* [`.as_tibble()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.as_tibble)
+* [`from_pandas()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble.from_pandas)
+* [`.as_pandas()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.to_pandas)
+* [`from_pandas()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble.from_polars)
+* [`.as_pandas()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.to_polars)
 
 
 #### Converting to a dict
-* [`.to_dict()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.to_dict)
+* [`.to_dict()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.to_dict)
 
 ## Reading/writing data
 
 #### Tibble Methods
 
-* [`.write_csv()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.write_csv)
-* [`.write_parquet()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble/index.html#tidypolars.tibble_df.tibble.write_parquet)
+* [`.write_csv()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.write_csv)
+* [`.write_parquet()`](https://tidypolars.readthedocs.io/en/latest/autoapi/tidypolars/tibble_df/index.html#tidypolars.tibble_df.tibble.write_parquet)
 
 #### Functions
 
