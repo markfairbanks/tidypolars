@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.3.2 (in development)
+## v0.3.2
 
 #### New tibble methods
 
@@ -12,6 +12,10 @@
 * `.rename()` `mapping` renamed to `_mapping` to avoid naming conflicts in
     dplyr interface using kwargs
 * Can now use `.plot` to access polars plotting
+
+#### Other improvements
+
+* General update to docs to ensure correct functions were being shown
 
 ## v0.3.1
 
