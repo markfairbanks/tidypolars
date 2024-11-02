@@ -2,6 +2,10 @@
 
 ## v0.3.2 (in development)
 
+#### New tibble methods
+
+* `.glimpse()`
+
 #### Functionality improvements
 
 * `pl.Null` is rexported as `tp.Null`
