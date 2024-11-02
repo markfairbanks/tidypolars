@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.3.2 (in development)
+## v0.3.2
 
 #### New tibble methods
 
@@ -8,10 +8,10 @@
 
 #### Functionality improvements
 
+* Can now use `.plot` to access polars plotting
 * `pl.Null` is rexported as `tp.Null`
 * `.rename()` `mapping` renamed to `_mapping` to avoid naming conflicts in
     dplyr interface using kwargs
-* Can now use `.plot` to access polars plotting
 
 ## v0.3.1
 
