@@ -214,7 +214,7 @@ def cast(x, dtype):
 
     Examples
     --------
-    >>> df.mutate(abs_x = tp.cast(col('x'), tp.Float64))
+    >>> df.mutate(float_x = tp.cast(col('x'), tp.Float64))
     """
     x = _col_expr(x)
     return x.cast(dtype)
@@ -230,7 +230,7 @@ def coalesce(*args):
 
     Examples
     --------
-    >>> df.mutate(abs_x = tp.cast(col('x'), tp.Float64))
+    >>> df.mutate(coalesce_xy = tp.coalesce(col('x'), col('y')))
     """
     args = _as_list(args)
     expr = if_else(args[0].is_null(), args[1], args[0])
@@ -274,7 +274,7 @@ def cov(x, y):
 
     Examples
     --------
-    >>> df.summarize(cor = tp.cov(col('x'), col('y')))
+    >>> df.summarize(cov = tp.cov(col('x'), col('y')))
     """
     return pl.cov(x, y)
 
@@ -412,7 +412,7 @@ def is_not(x):
     Examples
     --------
     >>> df = tp.tibble(x = range(3))
-    >>> df.filter(tp.not_(col('x') < 2))
+    >>> df.filter(tp.is_not(col('x') < 2))
     """
     x = _col_expr(x)
     return x.not_()
@@ -465,7 +465,7 @@ def is_not_null(x):
     Examples
     --------
     >>> df = tp.tibble(x = range(3))
-    >>> df.filter(tp.is_not_in(col('x'), [1, 2]))
+    >>> df.filter(tp.is_not_null(col('x'), [1, 2]))
     """
     x = _col_expr(x)
     return x.is_null().not_()
@@ -482,7 +482,7 @@ def is_null(x):
     Examples
     --------
     >>> df = tp.tibble(x = range(3))
-    >>> df.filter(tp.is_not_in(col('x'), [1, 2]))
+    >>> df.filter(tp.is_null(col('x')))
     """
     x = _col_expr(x)
     return x.is_null()
